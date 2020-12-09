@@ -19,6 +19,7 @@ type fdisk struct {
 	multiplicador int
 	mbr           Mbr
 	sizeBytes     int
+	addBytes      int
 }
 
 // MatchParametros adjudica los parámetros en lista
@@ -110,6 +111,7 @@ func Efdisk(p []Parametro) {
 			}
 
 			i.sizeBytes = i.size * i.multiplicador
+			i.addBytes = i.add * i.multiplicador
 
 			// ejecutar mètodo para crear la particiòn
 			if i.tipo == "p" || i.tipo == "e" {
@@ -121,11 +123,22 @@ func Efdisk(p []Parametro) {
 			return
 		}
 
-		if i.add != 0 && false {
+		if i.add != 0 {
 			// editando el tamaño de una particiòn
-			if i.unit != "" {
+			if i.unit == "" {
 				i.unit = "k"
 			}
+
+			// calcular el tamaño en bytes de la nueva particiòn
+			if i.unit == "m" {
+				i.multiplicador = 1024 * 1024
+			} else if i.unit == "k" {
+				i.multiplicador = 1024
+			}
+
+			i.addBytes = i.add * i.multiplicador
+
+			i.addParticion()
 			return
 		}
 
@@ -239,14 +252,14 @@ func (i *fdisk) crearParticionPE() {
 }
 
 func (i *fdisk) crearParticionL() {
-
+	fmt.Println("Funciòn actualmente en fase dev, contacte al programador")
 }
 
 func (i *fdisk) eliminarParticion() {
 	// recuperar el mbr
 	i.mbr = RecuperarMBR(i.path)
 	auxMbr := i.mbr
-	fmt.Println(i.mbr)
+	//fmt.Println(i.mbr)
 
 	// encontrar la particiòn con el nombre a eliminar
 	var nombreByte [16]byte
@@ -270,6 +283,54 @@ func (i *fdisk) eliminarParticion() {
 				file.Close()
 			}
 			escribirMBR(i.path, auxMbr)
+			break
+		}
+	}
+}
+
+func (i *fdisk) addParticion() {
+	fmt.Println("Funciòn actualmente en fase dev, contacte al programador")
+	// recuperar el mbr
+	i.mbr = RecuperarMBR(i.path)
+	auxMbr := i.mbr
+	fmt.Println(i.mbr)
+
+	// encontrar la particiòn con el nombre a eliminar
+	var nombreByte [16]byte
+	copy(nombreByte[:], i.name)
+	for indice := 0; indice <= 3; indice++ {
+		auxParticion := auxMbr.Partitions[indice]
+		if auxParticion.Status == 1 && auxParticion.Name == nombreByte {
+			// modificar mbr
+
+			// si es positivo
+			if i.add > 0 {
+				espaciosVacios := getEspaciosLibres(auxMbr)
+				finParticion := auxParticion.Start + auxParticion.Size
+
+				for indice2, inicio := range espaciosVacios.Inicios {
+					if finParticion == int64(inicio) {
+						// espacio contiguo
+						if i.addBytes <= espaciosVacios.Finales[indice2]-inicio {
+							// se puede añadir espacio
+							auxMbr.Partitions[indice].Size += int64(i.addBytes)
+
+							// guardar mbr
+							escribirMBR(i.path, auxMbr)
+						}
+					}
+				}
+			} else {
+				// si add es negativo
+				if int64(i.addBytes) < auxParticion.Size {
+					// reducir la particiòn
+					auxMbr.Partitions[indice].Size += int64(i.addBytes)
+
+					// guardar mbr
+					escribirMBR(i.path, auxMbr)
+				}
+			}
+
 			break
 		}
 	}

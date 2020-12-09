@@ -174,6 +174,7 @@ VALOR_DELETE:
 
 PARAMETRO_ADD:
     guion add asignacion numero         { $$=$1+$2+$3+$4; CrearParametro($2,$4); }
+    |guion add asignacion guion numero         { $$=$1+$2+$3+$4+$5; CrearParametro($2,"-"+$5); }
     
 ;
 
