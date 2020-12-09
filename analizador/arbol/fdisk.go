@@ -2,6 +2,8 @@ package arbol
 
 import (
 	"fmt"
+	"log"
+	"os"
 	"strconv"
 )
 
@@ -127,8 +129,9 @@ func Efdisk(p []Parametro) {
 			return
 		}
 
-		if i.delete != "" && false {
+		if i.delete != "" {
 			// eliminando una particiòn
+			i.eliminarParticion()
 			return
 		}
 
@@ -139,9 +142,8 @@ func Efdisk(p []Parametro) {
 /*acciones de fdisk*/
 func (i *fdisk) crearParticionPE() {
 	// recuperar el mbr
-	i.mbr = RecuperarMBR(i.path + i.name)
+	i.mbr = RecuperarMBR(i.path)
 	auxMbr := i.mbr
-	fmt.Println(i.mbr)
 
 	// si la particiòn es de tipo Primaria o extendida
 	// validar si mbr tiene particiones libres
@@ -225,7 +227,7 @@ func (i *fdisk) crearParticionPE() {
 			copy(auxMbr.Partitions[idParticionLibre].Name[:], i.name)
 
 			// escribir mbr
-			escribirMBR(i.path+i.name, auxMbr)
+			escribirMBR(i.path, auxMbr)
 
 		} else {
 			// no se encontrò espacio adecuado
@@ -238,4 +240,37 @@ func (i *fdisk) crearParticionPE() {
 
 func (i *fdisk) crearParticionL() {
 
+}
+
+func (i *fdisk) eliminarParticion() {
+	// recuperar el mbr
+	i.mbr = RecuperarMBR(i.path)
+	auxMbr := i.mbr
+	fmt.Println(i.mbr)
+
+	// encontrar la particiòn con el nombre a eliminar
+	var nombreByte [16]byte
+	copy(nombreByte[:], i.name)
+	for indice := 0; indice <= 3; indice++ {
+		auxParticion := auxMbr.Partitions[indice]
+		if auxParticion.Status == 1 && auxParticion.Name == nombreByte {
+			// modificar mbr para dejar estado eliminado
+			auxMbr.Partitions[indice].Status = 2
+
+			if i.delete == "full" {
+				// llenar de ceros el espacio de la particiòn
+				file, err := os.OpenFile(i.path, os.O_RDWR, 0777)
+				if err != nil {
+					log.Fatal(err)
+				}
+				file.Seek(auxParticion.Start, 0)
+				for j := 0; j < int(auxParticion.Size); j++ {
+					file.Write([]byte{0})
+				}
+				file.Close()
+			}
+			escribirMBR(i.path, auxMbr)
+			break
+		}
+	}
 }
