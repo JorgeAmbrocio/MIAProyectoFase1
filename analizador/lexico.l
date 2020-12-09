@@ -120,7 +120,7 @@ rutaCompleja        \"[^\"\n\t\r]*\"
 [Ff][Ff]                    lval.value = string(y.buf); return ff
 [Ww][Ff]                    lval.value = string(y.buf); return wf
 [Ff][Aa][Ss][Tt]            lval.value = string(y.buf); return fast
-[Ff][Uu][Ll][Ll]            lval.value = string(y.buf); return full
+[Ff][Uu][Ll][Ll]            lval.value = string(y.buf); lval.value = strings.ToLower(lval.value); return full
 
 
 {numero}                    lval.value = string(y.buf); return numero

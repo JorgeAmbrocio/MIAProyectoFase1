@@ -75,24 +75,25 @@ type Mbr struct {
 	Date       [20]byte
 	Signature  int32
 	Partitions [4]Partition
+	Fit        byte
 }
 
 // Partition ...
 type Partition struct {
-	Status byte
-	Type   byte
-	Fit    byte
-	Start  uint64
-	Size   uint64
+	Status byte // 0 vacìa, 1 ocupada, 2 eliminada
+	Type   byte // P primaria, E extendida, L lógica
+	Fit    byte // W peor ajuste, B mejor ajuste, P primer ajuste
+	Start  int64
+	Size   int64 // en tamaño bytes
 	Name   [16]byte
 }
 
 // Ebr ...
 type Ebr struct {
-	Status byte
-	Fit    byte
-	Start  uint64
-	Size   uint64
-	Next   uint64
+	Status byte // 0 vacìa, 1 ocupada, 2 eliminada
+	Fit    byte // W peor ajuste, B mejor ajuste, P primer ajuste
+	Start  int64
+	Size   int64 // en tamaño bytes
+	Next   int64
 	Name   [16]byte
 }

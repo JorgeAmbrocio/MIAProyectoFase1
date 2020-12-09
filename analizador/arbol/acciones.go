@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"sort"
 	"strconv"
 	"time"
 )
@@ -33,6 +34,21 @@ func RecuperarMBR(path string) Mbr {
 	return mbr
 }
 
+func escribirMBR(path string, mbr Mbr) {
+	// recuperar mbr
+	// abrir archivo
+	file, err := os.OpenFile(path, os.O_RDWR, 0777)
+	defer file.Close()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// escribir la estructura
+	var binario bytes.Buffer
+	binary.Write(&binario, binary.BigEndian, &mbr)
+	WriteNextBytes(file, binario.Bytes())
+}
+
 func ReadNextBytes(file *os.File, size int) []byte {
 	bytes := make([]byte, size)
 
@@ -41,6 +57,13 @@ func ReadNextBytes(file *os.File, size int) []byte {
 		log.Fatal(err)
 	}
 	return bytes
+}
+
+func WriteNextBytes(file *os.File, bytes []byte) {
+	_, err := file.Write(bytes)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func getFechaByte() [20]byte {
@@ -62,4 +85,47 @@ func getFechaByte() [20]byte {
 	copy(fechab[:], fechastr)
 	fmt.Println(fechastr)
 	return fechab
+}
+
+/*buscar espacios libres en un disco*/
+type Espacios struct {
+	Inicios []int
+	Finales []int
+}
+
+func getEspaciosLibres(mbr Mbr) Espacios {
+	var espaciosVacios Espacios
+	var iniciaLibre int = binary.Size(mbr) // inicia el espacio libre
+	// luego de la escritura del mbr
+
+	// recorrer las particiones activas
+	var espaciosLlenos Espacios
+	for i := 0; i <= 3; i++ {
+		espaciosLlenos.Inicios = append(espaciosLlenos.Inicios, int(mbr.Partitions[i].Start))
+		espaciosLlenos.Finales = append(espaciosLlenos.Finales, int(mbr.Partitions[i].Start+mbr.Partitions[i].Size))
+	}
+
+	// ordenar espacios llenos de menor a mayor
+	sort.Ints(espaciosLlenos.Inicios)
+	sort.Ints(espaciosLlenos.Finales)
+
+	// encontrar espacios vaciòs
+	var posicionActual int = int(iniciaLibre)
+	for indice, objeto := range espaciosLlenos.Inicios {
+		if objeto > posicionActual {
+			// hay un espacio libre
+			espaciosVacios.Inicios = append(espaciosVacios.Inicios, int(posicionActual))
+			espaciosVacios.Finales = append(espaciosVacios.Finales, int(objeto-1))
+			posicionActual = espaciosLlenos.Finales[indice]
+		} else if objeto == posicionActual {
+			posicionActual = espaciosLlenos.Finales[indice]
+		}
+	}
+
+	if posicionActual < int(mbr.Size) {
+		espaciosVacios.Inicios = append(espaciosVacios.Inicios, int(posicionActual))
+		espaciosVacios.Finales = append(espaciosVacios.Finales, int(mbr.Size))
+	}
+
+	return espaciosVacios
 }

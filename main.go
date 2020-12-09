@@ -9,11 +9,11 @@ import (
 func main() {
 	fmt.Println("hola mundo")
 
-	cadena := "mkdisk -size->4 -path->/home/folder/algo/ -name->archivo.dsk \n"
+	//cadena := "mkdisk -size->5 -path->/home/folder/algo/ -name->archivo.dsk \n"
 	//cadena += "exec -path->/ruta/ \n"
 	//cadena += "pause\n"
 	//cadena += "rmdisk -path->/home/folder/algo/archivo.dsk \n"
-	//cadena := "fdisk -path->/home/folder/algo/ -name->archivo.dsk -size->1 -type->p -unit->k \n"
+	cadena := "fdisk -path->/home/folder/algo/ -name->archivo.dsk -size->20 -type->l -unit->k \n"
 	//"/home/folder/algo/archivo.dsk"
 
 	reader := bufio.NewReader(strings.NewReader(cadena))

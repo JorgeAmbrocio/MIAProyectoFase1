@@ -101,10 +101,12 @@ LST_MKDIS:
     |LST_MKDIS PARAMETRO_PATH           { $$=$1; AddParametro();}
     |LST_MKDIS PARAMETRO_NAME           { $$=$1; AddParametro();}
     |LST_MKDIS PARAMETRO_UNIT           { $$=$1; AddParametro();}
+    |LST_MKDIS PARAMETRO_FIT            { $$=$1; AddParametro();}
     |PARAMETRO_SIZE                     { $$=$1; AddParametro();}
     |PARAMETRO_PATH                     { $$=$1; AddParametro();}
     |PARAMETRO_NAME                     { $$=$1; AddParametro();}
     |PARAMETRO_UNIT                     { $$=$1; AddParametro();}
+    |PARAMETRO_FIT                      { $$=$1; AddParametro();}
 ;
 
 

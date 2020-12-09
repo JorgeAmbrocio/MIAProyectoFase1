@@ -96,15 +96,15 @@ const (
 	wf           = 57402
 
 	yyMaxDepth = 200
-	yyTabOfs   = -64
+	yyTabOfs   = -66
 )
 
 var (
 	yyPrec = map[int]int{}
 
 	yyXLAT = map[int]int{
-		57347: 0,  // guion (63x)
-		10:    1,  // '\n' (62x)
+		57347: 0,  // guion (65x)
+		10:    1,  // '\n' (64x)
 		57346: 2,  // asignacion (10x)
 		57421: 3,  // PARAMETRO_PATH (8x)
 		57420: 4,  // PARAMETRO_NAME (6x)
@@ -113,32 +113,32 @@ var (
 		57352: 7,  // fdisk (4x)
 		57350: 8,  // mkdisk (4x)
 		57353: 9,  // mount (4x)
-		57422: 10, // PARAMETRO_SIZE (4x)
-		57424: 11, // PARAMETRO_UNIT (4x)
-		57375: 12, // path (4x)
-		57349: 13, // pause (4x)
-		57351: 14, // rmdisk (4x)
-		57354: 15, // unmount (4x)
-		57384: 16, // id (3x)
-		57377: 17, // name (3x)
-		57383: 18, // idn (2x)
-		57411: 19, // INSTRUCCION (2x)
-		57405: 20, // numero (2x)
-		57416: 21, // PARAMETRO_ADD (2x)
-		57417: 22, // PARAMETRO_DELETE (2x)
-		57418: 23, // PARAMETRO_FIT (2x)
-		57423: 24, // PARAMETRO_TYPE (2x)
-		57407: 25, // rutaCompleja (2x)
-		57376: 26, // size (2x)
-		57378: 27, // unit (2x)
-		57382: 28, // add (1x)
-		57408: 29, // archivo (1x)
-		57400: 30, // bf (1x)
-		57381: 31, // delete (1x)
-		57398: 32, // e (1x)
-		57404: 33, // fast (1x)
-		57401: 34, // ff (1x)
-		57380: 35, // fit (1x)
+		57418: 10, // PARAMETRO_FIT (4x)
+		57422: 11, // PARAMETRO_SIZE (4x)
+		57424: 12, // PARAMETRO_UNIT (4x)
+		57375: 13, // path (4x)
+		57349: 14, // pause (4x)
+		57351: 15, // rmdisk (4x)
+		57354: 16, // unmount (4x)
+		57384: 17, // id (3x)
+		57377: 18, // name (3x)
+		57380: 19, // fit (2x)
+		57383: 20, // idn (2x)
+		57411: 21, // INSTRUCCION (2x)
+		57405: 22, // numero (2x)
+		57416: 23, // PARAMETRO_ADD (2x)
+		57417: 24, // PARAMETRO_DELETE (2x)
+		57423: 25, // PARAMETRO_TYPE (2x)
+		57407: 26, // rutaCompleja (2x)
+		57376: 27, // size (2x)
+		57378: 28, // unit (2x)
+		57382: 29, // add (1x)
+		57408: 30, // archivo (1x)
+		57400: 31, // bf (1x)
+		57381: 32, // delete (1x)
+		57398: 33, // e (1x)
+		57404: 34, // fast (1x)
+		57401: 35, // ff (1x)
 		57403: 36, // full (1x)
 		57410: 37, // INICIO (1x)
 		57396: 38, // k (1x)
@@ -204,6 +204,7 @@ var (
 		"fdisk",
 		"mkdisk",
 		"mount",
+		"PARAMETRO_FIT",
 		"PARAMETRO_SIZE",
 		"PARAMETRO_UNIT",
 		"path",
@@ -212,12 +213,12 @@ var (
 		"unmount",
 		"id",
 		"name",
+		"fit",
 		"idn",
 		"INSTRUCCION",
 		"numero",
 		"PARAMETRO_ADD",
 		"PARAMETRO_DELETE",
-		"PARAMETRO_FIT",
 		"PARAMETRO_TYPE",
 		"rutaCompleja",
 		"size",
@@ -229,7 +230,6 @@ var (
 		"e",
 		"fast",
 		"ff",
-		"fit",
 		"full",
 		"INICIO",
 		"k",
@@ -291,13 +291,13 @@ var (
 		1:  {37, 1},
 		2:  {40, 3},
 		3:  {40, 2},
-		4:  {19, 1},
-		5:  {19, 2},
-		6:  {19, 2},
-		7:  {19, 2},
-		8:  {19, 2},
-		9:  {19, 2},
-		10: {19, 2},
+		4:  {21, 1},
+		5:  {21, 2},
+		6:  {21, 2},
+		7:  {21, 2},
+		8:  {21, 2},
+		9:  {21, 2},
+		10: {21, 2},
 		11: {43, 2},
 		12: {43, 2},
 		13: {43, 1},
@@ -322,159 +322,164 @@ var (
 		32: {42, 2},
 		33: {42, 2},
 		34: {42, 2},
-		35: {42, 1},
+		35: {42, 2},
 		36: {42, 1},
 		37: {42, 1},
 		38: {42, 1},
-		39: {3, 4},
-		40: {52, 1},
-		41: {52, 1},
-		42: {10, 4},
-		43: {4, 4},
-		44: {51, 1},
-		45: {51, 1},
+		39: {42, 1},
+		40: {42, 1},
+		41: {3, 4},
+		42: {52, 1},
+		43: {52, 1},
+		44: {11, 4},
+		45: {4, 4},
 		46: {51, 1},
-		47: {11, 4},
-		48: {54, 1},
-		49: {54, 1},
-		50: {24, 4},
-		51: {53, 1},
-		52: {53, 1},
+		47: {51, 1},
+		48: {51, 1},
+		49: {12, 4},
+		50: {54, 1},
+		51: {54, 1},
+		52: {25, 4},
 		53: {53, 1},
-		54: {23, 4},
-		55: {50, 1},
-		56: {50, 1},
+		54: {53, 1},
+		55: {53, 1},
+		56: {10, 4},
 		57: {50, 1},
-		58: {22, 4},
-		59: {49, 1},
-		60: {49, 1},
-		61: {21, 4},
-		62: {46, 5},
-		63: {46, 4},
+		58: {50, 1},
+		59: {50, 1},
+		60: {24, 4},
+		61: {49, 1},
+		62: {49, 1},
+		63: {23, 4},
+		64: {46, 5},
+		65: {46, 4},
 	}
 
 	yyXErrors = map[yyXError]string{}
 
-	yyParseTab = [99][]uint16{
+	yyParseTab = [101][]uint16{
 		// 0
-		{6: 69, 72, 70, 73, 13: 68, 71, 74, 19: 67, 37: 65, 40: 66},
-		{5: 64},
-		{5: 63, 69, 72, 70, 73, 13: 68, 71, 74, 19: 161},
-		{1: 160},
-		{1: 60},
+		{6: 71, 74, 72, 75, 14: 70, 73, 76, 21: 69, 37: 67, 40: 68},
+		{5: 66},
+		{5: 65, 71, 74, 72, 75, 14: 70, 73, 76, 21: 165},
+		{1: 164},
+		{1: 62},
 		// 5
-		{148, 3: 159},
-		{154, 3: 151, 152, 10: 150, 153, 42: 149},
-		{148, 3: 147},
-		{110, 3: 104, 108, 10: 102, 103, 21: 109, 107, 106, 105, 41: 101},
-		{87, 3: 85, 86, 43: 84},
+		{150, 3: 163},
+		{157, 3: 153, 154, 10: 156, 152, 155, 42: 151},
+		{150, 3: 149},
+		{112, 3: 106, 110, 10: 108, 104, 105, 23: 111, 109, 107, 41: 103},
+		{89, 3: 87, 88, 43: 86},
 		// 10
-		{76, 46: 75},
-		{80, 54},
-		{18: 77},
-		{2: 78},
-		{16: 79},
+		{78, 46: 77},
+		{82, 56},
+		{20: 79},
+		{2: 80},
+		{17: 81},
 		// 15
 		{1, 1},
-		{18: 81},
-		{2: 82},
-		{16: 83},
+		{20: 83},
+		{2: 84},
+		{17: 85},
 		{2, 2},
 		// 20
-		{87, 55, 3: 99, 100},
-		{51, 51},
-		{50, 50},
-		{12: 88, 17: 89},
-		{2: 95},
+		{89, 57, 3: 101, 102},
+		{53, 53},
+		{52, 52},
+		{13: 90, 18: 91},
+		{2: 97},
 		// 25
-		{2: 90},
-		{16: 93, 25: 94, 29: 92, 51: 91},
+		{2: 92},
+		{17: 95, 26: 96, 30: 94, 51: 93},
 		{21, 21},
 		{20, 20},
 		{19, 19},
 		// 30
 		{18, 18},
-		{25: 98, 48: 97, 52: 96},
+		{26: 100, 48: 99, 52: 98},
 		{25, 25},
 		{24, 24},
 		{23, 23},
 		// 35
-		{53, 53},
-		{52, 52},
-		{110, 56, 3: 141, 145, 10: 139, 140, 21: 146, 144, 143, 142},
+		{55, 55},
+		{54, 54},
+		{112, 58, 3: 143, 147, 10: 145, 141, 142, 23: 148, 146, 144},
+		{43, 43},
+		{42, 42},
+		// 40
 		{41, 41},
 		{40, 40},
-		// 40
 		{39, 39},
 		{38, 38},
 		{37, 37},
-		{36, 36},
-		{35, 35},
 		// 45
-		{34, 34},
-		{12: 88, 17: 89, 26: 111, 112, 116, 31: 115, 35: 114, 47: 113},
-		{2: 137},
-		{2: 133},
-		{2: 128},
+		{36, 36},
+		{13: 90, 18: 91, 116, 27: 113, 114, 118, 32: 117, 47: 115},
+		{2: 139},
+		{2: 135},
+		{2: 130},
 		// 50
-		{2: 123},
+		{2: 125},
+		{2: 121},
 		{2: 119},
-		{2: 117},
-		{20: 118},
+		{22: 120},
 		{3, 3},
 		// 55
-		{33: 122, 36: 121, 49: 120},
+		{34: 124, 36: 123, 49: 122},
 		{6, 6},
 		{5, 5},
 		{4, 4},
-		{30: 125, 34: 126, 50: 124, 55: 127},
+		{31: 127, 35: 128, 50: 126, 55: 129},
 		// 60
 		{10, 10},
 		{9, 9},
 		{8, 8},
 		{7, 7},
-		{32: 131, 39: 132, 45: 130, 53: 129},
+		{33: 133, 39: 134, 45: 132, 53: 131},
 		// 65
 		{14, 14},
 		{13, 13},
 		{12, 12},
 		{11, 11},
-		{38: 135, 44: 136, 54: 134},
+		{38: 137, 44: 138, 54: 136},
 		// 70
 		{17, 17},
 		{16, 16},
 		{15, 15},
-		{20: 138},
+		{22: 140},
 		{22, 22},
 		// 75
+		{51, 51},
+		{50, 50},
 		{49, 49},
 		{48, 48},
 		{47, 47},
+		// 80
 		{46, 46},
 		{45, 45},
-		// 80
 		{44, 44},
-		{43, 43},
-		{42, 42},
-		{1: 57},
-		{12: 88},
+		{1: 59},
+		{13: 90},
 		// 85
-		{154, 58, 3: 156, 157, 10: 155, 158},
+		{157, 60, 3: 159, 160, 10: 162, 158, 161},
+		{30, 30},
 		{29, 29},
 		{28, 28},
 		{27, 27},
-		{26, 26},
 		// 90
-		{12: 88, 17: 89, 26: 111, 112},
+		{26, 26},
+		{13: 90, 18: 91, 116, 27: 113, 114},
+		{35, 35},
+		{34, 34},
 		{33, 33},
+		// 95
 		{32, 32},
 		{31, 31},
-		{30, 30},
-		// 95
-		{1: 59},
-		{5: 61, 61, 61, 61, 61, 13: 61, 61, 61},
-		{1: 162},
-		{5: 62, 62, 62, 62, 62, 13: 62, 62, 62},
+		{1: 61},
+		{5: 63, 63, 63, 63, 63, 14: 63, 63, 63},
+		{1: 166},
+		// 100
+		{5: 64, 64, 64, 64, 64, 14: 64, 64, 64},
 	}
 )
 
@@ -867,7 +872,7 @@ yynewstate:
 		}
 	case 35:
 		{
-			yyVAL.value = yyS[yypt-0].value
+			yyVAL.value = yyS[yypt-1].value
 			AddParametro()
 		}
 	case 36:
@@ -887,34 +892,36 @@ yynewstate:
 		}
 	case 39:
 		{
-			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
-			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
+			yyVAL.value = yyS[yypt-0].value
+			AddParametro()
 		}
 	case 40:
 		{
 			yyVAL.value = yyS[yypt-0].value
+			AddParametro()
 		}
 	case 41:
 		{
-			yyVAL.value = yyS[yypt-0].value
+			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
+			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
 		}
 	case 42:
 		{
-			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
-			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
+			yyVAL.value = yyS[yypt-0].value
 		}
 	case 43:
 		{
-			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
-			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
+			yyVAL.value = yyS[yypt-0].value
 		}
 	case 44:
 		{
-			yyVAL.value = yyS[yypt-0].value
+			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
+			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
 		}
 	case 45:
 		{
-			yyVAL.value = yyS[yypt-0].value
+			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
+			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
 		}
 	case 46:
 		{
@@ -922,8 +929,7 @@ yynewstate:
 		}
 	case 47:
 		{
-			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
-			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
+			yyVAL.value = yyS[yypt-0].value
 		}
 	case 48:
 		{
@@ -931,12 +937,12 @@ yynewstate:
 		}
 	case 49:
 		{
-			yyVAL.value = yyS[yypt-0].value
+			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
+			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
 		}
 	case 50:
 		{
-			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
-			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
+			yyVAL.value = yyS[yypt-0].value
 		}
 	case 51:
 		{
@@ -944,7 +950,8 @@ yynewstate:
 		}
 	case 52:
 		{
-			yyVAL.value = yyS[yypt-0].value
+			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
+			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
 		}
 	case 53:
 		{
@@ -952,8 +959,7 @@ yynewstate:
 		}
 	case 54:
 		{
-			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
-			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
+			yyVAL.value = yyS[yypt-0].value
 		}
 	case 55:
 		{
@@ -961,7 +967,8 @@ yynewstate:
 		}
 	case 56:
 		{
-			yyVAL.value = yyS[yypt-0].value
+			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
+			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
 		}
 	case 57:
 		{
@@ -969,8 +976,7 @@ yynewstate:
 		}
 	case 58:
 		{
-			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
-			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
+			yyVAL.value = yyS[yypt-0].value
 		}
 	case 59:
 		{
@@ -978,18 +984,27 @@ yynewstate:
 		}
 	case 60:
 		{
-			yyVAL.value = yyS[yypt-0].value
+			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
+			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
 		}
 	case 61:
+		{
+			yyVAL.value = yyS[yypt-0].value
+		}
+	case 62:
+		{
+			yyVAL.value = yyS[yypt-0].value
+		}
+	case 63:
 		{
 			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
 			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
 		}
-	case 62:
+	case 64:
 		{
 			yyVAL.value = yyS[yypt-4].value + yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
 		}
-	case 63:
+	case 65:
 		{
 			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
 		}

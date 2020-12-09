@@ -16,6 +16,7 @@ type mkdisk struct {
 	path          string
 	name          string
 	unit          string
+	fit           string
 	multiplicador int
 }
 
@@ -41,14 +42,20 @@ func (i *mkdisk) MatchParametros(lp []Parametro) {
 		case "unit":
 			i.unit = p.Valor
 			break
+		case "fit":
+			i.unit = p.Valor
 		}
 	}
 
 	if i.unit == "" {
 		i.unit = "m"
-		i.multiplicador = 1024
+		i.multiplicador = 1024 * 1024
 	} else {
-		i.multiplicador = 1
+		i.multiplicador = 1024
+	}
+
+	if i.fit == "" {
+		i.fit = "wf"
 	}
 
 }
@@ -76,10 +83,10 @@ func (i mkdisk) CrearBinario() {
 	// llenar el archivo de ceros
 	var auxTamano [1024]byte // 1 kilobyte
 
-	for contador := 0; contador < i.multiplicador*i.size; contador++ {
+	for contador := 0; contador < (i.multiplicador/1024)*i.size; contador++ {
 		var binario bytes.Buffer
 		binary.Write(&binario, binary.BigEndian, &auxTamano)
-		i.WriteNextBytes(file, binario.Bytes())
+		WriteNextBytes(file, binario.Bytes())
 	}
 
 	// regresar putero a la posiciòn inicial
@@ -87,25 +94,19 @@ func (i mkdisk) CrearBinario() {
 
 	// crear estructura
 	mbr := Mbr{
-		Size:      int32(i.size),
+		Size:      int32(i.size * i.multiplicador),
 		Signature: int32(rand.Intn(1000)),
 		Date:      getFechaByte(),
+		Fit:       i.fit[0],
 	}
 
 	// escribir la estructura
 	dirMbr := &mbr
 	var binario bytes.Buffer
 	binary.Write(&binario, binary.BigEndian, dirMbr)
-	i.WriteNextBytes(file, binario.Bytes())
+	WriteNextBytes(file, binario.Bytes())
 
 	file.Close()
-}
-
-func (i mkdisk) WriteNextBytes(file *os.File, bytes []byte) {
-	_, err := file.Write(bytes)
-	if err != nil {
-		log.Fatal(err)
-	}
 }
 
 // Emkdisk es la ejecución del mkdisk
