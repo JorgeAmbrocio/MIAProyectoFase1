@@ -87,6 +87,24 @@ func getFechaByte() [20]byte {
 	return fechab
 }
 
+func BytesToString(b []byte) string {
+	cadena := ""
+	for i := 0; i < len(b); i++ {
+		if b[i] != 0 {
+			cadena += string(b[i])
+		}
+	}
+	return cadena
+}
+
+func ByteToString(b byte) string {
+	cadena := ""
+	if b != 0 {
+		cadena += string(b)
+	}
+	return cadena
+}
+
 /*buscar espacios libres en un disco*/
 type Espacios struct {
 	Inicios []int

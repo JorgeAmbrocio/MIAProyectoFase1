@@ -28,7 +28,7 @@ var lAST []arbol.AST
 %token  mkfile, cat,rm, edit, ren, mkdir, cp, mv, find, chown
 %token  chgrp, rep, path, size, name, unit, rtype, fit, delete
 %token  add, idn, id, tipo, usr, pwd, grp, ugo, r, p, cont
-%token  filen, rf, dest, k, m, e, l, bf,ff, wf, full, fast
+%token  filen, rf, dest, k, m, e, l, bf,ff, wf, full, fast, rid
 %token  numero, rutaSimple, rutaCompleja, archivo
 
 %type <value> INICIO
@@ -38,13 +38,13 @@ var lAST []arbol.AST
 %type <value> mkfile, cat,rm, edit, ren, mkdir, cp, mv, find, chown
 %type <value> chgrp, rep, path, size, name, unit, rtype, fit, delete
 %type <value> add, idn, id, tipo, usr, pwd, grp, ugo, r, p, cont
-%type <value> filen, rf, dest, k, m, e, l, bf,ff,wf, full, fast
+%type <value> filen, rf, dest, k, m, e, l, bf,ff,wf, full, fast, rid
 %type <value>  numero, rutaSimple, rutaCompleja, archivo
 %type <value> INSTRUCCION, LISTA_INSTRUCCION, PARAMETRO_PATH, VALOR_PATH
 %type <value> PARAMETRO_SIZE, PARAMETRO_NAME, VALOR_NAME, PARAMETRO_UNIT, VALOR_UNIT 
 %type <value> PARAMETRO_TYPE, VALOR_TYPE, PARAMETRO_FIT, VALOR_FIT
 %type <value> PARAMETRO_DELETE, VALOR_DELETE, PARAMETRO_ADD, PARAMETRO_IDN
-%type <value> LST_FDISK, LST_MKDIS, LST_MOUNT
+%type <value> LST_FDISK, LST_MKDIS, LST_MOUNT,PARAMETRO_ID,LST_REP
 
 
 %start INICIO
@@ -68,6 +68,16 @@ INSTRUCCION:
     |fdisk LST_FDISK        {fmt.Println("INSTRUCCION->",$1,$2); AddInstruccion("fdisk"); }
     |mount LST_MOUNT        {fmt.Println("INSTRUCCION->",$1,$2); AddInstruccion("mount"); }
     |unmount PARAMETRO_IDN  {fmt.Println("INSTRUCCION->",$1,$2); AddInstruccion("unmount"); }
+    |rep LST_REP            {fmt.Println("INSTRUCCION->",$1,$2); AddInstruccion("rep"); }
+;
+
+LST_REP:
+    LST_REP PARAMETRO_NAME          { $$=$1+$2; AddParametro(); }
+    |LST_REP PARAMETRO_PATH         { $$=$1+$2; AddParametro(); }
+    |LST_REP PARAMETRO_ID           { $$=$1+$2; AddParametro(); }
+    |PARAMETRO_NAME                 { $$=$1; AddParametro(); }
+    |PARAMETRO_PATH                 { $$=$1; AddParametro(); }
+    |PARAMETRO_ID                   { $$=$1; AddParametro(); }
 ;
 
 LST_MOUNT:
@@ -181,6 +191,11 @@ PARAMETRO_ADD:
 PARAMETRO_IDN:
     PARAMETRO_IDN guion idn asignacion id   { $$=$1+$2+$3+$4+$5 }
     |guion idn asignacion id                { $$=$1+$2+$3+$4 }
+;
+
+PARAMETRO_ID:
+    PARAMETRO_ID guion rid asignacion id   { $$=$1+$2+$3+$4+$5; CrearParametro($3,$5); }
+    |guion rid asignacion id                { $$=$1+$2+$3+$4; CrearParametro($2,$4); }
 ;
 
 

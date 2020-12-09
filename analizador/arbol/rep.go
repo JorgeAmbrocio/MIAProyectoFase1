@@ -1,0 +1,117 @@
+package arbol
+
+import (
+	"fmt"
+	"log"
+	"os"
+	"os/exec"
+	"strconv"
+)
+
+type rep struct {
+	name string
+	path string
+	id   string
+}
+
+func (i *rep) MatchParametros(lp []Parametro) {
+	for _, p := range lp {
+		switch p.Tipo {
+		case "path":
+			i.path = QuitarComillas(p.Valor)
+			break
+		case "name":
+			i.name = p.Valor
+			break
+		case "id":
+			i.id = p.Valor
+			break
+		}
+	}
+}
+
+func (i *rep) Validar() bool {
+	retorno := true
+
+	if i.path == "" || i.name == "" || i.id == "" {
+		retorno = false
+	}
+
+	return retorno
+}
+
+func Erep(p []Parametro) {
+	fmt.Println("Soy el rep y me estoy ejecutando")
+
+	i := rep{}
+	i.MatchParametros(p)
+	if i.Validar() {
+		i.crearReporte()
+	}
+}
+
+func (i *rep) crearReporte() {
+
+	// encontrar el id a buscar
+	if existe, particionMontada := RecuperarParticionMontada(i.id); existe {
+		if i.name == "mbr" {
+			// es un reporte mbr descripciòn
+			var auxMbr = RecuperarMBR(particionMontada.path)
+			var contenido = getReporteMBR(auxMbr)
+
+			// crear el archivo
+			file, err := os.Create(i.path + ".dot")
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			file.WriteString(contenido)
+			file.Close()
+
+			// compilar el archivo creado
+			comando := exec.Command("dot", i.path+".dot", "-Tjpg", "-o", i.path)
+			if err := comando.Run(); err != nil {
+				fmt.Println(err)
+			}
+			fmt.Println("Se ha creado el reporte con èxito")
+		} else {
+			// es un reporte de espacios
+		}
+	}
+}
+
+func getReporteMBR(mbr Mbr) string {
+	var retorno = ""
+
+	retorno += "digraph test {\n"
+	retorno += "	graph [ratio=fill];\n"
+	retorno += "	node [label=\"\\N\", fontsize=15, shape=plaintext];\n"
+	retorno += "	graph [bb=\"0,0,352,154\"];\n"
+	retorno += "	arset [label=<\n"
+	retorno += "		<table>\n"
+	retorno += "		<tr><td>Atributo</td><td>Valor</td></tr>\n"
+	// contenido de los valores para la tabla
+	retorno += "		<tr><td>mbr_tamano</td><td>Valor</td></tr>\n"
+	retorno += "		<tr><td>mbr_fecha_creacion</td><td>" + BytesToString(mbr.Date[:]) + "</td></tr>\n"
+	retorno += "		<tr><td>mbr_disk_signature</td><td>" + strconv.Itoa(int(mbr.Signature)) + "</td></tr>\n"
+	retorno += "		<tr><td>mbr_size</td><td>" + strconv.Itoa(int(mbr.Size)) + "</td></tr>\n"
+
+	for j := 0; j < 4; j++ {
+		retorno += "		<tr><td>part_status_" + strconv.Itoa(j+1) + "</td><td>" + strconv.Itoa(int(mbr.Partitions[j].Status)) + "</td></tr>\n"
+		retorno += "		<tr><td>part_type_" + strconv.Itoa(j+1) + "</td><td>" + ByteToString(mbr.Partitions[j].Type) + "</td></tr>\n"
+		retorno += "		<tr><td>part_fit_" + strconv.Itoa(j+1) + "</td><td>" + ByteToString(mbr.Partitions[j].Fit) + "</td></tr>\n"
+		retorno += "		<tr><td>part_start_" + strconv.Itoa(j+1) + "</td><td>" + strconv.Itoa(int(mbr.Partitions[j].Start)) + "</td></tr>\n"
+		retorno += "		<tr><td>part_size_" + strconv.Itoa(j+1) + "</td><td>" + strconv.Itoa(int(mbr.Partitions[j].Size)) + "</td></tr>\n"
+		retorno += "		<tr><td>part_name_" + strconv.Itoa(j+1) + "</td><td>" + BytesToString(mbr.Partitions[j].Name[:]) + "</td></tr>\n"
+	}
+
+	retorno += "		</table>\n"
+	retorno += "	>, ];\n"
+	retorno += "}\n"
+	return retorno
+}
+
+func getReporteDSK() string {
+	var retorno = ""
+	return retorno
+}

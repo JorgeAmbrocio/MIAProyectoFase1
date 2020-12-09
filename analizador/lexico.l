@@ -52,7 +52,7 @@ func (y *yylexer) Lex(lval *yySymType) int {
 numero              [0-9]+
 letra               [a-zñA-ZÑ_]
 id                  ({letra}|{numero})+
-archivo             {id}(".mia"|".dsk")
+archivo             {id}(".mia"|".dsk"|".jpg"|".pdf")
 rutaSimple          "/"({id}"/")*({archivo}?)
 rutaCompleja        \"[^\"\n\t\r]*\"
 
@@ -99,7 +99,7 @@ rutaCompleja        \"[^\"\n\t\r]*\"
 [Dd][Ee][Ll][Ee][Tt][Ee]    lval.value = string(y.buf); return delete
 [Aa][Dd][Dd]                lval.value = string(y.buf); return add
 [Ii][Dd]{numero}            lval.value = string(y.buf); return idn
-[Ii][Dd]                    lval.value = string(y.buf); return id
+[Ii][Dd]                    lval.value = string(y.buf); return rid
 [Tt][Ii][Pp][Oo]            lval.value = string(y.buf); return tipo
 [Uu][Ss][Rr]                lval.value = string(y.buf); return usr
 [Pp][Dd][Ww][Dd]            lval.value = string(y.buf); return pwd

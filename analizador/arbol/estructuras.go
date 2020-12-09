@@ -39,11 +39,16 @@ func (i Instruccion) Ejecutar() {
 		fmt.Println("Se ha ejecutado -> ", i.Tipo, "\n\t->", i.Parametros)
 		Efdisk(i.Parametros)
 		break
-	case "moun":
+	case "mount":
 		fmt.Println("Se ha ejecutado -> ", i.Tipo, "\n\t->", i.Parametros)
+		Emount(i.Parametros)
 		break
 	case "unmount":
 		fmt.Println("Se ha ejecutado -> ", i.Tipo, "\n\t->", i.Parametros)
+		break
+	case "rep":
+		fmt.Println("Se ha ejecutado -> ", i.Tipo, "\n\t->", i.Parametros)
+		Erep(i.Parametros)
 		break
 	default:
 		fmt.Println("No se reconoce la instrucción -> ", i.Tipo)

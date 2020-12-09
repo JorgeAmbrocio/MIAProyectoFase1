@@ -14,8 +14,12 @@ func main() {
 	//cadena += "pause\n"
 	//cadena += "rmdisk -path->/home/folder/algo/archivo.dsk \n"
 	//cadena := "fdisk -path->/home/folder/algo/archivo.dsk -name->particion2 -size->10 -type->e -unit->k -fit->ff \n"
-	cadena := "fdisk -path->/home/folder/algo/archivo.dsk -name->particion2 -add->-6 -unit->k \n"
+	//cadena := "fdisk -path->/home/folder/algo/archivo.dsk -name->particion2 -add->-6 -unit->k \n"
 	//"/home/folder/algo/archivo.particion
+	//cadena := "rep -name->mbr   -path->/home/algo/reporte.jpg -id->vda1 \n"
+	cadena := "mount -name->particion2   -path->/home/folder/algo/archivo.dsk \n"
+	cadena += "mount -name->particion1   -path->/home/folder/algo/archivo.dsk \n"
+	cadena += "rep -path->/home/folder/algo/reporte.jpg -name->mbr -id->vda1 \n"
 
 	reader := bufio.NewReader(strings.NewReader(cadena))
 	yyParse(newLexer(reader))
