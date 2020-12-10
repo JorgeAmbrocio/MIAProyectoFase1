@@ -147,3 +147,12 @@ func getEspaciosLibres(mbr Mbr) Espacios {
 
 	return espaciosVacios
 }
+
+func getEspaciosLlenos(mbr Mbr) {
+	var espacios Espacios
+
+	for _, paricion := range mbr.Partitions {
+		espacios.Inicios = append(espacios.Inicios, int(paricion.Start))
+		espacios.Finales = append(espacios.Finales, int(paricion.Start+paricion.Size))
+	}
+}

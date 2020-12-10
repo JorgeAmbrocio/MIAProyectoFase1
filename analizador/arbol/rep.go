@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"sort"
 	"strconv"
 )
 
@@ -76,6 +77,25 @@ func (i *rep) crearReporte() {
 			fmt.Println("Se ha creado el reporte con èxito")
 		} else {
 			// es un reporte de espacios
+			// es un reporte mbr descripciòn
+			var auxMbr = RecuperarMBR(particionMontada.path)
+			var contenido = getReporteDSK(auxMbr)
+
+			// crear el archivo
+			file, err := os.Create(i.path + ".dot")
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			file.WriteString(contenido)
+			file.Close()
+
+			// compilar el archivo creado
+			comando := exec.Command("dot", i.path+".dot", "-Tjpg", "-o", i.path)
+			if err := comando.Run(); err != nil {
+				fmt.Println(err)
+			}
+			fmt.Println("Se ha creado el reporte con èxito")
 		}
 	}
 }
@@ -91,7 +111,6 @@ func getReporteMBR(mbr Mbr) string {
 	retorno += "		<table>\n"
 	retorno += "		<tr><td>Atributo</td><td>Valor</td></tr>\n"
 	// contenido de los valores para la tabla
-	retorno += "		<tr><td>mbr_tamano</td><td>Valor</td></tr>\n"
 	retorno += "		<tr><td>mbr_fecha_creacion</td><td>" + BytesToString(mbr.Date[:]) + "</td></tr>\n"
 	retorno += "		<tr><td>mbr_disk_signature</td><td>" + strconv.Itoa(int(mbr.Signature)) + "</td></tr>\n"
 	retorno += "		<tr><td>mbr_size</td><td>" + strconv.Itoa(int(mbr.Size)) + "</td></tr>\n"
@@ -111,7 +130,61 @@ func getReporteMBR(mbr Mbr) string {
 	return retorno
 }
 
-func getReporteDSK() string {
+func getReporteDSK(mbr Mbr) string {
 	var retorno = ""
+
+	retorno += "digraph G {\n"
+	retorno += "	concentrate=True;"
+	retorno += "	rankdir=TB;"
+	retorno += "	node [shape=record];"
+	//retorno += "	hoja [label=\"mbr\n|{Extendida: 70% |}|{ Primaria 25% } | { Libre 5% }\"];"
+	retorno += "	hojasa [label=\"mbr\n"
+
+	// obtener espacios vacìos
+	//espaciosVacios := getEspaciosLibres(mbr)
+	espaciosTotales := getEspaciosLibres(mbr)
+	for _, particion := range mbr.Partitions { // obtener espacios llenos
+		espaciosTotales.Inicios = append(espaciosTotales.Inicios, int(particion.Start))
+		espaciosTotales.Finales = append(espaciosTotales.Finales, int(particion.Start+particion.Size))
+	}
+
+	//  ordenar todos los espacios
+	sort.Ints(espaciosTotales.Inicios)
+	sort.Ints(espaciosTotales.Finales)
+
+	// encontrar tamaños
+	// recorrer todos los espacios
+	for indice, espacio := range espaciosTotales.Inicios {
+		// omitir los ceros
+		if espacio == 0 {
+			continue
+		}
+
+		// identificar si el espacio es libre o particiòn
+		var particionCorrecta int = -1
+		for in, part := range mbr.Partitions {
+			if part.Start == int64(espacio) {
+				particionCorrecta = in
+				break
+			}
+		}
+
+		if particionCorrecta == -1 {
+			// es un espacio libre
+			tamano := espaciosTotales.Finales[indice] - espacio
+			retorno += "|{ Libre " + strconv.Itoa(int(int(tamano)*100/int(mbr.Size))) + "% }"
+		} else {
+			// es una particiòn
+			if mbr.Partitions[particionCorrecta].Type == 'p' {
+				retorno += "|{ Primaria " + BytesToString(mbr.Partitions[particionCorrecta].Name[:]) + strconv.Itoa(int(int(mbr.Partitions[particionCorrecta].Size)*100/int(mbr.Size))) + "% }"
+			} else {
+				retorno += "|{ Extendida " + BytesToString(mbr.Partitions[particionCorrecta].Name[:]) + strconv.Itoa(int(int(mbr.Partitions[particionCorrecta].Size)*100/int(mbr.Size))) + "% |}"
+			}
+		}
+	}
+
+	retorno += "\"];"
+	retorno += "}"
+
 	return retorno
 }

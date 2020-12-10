@@ -15,7 +15,7 @@ func QuitarComillas(str string) string {
  */
 func CrearTodasCarpetas(ruta string) {
 	if !ExisteCarpeta(ruta) {
-		err := os.MkdirAll(ruta, 0770)
+		err := os.MkdirAll(ruta, 0777)
 		if err != nil {
 			log.Fatal(err)
 		}

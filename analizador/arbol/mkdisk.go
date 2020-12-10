@@ -8,13 +8,14 @@ import (
 	"math/rand"
 	"os"
 	"strconv"
+	"strings"
 )
 
 // mkdisk estructura de la instrucción mkdisk
 type mkdisk struct {
-	size          int
-	path          string
-	name          string
+	size int
+	path string
+	//name          string
 	unit          string
 	fit           string
 	multiplicador int
@@ -34,10 +35,12 @@ func (i *mkdisk) MatchParametros(lp []Parametro) {
 			break
 		case "path":
 			i.path = QuitarComillas(p.Valor)
-			CrearTodasCarpetas(i.path)
-			break
-		case "name":
-			i.name = p.Valor
+			spliteado := strings.Split(i.path, "/")
+			var directorio string = ""
+			for _, str := range spliteado[1 : len(spliteado)-1] {
+				directorio += "/" + str
+			}
+			CrearTodasCarpetas(directorio)
 			break
 		case "unit":
 			i.unit = p.Valor
@@ -64,7 +67,7 @@ func (i *mkdisk) MatchParametros(lp []Parametro) {
 func (i mkdisk) Validar() bool {
 	retorno := true
 
-	if i.size < 0 || i.path == "" || i.name == "" {
+	if i.size < 0 || i.path == "" {
 		retorno = false
 	}
 
@@ -73,7 +76,7 @@ func (i mkdisk) Validar() bool {
 
 // CrearBinario ...
 func (i mkdisk) CrearBinario() {
-	file, err := os.Create(i.path + i.name)
+	file, err := os.Create(i.path)
 	defer file.Close()
 
 	if err != nil {

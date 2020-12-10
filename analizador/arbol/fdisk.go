@@ -63,14 +63,15 @@ func (i *fdisk) MatchParametros(lp []Parametro) {
 	}
 
 	if i.unit == "" {
-		i.unit = "m"
-		i.multiplicador = 1024
-	} else {
-		i.multiplicador = 1
+		i.unit = "k"
 	}
 
 	if i.fit == "" {
 		i.fit = "wf"
+	}
+
+	if i.tipo == "" {
+		i.tipo = "p"
 	}
 
 }
@@ -94,10 +95,10 @@ func Efdisk(p []Parametro) {
 		// identificar què tipo de ejecuciòn se debe realizar
 
 		// crear una particiòn
-		if i.size != 0 && i.tipo != "" {
+		if i.size != 0 {
 			// se està creando una particiòn
 			if i.fit != "" {
-				i.fit = "wf"
+				i.fit = "ff"
 			}
 			if i.unit != "" {
 				i.unit = "k"
@@ -293,7 +294,7 @@ func (i *fdisk) addParticion() {
 	// recuperar el mbr
 	i.mbr = RecuperarMBR(i.path)
 	auxMbr := i.mbr
-	fmt.Println(i.mbr)
+	//fmt.Println(i.mbr)
 
 	// encontrar la particiòn con el nombre a eliminar
 	var nombreByte [16]byte

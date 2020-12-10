@@ -4,17 +4,19 @@
 package main
 
 import (
-    //"bufio"
+    "bufio"
     "fmt"
+    "log"
     //"archivos/MIA-Proyecto1_201709454/analizador/arbol"
     "proyectos/MIAProyectoFase1/analizador/arbol"
-    //"os"
+    "os"
 )
 
 var oParametro arbol.Parametro
 var oInstruccion arbol.Instruccion
 var lInstruccion []arbol.Instruccion
 var lAST []arbol.AST
+var auxPath string
 
 %}
 
@@ -62,7 +64,7 @@ LISTA_INSTRUCCION:
 
 INSTRUCCION:
     pause                   {fmt.Println("pausa->",$1); AddInstruccion("pause"); }
-    |exec PARAMETRO_PATH    {fmt.Println("INSTRUCCION->",$1,$2); AddParametro(); AddInstruccion("exec"); }
+    |exec PARAMETRO_PATH    {fmt.Println("INSTRUCCION->",$1,$2); EjecutarExec(); }
     |mkdisk LST_MKDIS       {fmt.Println("INSTRUCCION->",$1,$2); AddInstruccion("mkdisk"); }
     |rmdisk PARAMETRO_PATH  {fmt.Println("INSTRUCCION->",$1,$2); AddParametro(); AddInstruccion("rmdisk"); }
     |fdisk LST_FDISK        {fmt.Println("INSTRUCCION->",$1,$2); AddInstruccion("fdisk"); }
@@ -109,12 +111,12 @@ LST_FDISK:
 LST_MKDIS:
     LST_MKDIS PARAMETRO_SIZE            { $$=$1; AddParametro();}
     |LST_MKDIS PARAMETRO_PATH           { $$=$1; AddParametro();}
-    |LST_MKDIS PARAMETRO_NAME           { $$=$1; AddParametro();}
+    //|LST_MKDIS PARAMETRO_NAME           { $$=$1; AddParametro();}
     |LST_MKDIS PARAMETRO_UNIT           { $$=$1; AddParametro();}
     |LST_MKDIS PARAMETRO_FIT            { $$=$1; AddParametro();}
     |PARAMETRO_SIZE                     { $$=$1; AddParametro();}
     |PARAMETRO_PATH                     { $$=$1; AddParametro();}
-    |PARAMETRO_NAME                     { $$=$1; AddParametro();}
+    //|PARAMETRO_NAME                     { $$=$1; AddParametro();}
     |PARAMETRO_UNIT                     { $$=$1; AddParametro();}
     |PARAMETRO_FIT                      { $$=$1; AddParametro();}
 ;
@@ -122,7 +124,7 @@ LST_MKDIS:
 
 
 PARAMETRO_PATH:
-    guion path asignacion VALOR_PATH { $$=$1+$2+$3+$4; CrearParametro($2,$4);}
+    guion path asignacion VALOR_PATH { $$=$1+$2+$3+$4; auxPath = $4; CrearParametro($2,$4);}
 ;
 
 VALOR_PATH:
@@ -227,5 +229,19 @@ func AddInstruccion( tipo string) {
 func AddAST()  {
 	ast:= arbol.AST{}
 	ast.Instrucciones = lInstruccion
+    lInstruccion = []arbol.Instruccion{}
 	lAST = append(lAST, ast)
+}
+
+func EjecutarExec () {
+    if file, err := os.Open(auxPath); err == nil {
+		yyParse(newLexer(bufio.NewReader(file)))
+
+        ast := lAST[len(lAST)-1]
+	    ast.EjecutarAST()
+        lAST = lAST[:len(lAST)-1]
+	} else {
+		fmt.Println("No se ha podido abrir el archivo")
+		log.Panic(err)
+	}
 }

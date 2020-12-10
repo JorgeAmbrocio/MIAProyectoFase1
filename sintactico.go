@@ -6,17 +6,19 @@ package main
 import __yyfmt__ "fmt"
 
 import (
-	//"bufio"
+	"bufio"
 	"fmt"
+	"log"
 	//"archivos/MIA-Proyecto1_201709454/analizador/arbol"
+	"os"
 	"proyectos/MIAProyectoFase1/analizador/arbol"
-	//"os"
 )
 
 var oParametro arbol.Parametro
 var oInstruccion arbol.Instruccion
 var lInstruccion []arbol.Instruccion
 var lAST []arbol.AST
+var auxPath string
 
 type yySymType struct {
 	yys   int
@@ -97,18 +99,18 @@ const (
 	wf           = 57402
 
 	yyMaxDepth = 200
-	yyTabOfs   = -76
+	yyTabOfs   = -74
 )
 
 var (
 	yyPrec = map[int]int{}
 
 	yyXLAT = map[int]int{
-		57347: 0,  // guion (77x)
-		10:    1,  // '\n' (74x)
+		57347: 0,  // guion (75x)
+		10:    1,  // '\n' (72x)
 		57346: 2,  // asignacion (12x)
 		57424: 3,  // PARAMETRO_PATH (10x)
-		57423: 4,  // PARAMETRO_NAME (8x)
+		57423: 4,  // PARAMETRO_NAME (6x)
 		57384: 5,  // id (5x)
 		57375: 6,  // path (5x)
 		57344: 7,  // $end (4x)
@@ -116,14 +118,14 @@ var (
 		57352: 9,  // fdisk (4x)
 		57350: 10, // mkdisk (4x)
 		57353: 11, // mount (4x)
-		57377: 12, // name (4x)
-		57420: 13, // PARAMETRO_FIT (4x)
-		57425: 14, // PARAMETRO_SIZE (4x)
-		57427: 15, // PARAMETRO_UNIT (4x)
-		57349: 16, // pause (4x)
-		57374: 17, // rep (4x)
-		57351: 18, // rmdisk (4x)
-		57354: 19, // unmount (4x)
+		57420: 12, // PARAMETRO_FIT (4x)
+		57425: 13, // PARAMETRO_SIZE (4x)
+		57427: 14, // PARAMETRO_UNIT (4x)
+		57349: 15, // pause (4x)
+		57374: 16, // rep (4x)
+		57351: 17, // rmdisk (4x)
+		57354: 18, // unmount (4x)
+		57377: 19, // name (3x)
 		57406: 20, // numero (3x)
 		57380: 21, // fit (2x)
 		57383: 22, // idn (2x)
@@ -210,7 +212,6 @@ var (
 		"fdisk",
 		"mkdisk",
 		"mount",
-		"name",
 		"PARAMETRO_FIT",
 		"PARAMETRO_SIZE",
 		"PARAMETRO_UNIT",
@@ -218,6 +219,7 @@ var (
 		"rep",
 		"rmdisk",
 		"unmount",
+		"name",
 		"numero",
 		"fit",
 		"idn",
@@ -336,188 +338,184 @@ var (
 		39: {45, 2},
 		40: {45, 2},
 		41: {45, 2},
-		42: {45, 2},
+		42: {45, 1},
 		43: {45, 1},
 		44: {45, 1},
 		45: {45, 1},
-		46: {45, 1},
-		47: {45, 1},
-		48: {3, 4},
-		49: {56, 1},
-		50: {56, 1},
-		51: {14, 4},
-		52: {4, 4},
+		46: {3, 4},
+		47: {56, 1},
+		48: {56, 1},
+		49: {13, 4},
+		50: {4, 4},
+		51: {55, 1},
+		52: {55, 1},
 		53: {55, 1},
-		54: {55, 1},
-		55: {55, 1},
-		56: {15, 4},
-		57: {58, 1},
-		58: {58, 1},
-		59: {27, 4},
+		54: {14, 4},
+		55: {58, 1},
+		56: {58, 1},
+		57: {27, 4},
+		58: {57, 1},
+		59: {57, 1},
 		60: {57, 1},
-		61: {57, 1},
-		62: {57, 1},
-		63: {13, 4},
+		61: {12, 4},
+		62: {54, 1},
+		63: {54, 1},
 		64: {54, 1},
-		65: {54, 1},
-		66: {54, 1},
-		67: {25, 4},
-		68: {53, 1},
-		69: {53, 1},
-		70: {24, 4},
-		71: {24, 5},
-		72: {50, 5},
-		73: {50, 4},
-		74: {26, 5},
-		75: {26, 4},
+		65: {25, 4},
+		66: {53, 1},
+		67: {53, 1},
+		68: {24, 4},
+		69: {24, 5},
+		70: {50, 5},
+		71: {50, 4},
+		72: {26, 5},
+		73: {26, 4},
 	}
 
 	yyXErrors = map[yyXError]string{}
 
-	yyParseTab = [119][]uint16{
+	yyParseTab = [117][]uint16{
 		// 0
-		{8: 81, 84, 82, 85, 16: 80, 87, 83, 86, 23: 79, 40: 77, 43: 78},
-		{7: 76},
-		{7: 75, 81, 84, 82, 85, 16: 80, 87, 83, 86, 23: 193},
-		{1: 192},
-		{1: 72},
+		{8: 79, 82, 80, 83, 15: 78, 85, 81, 84, 23: 77, 40: 75, 43: 76},
+		{7: 74},
+		{7: 73, 79, 82, 80, 83, 15: 78, 85, 81, 84, 23: 189},
+		{1: 188},
+		{1: 70},
 		// 5
-		{178, 3: 191},
-		{185, 3: 181, 182, 13: 184, 180, 183, 45: 179},
-		{178, 3: 177},
-		{138, 3: 132, 136, 13: 134, 130, 131, 24: 137, 135, 27: 133, 44: 129},
-		{126, 3: 124, 125, 46: 123},
+		{176, 3: 187},
+		{182, 3: 179, 12: 181, 178, 180, 45: 177},
+		{176, 3: 175},
+		{136, 3: 130, 134, 12: 132, 128, 129, 24: 135, 133, 27: 131, 44: 127},
+		{124, 3: 122, 123, 46: 121},
 		// 10
-		{115, 50: 114},
-		{92, 3: 90, 89, 26: 91, 47: 88},
-		{92, 65, 3: 112, 111, 26: 113},
-		{61, 61},
-		{60, 60},
+		{113, 50: 112},
+		{90, 3: 88, 87, 26: 89, 47: 86},
+		{90, 63, 3: 110, 109, 26: 111},
+		{59, 59},
+		{58, 58},
 		// 15
-		{107, 59},
-		{6: 93, 12: 94, 28: 95},
-		{2: 103},
-		{2: 98},
+		{105, 57},
+		{6: 91, 19: 92, 28: 93},
+		{2: 101},
 		{2: 96},
+		{2: 94},
 		// 20
-		{5: 97},
+		{5: 95},
 		{1, 1},
-		{5: 101, 29: 102, 33: 100, 55: 99},
+		{5: 99, 29: 100, 33: 98, 55: 97},
 		{24, 24},
 		{23, 23},
 		// 25
 		{22, 22},
 		{21, 21},
-		{29: 106, 52: 105, 56: 104},
+		{29: 104, 52: 103, 56: 102},
 		{28, 28},
 		{27, 27},
 		// 30
 		{26, 26},
-		{28: 108},
-		{2: 109},
-		{5: 110},
+		{28: 106},
+		{2: 107},
+		{5: 108},
 		{2, 2},
 		// 35
-		{64, 64},
-		{63, 63},
-		{107, 62},
-		{119, 66},
-		{22: 116},
+		{62, 62},
+		{61, 61},
+		{105, 60},
+		{117, 64},
+		{22: 114},
 		// 40
-		{2: 117},
-		{5: 118},
+		{2: 115},
+		{5: 116},
 		{3, 3},
-		{22: 120},
-		{2: 121},
+		{22: 118},
+		{2: 119},
 		// 45
-		{5: 122},
+		{5: 120},
 		{4, 4},
-		{126, 67, 3: 127, 128},
+		{124, 65, 3: 125, 126},
+		{54, 54},
+		{53, 53},
+		// 50
+		{6: 91, 19: 92},
 		{56, 56},
 		{55, 55},
-		// 50
-		{6: 93, 12: 94},
-		{58, 58},
-		{57, 57},
-		{138, 68, 3: 171, 175, 13: 173, 169, 170, 24: 176, 174, 27: 172},
-		{46, 46},
-		// 55
-		{45, 45},
+		{136, 66, 3: 169, 173, 12: 171, 167, 168, 24: 174, 172, 27: 170},
 		{44, 44},
+		// 55
 		{43, 43},
 		{42, 42},
 		{41, 41},
-		// 60
 		{40, 40},
 		{39, 39},
-		{6: 93, 12: 94, 21: 142, 30: 139, 140, 144, 35: 143, 51: 141},
-		{2: 167},
-		{2: 163},
+		// 60
+		{38, 38},
+		{37, 37},
+		{6: 91, 19: 92, 21: 140, 30: 137, 138, 142, 35: 141, 51: 139},
+		{2: 165},
+		{2: 161},
 		// 65
-		{2: 158},
-		{2: 153},
-		{2: 149},
-		{2: 145},
-		{147, 20: 146},
+		{2: 156},
+		{2: 151},
+		{2: 147},
+		{2: 143},
+		{145, 20: 144},
 		// 70
 		{6, 6},
-		{20: 148},
+		{20: 146},
 		{5, 5},
-		{37: 152, 39: 151, 53: 150},
+		{37: 150, 39: 149, 53: 148},
 		{9, 9},
 		// 75
 		{8, 8},
 		{7, 7},
-		{34: 155, 38: 156, 54: 154, 59: 157},
+		{34: 153, 38: 154, 54: 152, 59: 155},
 		{13, 13},
 		{12, 12},
 		// 80
 		{11, 11},
 		{10, 10},
-		{36: 161, 42: 162, 49: 160, 57: 159},
+		{36: 159, 42: 160, 49: 158, 57: 157},
 		{17, 17},
 		{16, 16},
 		// 85
 		{15, 15},
 		{14, 14},
-		{41: 165, 48: 166, 58: 164},
+		{41: 163, 48: 164, 58: 162},
 		{20, 20},
 		{19, 19},
 		// 90
 		{18, 18},
-		{20: 168},
+		{20: 166},
 		{25, 25},
-		{54, 54},
-		{53, 53},
-		// 95
 		{52, 52},
 		{51, 51},
+		// 95
 		{50, 50},
 		{49, 49},
 		{48, 48},
-		// 100
 		{47, 47},
-		{1: 69},
-		{6: 93},
-		{185, 70, 3: 187, 188, 13: 190, 186, 189},
-		{33, 33},
-		// 105
+		{46, 46},
+		// 100
+		{45, 45},
+		{1: 67},
+		{6: 91},
+		{182, 68, 3: 184, 12: 186, 183, 185},
 		{32, 32},
+		// 105
 		{31, 31},
 		{30, 30},
 		{29, 29},
-		{6: 93, 12: 94, 21: 142, 30: 139, 140},
-		// 110
-		{38, 38},
-		{37, 37},
+		{6: 91, 21: 140, 30: 137, 138},
 		{36, 36},
+		// 110
 		{35, 35},
 		{34, 34},
+		{33, 33},
+		{1: 69},
+		{7: 71, 71, 71, 71, 71, 15: 71, 71, 71, 71},
 		// 115
-		{1: 71},
-		{7: 73, 73, 73, 73, 73, 16: 73, 73, 73, 73},
-		{1: 194},
-		{7: 74, 74, 74, 74, 74, 16: 74, 74, 74, 74},
+		{1: 190},
+		{7: 72, 72, 72, 72, 72, 15: 72, 72, 72, 72},
 	}
 )
 
@@ -759,8 +757,7 @@ yynewstate:
 	case 5:
 		{
 			fmt.Println("INSTRUCCION->", yyS[yypt-1].value, yyS[yypt-0].value)
-			AddParametro()
-			AddInstruccion("exec")
+			EjecutarExec()
 		}
 	case 6:
 		{
@@ -945,7 +942,7 @@ yynewstate:
 		}
 	case 42:
 		{
-			yyVAL.value = yyS[yypt-1].value
+			yyVAL.value = yyS[yypt-0].value
 			AddParametro()
 		}
 	case 43:
@@ -965,36 +962,35 @@ yynewstate:
 		}
 	case 46:
 		{
-			yyVAL.value = yyS[yypt-0].value
-			AddParametro()
+			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
+			auxPath = yyS[yypt-0].value
+			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
 		}
 	case 47:
 		{
 			yyVAL.value = yyS[yypt-0].value
-			AddParametro()
 		}
 	case 48:
 		{
-			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
-			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
+			yyVAL.value = yyS[yypt-0].value
 		}
 	case 49:
 		{
-			yyVAL.value = yyS[yypt-0].value
+			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
+			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
 		}
 	case 50:
 		{
-			yyVAL.value = yyS[yypt-0].value
+			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
+			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
 		}
 	case 51:
 		{
-			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
-			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
+			yyVAL.value = yyS[yypt-0].value
 		}
 	case 52:
 		{
-			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
-			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
+			yyVAL.value = yyS[yypt-0].value
 		}
 	case 53:
 		{
@@ -1002,7 +998,8 @@ yynewstate:
 		}
 	case 54:
 		{
-			yyVAL.value = yyS[yypt-0].value
+			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
+			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
 		}
 	case 55:
 		{
@@ -1010,12 +1007,12 @@ yynewstate:
 		}
 	case 56:
 		{
-			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
-			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
+			yyVAL.value = yyS[yypt-0].value
 		}
 	case 57:
 		{
-			yyVAL.value = yyS[yypt-0].value
+			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
+			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
 		}
 	case 58:
 		{
@@ -1023,8 +1020,7 @@ yynewstate:
 		}
 	case 59:
 		{
-			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
-			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
+			yyVAL.value = yyS[yypt-0].value
 		}
 	case 60:
 		{
@@ -1032,7 +1028,8 @@ yynewstate:
 		}
 	case 61:
 		{
-			yyVAL.value = yyS[yypt-0].value
+			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
+			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
 		}
 	case 62:
 		{
@@ -1040,8 +1037,7 @@ yynewstate:
 		}
 	case 63:
 		{
-			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
-			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
+			yyVAL.value = yyS[yypt-0].value
 		}
 	case 64:
 		{
@@ -1049,7 +1045,8 @@ yynewstate:
 		}
 	case 65:
 		{
-			yyVAL.value = yyS[yypt-0].value
+			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
+			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
 		}
 	case 66:
 		{
@@ -1057,41 +1054,32 @@ yynewstate:
 		}
 	case 67:
 		{
-			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
-			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
+			yyVAL.value = yyS[yypt-0].value
 		}
 	case 68:
 		{
-			yyVAL.value = yyS[yypt-0].value
-		}
-	case 69:
-		{
-			yyVAL.value = yyS[yypt-0].value
-		}
-	case 70:
-		{
 			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
 			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
 		}
-	case 71:
+	case 69:
 		{
 			yyVAL.value = yyS[yypt-4].value + yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
 			CrearParametro(yyS[yypt-3].value, "-"+yyS[yypt-0].value)
 		}
-	case 72:
+	case 70:
 		{
 			yyVAL.value = yyS[yypt-4].value + yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
 		}
-	case 73:
+	case 71:
 		{
 			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
 		}
-	case 74:
+	case 72:
 		{
 			yyVAL.value = yyS[yypt-4].value + yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
 			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
 		}
-	case 75:
+	case 73:
 		{
 			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
 			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
@@ -1131,5 +1119,19 @@ func AddInstruccion(tipo string) {
 func AddAST() {
 	ast := arbol.AST{}
 	ast.Instrucciones = lInstruccion
+	lInstruccion = []arbol.Instruccion{}
 	lAST = append(lAST, ast)
+}
+
+func EjecutarExec() {
+	if file, err := os.Open(auxPath); err == nil {
+		yyParse(newLexer(bufio.NewReader(file)))
+
+		ast := lAST[len(lAST)-1]
+		ast.EjecutarAST()
+		lAST = lAST[:len(lAST)-1]
+	} else {
+		fmt.Println("No se ha podido abrir el archivo")
+		log.Panic(err)
+	}
 }

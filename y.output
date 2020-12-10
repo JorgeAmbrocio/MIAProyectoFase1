@@ -36,13 +36,13 @@ state 2 // pause '\n' [$end]
     rmdisk   shift, and goto state 7
     unmount  shift, and goto state 10
 
-    INSTRUCCION  goto state 117
+    INSTRUCCION  goto state 115
 
 state 3 // pause ['\n']
 
     3 LISTA_INSTRUCCION: INSTRUCCION . '\n'
 
-    '\n'  shift, and goto state 116
+    '\n'  shift, and goto state 114
 
 state 4 // pause
 
@@ -56,20 +56,19 @@ state 5 // exec
 
     guion  shift, and goto state 102
 
-    PARAMETRO_PATH  goto state 115
+    PARAMETRO_PATH  goto state 113
 
 state 6 // mkdisk
 
     6 INSTRUCCION: mkdisk . LST_MKDIS
 
-    guion  shift, and goto state 109
+    guion  shift, and goto state 108
 
     LST_MKDIS       goto state 103
-    PARAMETRO_FIT   goto state 108
-    PARAMETRO_NAME  goto state 106
+    PARAMETRO_FIT   goto state 107
     PARAMETRO_PATH  goto state 105
     PARAMETRO_SIZE  goto state 104
-    PARAMETRO_UNIT  goto state 107
+    PARAMETRO_UNIT  goto state 106
 
 state 7 // rmdisk
 
@@ -155,7 +154,7 @@ state 14 // rep guion path asignacion rutaCompleja ['\n']
 state 15 // rep guion rid asignacion id ['\n']
 
    17 LST_REP: PARAMETRO_ID .  ['\n', guion]
-   74 PARAMETRO_ID: PARAMETRO_ID . guion rid asignacion id
+   72 PARAMETRO_ID: PARAMETRO_ID . guion rid asignacion id
 
     '\n'   reduce using rule 17 (LST_REP)
     guion  shift, and goto state 31
@@ -163,9 +162,9 @@ state 15 // rep guion rid asignacion id ['\n']
 
 state 16 // rep guion
 
-   48 PARAMETRO_PATH: guion . path asignacion VALOR_PATH
-   52 PARAMETRO_NAME: guion . name asignacion VALOR_NAME
-   75 PARAMETRO_ID: guion . rid asignacion id
+   46 PARAMETRO_PATH: guion . path asignacion VALOR_PATH
+   50 PARAMETRO_NAME: guion . name asignacion VALOR_NAME
+   73 PARAMETRO_ID: guion . rid asignacion id
 
     name  shift, and goto state 18
     path  shift, and goto state 17
@@ -173,38 +172,38 @@ state 16 // rep guion
 
 state 17 // rep guion path
 
-   48 PARAMETRO_PATH: guion path . asignacion VALOR_PATH
+   46 PARAMETRO_PATH: guion path . asignacion VALOR_PATH
 
     asignacion  shift, and goto state 27
 
 state 18 // rep guion name
 
-   52 PARAMETRO_NAME: guion name . asignacion VALOR_NAME
+   50 PARAMETRO_NAME: guion name . asignacion VALOR_NAME
 
     asignacion  shift, and goto state 22
 
 state 19 // rep guion rid
 
-   75 PARAMETRO_ID: guion rid . asignacion id
+   73 PARAMETRO_ID: guion rid . asignacion id
 
     asignacion  shift, and goto state 20
 
 state 20 // rep guion rid asignacion
 
-   75 PARAMETRO_ID: guion rid asignacion . id
+   73 PARAMETRO_ID: guion rid asignacion . id
 
     id  shift, and goto state 21
 
 state 21 // rep guion rid asignacion id
 
-   75 PARAMETRO_ID: guion rid asignacion id .  ['\n', guion]
+   73 PARAMETRO_ID: guion rid asignacion id .  ['\n', guion]
 
-    '\n'   reduce using rule 75 (PARAMETRO_ID)
-    guion  reduce using rule 75 (PARAMETRO_ID)
+    '\n'   reduce using rule 73 (PARAMETRO_ID)
+    guion  reduce using rule 73 (PARAMETRO_ID)
 
 state 22 // rep guion name asignacion
 
-   52 PARAMETRO_NAME: guion name asignacion . VALOR_NAME
+   50 PARAMETRO_NAME: guion name asignacion . VALOR_NAME
 
     archivo       shift, and goto state 24
     id            shift, and goto state 25
@@ -214,35 +213,35 @@ state 22 // rep guion name asignacion
 
 state 23 // rep guion name asignacion archivo ['\n']
 
-   52 PARAMETRO_NAME: guion name asignacion VALOR_NAME .  ['\n', guion]
+   50 PARAMETRO_NAME: guion name asignacion VALOR_NAME .  ['\n', guion]
 
-    '\n'   reduce using rule 52 (PARAMETRO_NAME)
-    guion  reduce using rule 52 (PARAMETRO_NAME)
+    '\n'   reduce using rule 50 (PARAMETRO_NAME)
+    guion  reduce using rule 50 (PARAMETRO_NAME)
 
 state 24 // rep guion name asignacion archivo
 
-   53 VALOR_NAME: archivo .  ['\n', guion]
+   51 VALOR_NAME: archivo .  ['\n', guion]
+
+    '\n'   reduce using rule 51 (VALOR_NAME)
+    guion  reduce using rule 51 (VALOR_NAME)
+
+state 25 // rep guion name asignacion id
+
+   52 VALOR_NAME: id .  ['\n', guion]
+
+    '\n'   reduce using rule 52 (VALOR_NAME)
+    guion  reduce using rule 52 (VALOR_NAME)
+
+state 26 // rep guion name asignacion rutaCompleja
+
+   53 VALOR_NAME: rutaCompleja .  ['\n', guion]
 
     '\n'   reduce using rule 53 (VALOR_NAME)
     guion  reduce using rule 53 (VALOR_NAME)
 
-state 25 // rep guion name asignacion id
-
-   54 VALOR_NAME: id .  ['\n', guion]
-
-    '\n'   reduce using rule 54 (VALOR_NAME)
-    guion  reduce using rule 54 (VALOR_NAME)
-
-state 26 // rep guion name asignacion rutaCompleja
-
-   55 VALOR_NAME: rutaCompleja .  ['\n', guion]
-
-    '\n'   reduce using rule 55 (VALOR_NAME)
-    guion  reduce using rule 55 (VALOR_NAME)
-
 state 27 // rep guion path asignacion
 
-   48 PARAMETRO_PATH: guion path asignacion . VALOR_PATH
+   46 PARAMETRO_PATH: guion path asignacion . VALOR_PATH
 
     rutaCompleja  shift, and goto state 30
     rutaSimple    shift, and goto state 29
@@ -251,49 +250,49 @@ state 27 // rep guion path asignacion
 
 state 28 // rep guion path asignacion rutaCompleja ['\n']
 
-   48 PARAMETRO_PATH: guion path asignacion VALOR_PATH .  ['\n', guion]
+   46 PARAMETRO_PATH: guion path asignacion VALOR_PATH .  ['\n', guion]
 
-    '\n'   reduce using rule 48 (PARAMETRO_PATH)
-    guion  reduce using rule 48 (PARAMETRO_PATH)
+    '\n'   reduce using rule 46 (PARAMETRO_PATH)
+    guion  reduce using rule 46 (PARAMETRO_PATH)
 
 state 29 // rep guion path asignacion rutaSimple
 
-   49 VALOR_PATH: rutaSimple .  ['\n', guion]
+   47 VALOR_PATH: rutaSimple .  ['\n', guion]
 
-    '\n'   reduce using rule 49 (VALOR_PATH)
-    guion  reduce using rule 49 (VALOR_PATH)
+    '\n'   reduce using rule 47 (VALOR_PATH)
+    guion  reduce using rule 47 (VALOR_PATH)
 
 state 30 // rep guion path asignacion rutaCompleja
 
-   50 VALOR_PATH: rutaCompleja .  ['\n', guion]
+   48 VALOR_PATH: rutaCompleja .  ['\n', guion]
 
-    '\n'   reduce using rule 50 (VALOR_PATH)
-    guion  reduce using rule 50 (VALOR_PATH)
+    '\n'   reduce using rule 48 (VALOR_PATH)
+    guion  reduce using rule 48 (VALOR_PATH)
 
 state 31 // rep guion rid asignacion id guion
 
-   74 PARAMETRO_ID: PARAMETRO_ID guion . rid asignacion id
+   72 PARAMETRO_ID: PARAMETRO_ID guion . rid asignacion id
 
     rid  shift, and goto state 32
 
 state 32 // rep guion rid asignacion id guion rid
 
-   74 PARAMETRO_ID: PARAMETRO_ID guion rid . asignacion id
+   72 PARAMETRO_ID: PARAMETRO_ID guion rid . asignacion id
 
     asignacion  shift, and goto state 33
 
 state 33 // rep guion rid asignacion id guion rid asignacion
 
-   74 PARAMETRO_ID: PARAMETRO_ID guion rid asignacion . id
+   72 PARAMETRO_ID: PARAMETRO_ID guion rid asignacion . id
 
     id  shift, and goto state 34
 
 state 34 // rep guion rid asignacion id guion rid asignacion id
 
-   74 PARAMETRO_ID: PARAMETRO_ID guion rid asignacion id .  ['\n', guion]
+   72 PARAMETRO_ID: PARAMETRO_ID guion rid asignacion id .  ['\n', guion]
 
-    '\n'   reduce using rule 74 (PARAMETRO_ID)
-    guion  reduce using rule 74 (PARAMETRO_ID)
+    '\n'   reduce using rule 72 (PARAMETRO_ID)
+    guion  reduce using rule 72 (PARAMETRO_ID)
 
 state 35 // rep guion name asignacion archivo guion name asignacion archivo ['\n']
 
@@ -312,7 +311,7 @@ state 36 // rep guion name asignacion archivo guion path asignacion rutaCompleja
 state 37 // rep guion name asignacion archivo guion rid asignacion id ['\n']
 
    14 LST_REP: LST_REP PARAMETRO_ID .  ['\n', guion]
-   74 PARAMETRO_ID: PARAMETRO_ID . guion rid asignacion id
+   72 PARAMETRO_ID: PARAMETRO_ID . guion rid asignacion id
 
     '\n'   reduce using rule 14 (LST_REP)
     guion  shift, and goto state 31
@@ -321,60 +320,60 @@ state 37 // rep guion name asignacion archivo guion rid asignacion id ['\n']
 state 38 // unmount guion idn asignacion id ['\n']
 
    10 INSTRUCCION: unmount PARAMETRO_IDN .  ['\n']
-   72 PARAMETRO_IDN: PARAMETRO_IDN . guion idn asignacion id
+   70 PARAMETRO_IDN: PARAMETRO_IDN . guion idn asignacion id
 
     '\n'   reduce using rule 10 (INSTRUCCION)
     guion  shift, and goto state 43
 
 state 39 // unmount guion
 
-   73 PARAMETRO_IDN: guion . idn asignacion id
+   71 PARAMETRO_IDN: guion . idn asignacion id
 
     idn  shift, and goto state 40
 
 state 40 // unmount guion idn
 
-   73 PARAMETRO_IDN: guion idn . asignacion id
+   71 PARAMETRO_IDN: guion idn . asignacion id
 
     asignacion  shift, and goto state 41
 
 state 41 // unmount guion idn asignacion
 
-   73 PARAMETRO_IDN: guion idn asignacion . id
+   71 PARAMETRO_IDN: guion idn asignacion . id
 
     id  shift, and goto state 42
 
 state 42 // unmount guion idn asignacion id
 
-   73 PARAMETRO_IDN: guion idn asignacion id .  ['\n', guion]
+   71 PARAMETRO_IDN: guion idn asignacion id .  ['\n', guion]
 
-    '\n'   reduce using rule 73 (PARAMETRO_IDN)
-    guion  reduce using rule 73 (PARAMETRO_IDN)
+    '\n'   reduce using rule 71 (PARAMETRO_IDN)
+    guion  reduce using rule 71 (PARAMETRO_IDN)
 
 state 43 // unmount guion idn asignacion id guion
 
-   72 PARAMETRO_IDN: PARAMETRO_IDN guion . idn asignacion id
+   70 PARAMETRO_IDN: PARAMETRO_IDN guion . idn asignacion id
 
     idn  shift, and goto state 44
 
 state 44 // unmount guion idn asignacion id guion idn
 
-   72 PARAMETRO_IDN: PARAMETRO_IDN guion idn . asignacion id
+   70 PARAMETRO_IDN: PARAMETRO_IDN guion idn . asignacion id
 
     asignacion  shift, and goto state 45
 
 state 45 // unmount guion idn asignacion id guion idn asignacion
 
-   72 PARAMETRO_IDN: PARAMETRO_IDN guion idn asignacion . id
+   70 PARAMETRO_IDN: PARAMETRO_IDN guion idn asignacion . id
 
     id  shift, and goto state 46
 
 state 46 // unmount guion idn asignacion id guion idn asignacion id
 
-   72 PARAMETRO_IDN: PARAMETRO_IDN guion idn asignacion id .  ['\n', guion]
+   70 PARAMETRO_IDN: PARAMETRO_IDN guion idn asignacion id .  ['\n', guion]
 
-    '\n'   reduce using rule 72 (PARAMETRO_IDN)
-    guion  reduce using rule 72 (PARAMETRO_IDN)
+    '\n'   reduce using rule 70 (PARAMETRO_IDN)
+    guion  reduce using rule 70 (PARAMETRO_IDN)
 
 state 47 // mount guion name asignacion archivo ['\n']
 
@@ -404,8 +403,8 @@ state 49 // mount guion name asignacion archivo ['\n']
 
 state 50 // mount guion
 
-   48 PARAMETRO_PATH: guion . path asignacion VALOR_PATH
-   52 PARAMETRO_NAME: guion . name asignacion VALOR_NAME
+   46 PARAMETRO_PATH: guion . path asignacion VALOR_PATH
+   50 PARAMETRO_NAME: guion . name asignacion VALOR_NAME
 
     name  shift, and goto state 18
     path  shift, and goto state 17
@@ -506,15 +505,15 @@ state 61 // fdisk guion add asignacion numero ['\n']
 
 state 62 // fdisk guion
 
-   48 PARAMETRO_PATH: guion . path asignacion VALOR_PATH
-   51 PARAMETRO_SIZE: guion . size asignacion numero
-   52 PARAMETRO_NAME: guion . name asignacion VALOR_NAME
-   56 PARAMETRO_UNIT: guion . unit asignacion VALOR_UNIT
-   59 PARAMETRO_TYPE: guion . rtype asignacion VALOR_TYPE
-   63 PARAMETRO_FIT: guion . fit asignacion VALOR_FIT
-   67 PARAMETRO_DELETE: guion . delete asignacion VALOR_DELETE
-   70 PARAMETRO_ADD: guion . add asignacion numero
-   71 PARAMETRO_ADD: guion . add asignacion guion numero
+   46 PARAMETRO_PATH: guion . path asignacion VALOR_PATH
+   49 PARAMETRO_SIZE: guion . size asignacion numero
+   50 PARAMETRO_NAME: guion . name asignacion VALOR_NAME
+   54 PARAMETRO_UNIT: guion . unit asignacion VALOR_UNIT
+   57 PARAMETRO_TYPE: guion . rtype asignacion VALOR_TYPE
+   61 PARAMETRO_FIT: guion . fit asignacion VALOR_FIT
+   65 PARAMETRO_DELETE: guion . delete asignacion VALOR_DELETE
+   68 PARAMETRO_ADD: guion . add asignacion numero
+   69 PARAMETRO_ADD: guion . add asignacion guion numero
 
     add     shift, and goto state 68
     delete  shift, and goto state 67
@@ -527,72 +526,72 @@ state 62 // fdisk guion
 
 state 63 // fdisk guion size
 
-   51 PARAMETRO_SIZE: guion size . asignacion numero
+   49 PARAMETRO_SIZE: guion size . asignacion numero
 
     asignacion  shift, and goto state 91
 
 state 64 // fdisk guion unit
 
-   56 PARAMETRO_UNIT: guion unit . asignacion VALOR_UNIT
+   54 PARAMETRO_UNIT: guion unit . asignacion VALOR_UNIT
 
     asignacion  shift, and goto state 87
 
 state 65 // fdisk guion rtype
 
-   59 PARAMETRO_TYPE: guion rtype . asignacion VALOR_TYPE
+   57 PARAMETRO_TYPE: guion rtype . asignacion VALOR_TYPE
 
     asignacion  shift, and goto state 82
 
 state 66 // fdisk guion fit
 
-   63 PARAMETRO_FIT: guion fit . asignacion VALOR_FIT
+   61 PARAMETRO_FIT: guion fit . asignacion VALOR_FIT
 
     asignacion  shift, and goto state 77
 
 state 67 // fdisk guion delete
 
-   67 PARAMETRO_DELETE: guion delete . asignacion VALOR_DELETE
+   65 PARAMETRO_DELETE: guion delete . asignacion VALOR_DELETE
 
     asignacion  shift, and goto state 73
 
 state 68 // fdisk guion add
 
-   70 PARAMETRO_ADD: guion add . asignacion numero
-   71 PARAMETRO_ADD: guion add . asignacion guion numero
+   68 PARAMETRO_ADD: guion add . asignacion numero
+   69 PARAMETRO_ADD: guion add . asignacion guion numero
 
     asignacion  shift, and goto state 69
 
 state 69 // fdisk guion add asignacion
 
-   70 PARAMETRO_ADD: guion add asignacion . numero
-   71 PARAMETRO_ADD: guion add asignacion . guion numero
+   68 PARAMETRO_ADD: guion add asignacion . numero
+   69 PARAMETRO_ADD: guion add asignacion . guion numero
 
     guion   shift, and goto state 71
     numero  shift, and goto state 70
 
 state 70 // fdisk guion add asignacion numero
 
-   70 PARAMETRO_ADD: guion add asignacion numero .  ['\n', guion]
+   68 PARAMETRO_ADD: guion add asignacion numero .  ['\n', guion]
 
-    '\n'   reduce using rule 70 (PARAMETRO_ADD)
-    guion  reduce using rule 70 (PARAMETRO_ADD)
+    '\n'   reduce using rule 68 (PARAMETRO_ADD)
+    guion  reduce using rule 68 (PARAMETRO_ADD)
 
 state 71 // fdisk guion add asignacion guion
 
-   71 PARAMETRO_ADD: guion add asignacion guion . numero
+   69 PARAMETRO_ADD: guion add asignacion guion . numero
 
     numero  shift, and goto state 72
 
 state 72 // fdisk guion add asignacion guion numero
 
-   71 PARAMETRO_ADD: guion add asignacion guion numero .  ['\n', guion]
+   69 PARAMETRO_ADD: guion add asignacion guion numero .  ['\n', guion]
 
-    '\n'   reduce using rule 71 (PARAMETRO_ADD)
-    guion  reduce using rule 71 (PARAMETRO_ADD)
+    '\n'   reduce using rule 69 (PARAMETRO_ADD)
+    guion  reduce using rule 69 (PARAMETRO_ADD)
 
 state 73 // fdisk guion delete asignacion
 
-   67 PARAMETRO_DELETE: guion delete asignacion . VALOR_DELETE
+   65 PARAMETRO_DELETE: guion delete asignacion . VALOR_DELETE
 
     fast  shift, and goto state 76
     full  shift, and goto state 75
@@ -601,28 +600,28 @@ state 73 // fdisk guion delete asignacion
 
 state 74 // fdisk guion delete asignacion fast ['\n']
 
-   67 PARAMETRO_DELETE: guion delete asignacion VALOR_DELETE .  ['\n', guion]
+   65 PARAMETRO_DELETE: guion delete asignacion VALOR_DELETE .  ['\n', guion]
 
-    '\n'   reduce using rule 67 (PARAMETRO_DELETE)
-    guion  reduce using rule 67 (PARAMETRO_DELETE)
+    '\n'   reduce using rule 65 (PARAMETRO_DELETE)
+    guion  reduce using rule 65 (PARAMETRO_DELETE)
 
 state 75 // fdisk guion delete asignacion full
 
-   68 VALOR_DELETE: full .  ['\n', guion]
+   66 VALOR_DELETE: full .  ['\n', guion]
 
-    '\n'   reduce using rule 68 (VALOR_DELETE)
-    guion  reduce using rule 68 (VALOR_DELETE)
+    '\n'   reduce using rule 66 (VALOR_DELETE)
+    guion  reduce using rule 66 (VALOR_DELETE)
 
 state 76 // fdisk guion delete asignacion fast
 
-   69 VALOR_DELETE: fast .  ['\n', guion]
+   67 VALOR_DELETE: fast .  ['\n', guion]
 
-    '\n'   reduce using rule 69 (VALOR_DELETE)
-    guion  reduce using rule 69 (VALOR_DELETE)
+    '\n'   reduce using rule 67 (VALOR_DELETE)
+    guion  reduce using rule 67 (VALOR_DELETE)
 
 state 77 // fdisk guion fit asignacion
 
-   63 PARAMETRO_FIT: guion fit asignacion . VALOR_FIT
+   61 PARAMETRO_FIT: guion fit asignacion . VALOR_FIT
 
     bf  shift, and goto state 79
     ff  shift, and goto state 80
@@ -632,35 +631,35 @@ state 77 // fdisk guion fit asignacion
 
 state 78 // fdisk guion fit asignacion bf ['\n']
 
-   63 PARAMETRO_FIT: guion fit asignacion VALOR_FIT .  ['\n', guion]
+   61 PARAMETRO_FIT: guion fit asignacion VALOR_FIT .  ['\n', guion]
 
-    '\n'   reduce using rule 63 (PARAMETRO_FIT)
-    guion  reduce using rule 63 (PARAMETRO_FIT)
+    '\n'   reduce using rule 61 (PARAMETRO_FIT)
+    guion  reduce using rule 61 (PARAMETRO_FIT)
 
 state 79 // fdisk guion fit asignacion bf
 
-   64 VALOR_FIT: bf .  ['\n', guion]
+   62 VALOR_FIT: bf .  ['\n', guion]
+
+    '\n'   reduce using rule 62 (VALOR_FIT)
+    guion  reduce using rule 62 (VALOR_FIT)
+
+state 80 // fdisk guion fit asignacion ff
+
+   63 VALOR_FIT: ff .  ['\n', guion]
+
+    '\n'   reduce using rule 63 (VALOR_FIT)
+    guion  reduce using rule 63 (VALOR_FIT)
+
+state 81 // fdisk guion fit asignacion wf
+
+   64 VALOR_FIT: wf .  ['\n', guion]
 
     '\n'   reduce using rule 64 (VALOR_FIT)
     guion  reduce using rule 64 (VALOR_FIT)
 
-state 80 // fdisk guion fit asignacion ff
-
-   65 VALOR_FIT: ff .  ['\n', guion]
-
-    '\n'   reduce using rule 65 (VALOR_FIT)
-    guion  reduce using rule 65 (VALOR_FIT)
-
-state 81 // fdisk guion fit asignacion wf
-
-   66 VALOR_FIT: wf .  ['\n', guion]
-
-    '\n'   reduce using rule 66 (VALOR_FIT)
-    guion  reduce using rule 66 (VALOR_FIT)
-
 state 82 // fdisk guion rtype asignacion
 
-   59 PARAMETRO_TYPE: guion rtype asignacion . VALOR_TYPE
+   57 PARAMETRO_TYPE: guion rtype asignacion . VALOR_TYPE
 
     e  shift, and goto state 85
     l  shift, and goto state 86
@@ -670,35 +669,35 @@ state 82 // fdisk guion rtype asignacion
 
 state 83 // fdisk guion rtype asignacion e ['\n']
 
-   59 PARAMETRO_TYPE: guion rtype asignacion VALOR_TYPE .  ['\n', guion]
+   57 PARAMETRO_TYPE: guion rtype asignacion VALOR_TYPE .  ['\n', guion]
 
-    '\n'   reduce using rule 59 (PARAMETRO_TYPE)
-    guion  reduce using rule 59 (PARAMETRO_TYPE)
+    '\n'   reduce using rule 57 (PARAMETRO_TYPE)
+    guion  reduce using rule 57 (PARAMETRO_TYPE)
 
 state 84 // fdisk guion rtype asignacion p
 
-   60 VALOR_TYPE: p .  ['\n', guion]
+   58 VALOR_TYPE: p .  ['\n', guion]
+
+    '\n'   reduce using rule 58 (VALOR_TYPE)
+    guion  reduce using rule 58 (VALOR_TYPE)
+
+state 85 // fdisk guion rtype asignacion e
+
+   59 VALOR_TYPE: e .  ['\n', guion]
+
+    '\n'   reduce using rule 59 (VALOR_TYPE)
+    guion  reduce using rule 59 (VALOR_TYPE)
+
+state 86 // fdisk guion rtype asignacion l
+
+   60 VALOR_TYPE: l .  ['\n', guion]
 
     '\n'   reduce using rule 60 (VALOR_TYPE)
     guion  reduce using rule 60 (VALOR_TYPE)
 
-state 85 // fdisk guion rtype asignacion e
-
-   61 VALOR_TYPE: e .  ['\n', guion]
-
-    '\n'   reduce using rule 61 (VALOR_TYPE)
-    guion  reduce using rule 61 (VALOR_TYPE)
-
-state 86 // fdisk guion rtype asignacion l
-
-   62 VALOR_TYPE: l .  ['\n', guion]
-
-    '\n'   reduce using rule 62 (VALOR_TYPE)
-    guion  reduce using rule 62 (VALOR_TYPE)
-
 state 87 // fdisk guion unit asignacion
 
-   56 PARAMETRO_UNIT: guion unit asignacion . VALOR_UNIT
+   54 PARAMETRO_UNIT: guion unit asignacion . VALOR_UNIT
 
     k  shift, and goto state 89
     m  shift, and goto state 90
@@ -707,37 +706,37 @@ state 87 // fdisk guion unit asignacion
 
 state 88 // fdisk guion unit asignacion k ['\n']
 
-   56 PARAMETRO_UNIT: guion unit asignacion VALOR_UNIT .  ['\n', guion]
+   54 PARAMETRO_UNIT: guion unit asignacion VALOR_UNIT .  ['\n', guion]
 
-    '\n'   reduce using rule 56 (PARAMETRO_UNIT)
-    guion  reduce using rule 56 (PARAMETRO_UNIT)
+    '\n'   reduce using rule 54 (PARAMETRO_UNIT)
+    guion  reduce using rule 54 (PARAMETRO_UNIT)
 
 state 89 // fdisk guion unit asignacion k
 
-   57 VALOR_UNIT: k .  ['\n', guion]
+   55 VALOR_UNIT: k .  ['\n', guion]
 
-    '\n'   reduce using rule 57 (VALOR_UNIT)
-    guion  reduce using rule 57 (VALOR_UNIT)
+    '\n'   reduce using rule 55 (VALOR_UNIT)
+    guion  reduce using rule 55 (VALOR_UNIT)
 
 state 90 // fdisk guion unit asignacion m
 
-   58 VALOR_UNIT: m .  ['\n', guion]
+   56 VALOR_UNIT: m .  ['\n', guion]
 
-    '\n'   reduce using rule 58 (VALOR_UNIT)
-    guion  reduce using rule 58 (VALOR_UNIT)
+    '\n'   reduce using rule 56 (VALOR_UNIT)
+    guion  reduce using rule 56 (VALOR_UNIT)
 
 state 91 // fdisk guion size asignacion
 
-   51 PARAMETRO_SIZE: guion size asignacion . numero
+   49 PARAMETRO_SIZE: guion size asignacion . numero
 
     numero  shift, and goto state 92
 
 state 92 // fdisk guion size asignacion numero
 
-   51 PARAMETRO_SIZE: guion size asignacion numero .  ['\n', guion]
+   49 PARAMETRO_SIZE: guion size asignacion numero .  ['\n', guion]
 
-    '\n'   reduce using rule 51 (PARAMETRO_SIZE)
-    guion  reduce using rule 51 (PARAMETRO_SIZE)
+    '\n'   reduce using rule 49 (PARAMETRO_SIZE)
+    guion  reduce using rule 49 (PARAMETRO_SIZE)
 
 state 93 // fdisk guion add asignacion numero guion size asignacion numero ['\n']
 
@@ -803,7 +802,7 @@ state 101 // rmdisk guion path asignacion rutaCompleja ['\n']
 
 state 102 // exec guion
 
-   48 PARAMETRO_PATH: guion . path asignacion VALOR_PATH
+   46 PARAMETRO_PATH: guion . path asignacion VALOR_PATH
 
     path  shift, and goto state 17
 
@@ -812,110 +811,92 @@ state 103 // mkdisk guion fit asignacion bf ['\n']
     6 INSTRUCCION: mkdisk LST_MKDIS .  ['\n']
    38 LST_MKDIS: LST_MKDIS . PARAMETRO_SIZE
    39 LST_MKDIS: LST_MKDIS . PARAMETRO_PATH
-   40 LST_MKDIS: LST_MKDIS . PARAMETRO_NAME
-   41 LST_MKDIS: LST_MKDIS . PARAMETRO_UNIT
-   42 LST_MKDIS: LST_MKDIS . PARAMETRO_FIT
+   40 LST_MKDIS: LST_MKDIS . PARAMETRO_UNIT
+   41 LST_MKDIS: LST_MKDIS . PARAMETRO_FIT
 
     '\n'   reduce using rule 6 (INSTRUCCION)
-    guion  shift, and goto state 109
+    guion  shift, and goto state 108
 
-    PARAMETRO_FIT   goto state 114
-    PARAMETRO_NAME  goto state 112
-    PARAMETRO_PATH  goto state 111
-    PARAMETRO_SIZE  goto state 110
-    PARAMETRO_UNIT  goto state 113
+    PARAMETRO_FIT   goto state 112
+    PARAMETRO_PATH  goto state 110
+    PARAMETRO_SIZE  goto state 109
+    PARAMETRO_UNIT  goto state 111
 
 state 104 // mkdisk guion size asignacion numero ['\n']
 
-   43 LST_MKDIS: PARAMETRO_SIZE .  ['\n', guion]
+   42 LST_MKDIS: PARAMETRO_SIZE .  ['\n', guion]
+
+    '\n'   reduce using rule 42 (LST_MKDIS)
+    guion  reduce using rule 42 (LST_MKDIS)
+
+state 105 // mkdisk guion path asignacion rutaCompleja ['\n']
+
+   43 LST_MKDIS: PARAMETRO_PATH .  ['\n', guion]
 
     '\n'   reduce using rule 43 (LST_MKDIS)
     guion  reduce using rule 43 (LST_MKDIS)
 
-state 105 // mkdisk guion path asignacion rutaCompleja ['\n']
+state 106 // mkdisk guion unit asignacion k ['\n']
 
-   44 LST_MKDIS: PARAMETRO_PATH .  ['\n', guion]
+   44 LST_MKDIS: PARAMETRO_UNIT .  ['\n', guion]
 
     '\n'   reduce using rule 44 (LST_MKDIS)
     guion  reduce using rule 44 (LST_MKDIS)
 
-state 106 // mkdisk guion name asignacion archivo ['\n']
+state 107 // mkdisk guion fit asignacion bf ['\n']
 
-   45 LST_MKDIS: PARAMETRO_NAME .  ['\n', guion]
+   45 LST_MKDIS: PARAMETRO_FIT .  ['\n', guion]
 
     '\n'   reduce using rule 45 (LST_MKDIS)
     guion  reduce using rule 45 (LST_MKDIS)
 
-state 107 // mkdisk guion unit asignacion k ['\n']
+state 108 // mkdisk guion
 
-   46 LST_MKDIS: PARAMETRO_UNIT .  ['\n', guion]
-
-    '\n'   reduce using rule 46 (LST_MKDIS)
-    guion  reduce using rule 46 (LST_MKDIS)
-
-state 108 // mkdisk guion fit asignacion bf ['\n']
-
-   47 LST_MKDIS: PARAMETRO_FIT .  ['\n', guion]
-
-    '\n'   reduce using rule 47 (LST_MKDIS)
-    guion  reduce using rule 47 (LST_MKDIS)
-
-state 109 // mkdisk guion
-
-   48 PARAMETRO_PATH: guion . path asignacion VALOR_PATH
-   51 PARAMETRO_SIZE: guion . size asignacion numero
-   52 PARAMETRO_NAME: guion . name asignacion VALOR_NAME
-   56 PARAMETRO_UNIT: guion . unit asignacion VALOR_UNIT
-   63 PARAMETRO_FIT: guion . fit asignacion VALOR_FIT
+   46 PARAMETRO_PATH: guion . path asignacion VALOR_PATH
+   49 PARAMETRO_SIZE: guion . size asignacion numero
+   54 PARAMETRO_UNIT: guion . unit asignacion VALOR_UNIT
+   61 PARAMETRO_FIT: guion . fit asignacion VALOR_FIT
 
     fit   shift, and goto state 66
-    name  shift, and goto state 18
     path  shift, and goto state 17
     size  shift, and goto state 63
     unit  shift, and goto state 64
 
-state 110 // mkdisk guion fit asignacion bf guion size asignacion numero ['\n']
+state 109 // mkdisk guion fit asignacion bf guion size asignacion numero ['\n']
 
    38 LST_MKDIS: LST_MKDIS PARAMETRO_SIZE .  ['\n', guion]
 
     '\n'   reduce using rule 38 (LST_MKDIS)
     guion  reduce using rule 38 (LST_MKDIS)
 
-state 111 // mkdisk guion fit asignacion bf guion path asignacion rutaCompleja ['\n']
+state 110 // mkdisk guion fit asignacion bf guion path asignacion rutaCompleja ['\n']
 
    39 LST_MKDIS: LST_MKDIS PARAMETRO_PATH .  ['\n', guion]
 
     '\n'   reduce using rule 39 (LST_MKDIS)
     guion  reduce using rule 39 (LST_MKDIS)
 
-state 112 // mkdisk guion fit asignacion bf guion name asignacion archivo ['\n']
+state 111 // mkdisk guion fit asignacion bf guion unit asignacion k ['\n']
 
-   40 LST_MKDIS: LST_MKDIS PARAMETRO_NAME .  ['\n', guion]
+   40 LST_MKDIS: LST_MKDIS PARAMETRO_UNIT .  ['\n', guion]
 
     '\n'   reduce using rule 40 (LST_MKDIS)
     guion  reduce using rule 40 (LST_MKDIS)
 
-state 113 // mkdisk guion fit asignacion bf guion unit asignacion k ['\n']
+state 112 // mkdisk guion fit asignacion bf guion fit asignacion bf ['\n']
 
-   41 LST_MKDIS: LST_MKDIS PARAMETRO_UNIT .  ['\n', guion]
+   41 LST_MKDIS: LST_MKDIS PARAMETRO_FIT .  ['\n', guion]
 
     '\n'   reduce using rule 41 (LST_MKDIS)
     guion  reduce using rule 41 (LST_MKDIS)
 
-state 114 // mkdisk guion fit asignacion bf guion fit asignacion bf ['\n']
-
-   42 LST_MKDIS: LST_MKDIS PARAMETRO_FIT .  ['\n', guion]
-
-    '\n'   reduce using rule 42 (LST_MKDIS)
-    guion  reduce using rule 42 (LST_MKDIS)
-
-state 115 // exec guion path asignacion rutaCompleja ['\n']
+state 113 // exec guion path asignacion rutaCompleja ['\n']
 
     5 INSTRUCCION: exec PARAMETRO_PATH .  ['\n']
 
     '\n'  reduce using rule 5 (INSTRUCCION)
 
-state 116 // pause '\n'
+state 114 // pause '\n'
 
     3 LISTA_INSTRUCCION: INSTRUCCION '\n' .  [$end, exec, fdisk, mkdisk, mount, pause, rep, rmdisk, unmount]
 
@@ -929,13 +910,13 @@ state 116 // pause '\n'
     rmdisk   reduce using rule 3 (LISTA_INSTRUCCION)
     unmount  reduce using rule 3 (LISTA_INSTRUCCION)
 
-state 117 // pause '\n' pause ['\n']
+state 115 // pause '\n' pause ['\n']
 
     2 LISTA_INSTRUCCION: LISTA_INSTRUCCION INSTRUCCION . '\n'
 
-    '\n'  shift, and goto state 118
+    '\n'  shift, and goto state 116
 
-state 118 // pause '\n' pause '\n'
+state 116 // pause '\n' pause '\n'
 
     2 LISTA_INSTRUCCION: LISTA_INSTRUCCION INSTRUCCION '\n' .  [$end, exec, fdisk, mkdisk, mount, pause, rep, rmdisk, unmount]
 

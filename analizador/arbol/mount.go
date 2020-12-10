@@ -66,6 +66,7 @@ func (i *mount) montarParticion() {
 
 		if i.path == particion.path {
 			auxNumero++
+			
 		} else {
 			if auxLetra <= particion.letra {
 				auxLetra = particion.letra + 1
@@ -75,7 +76,6 @@ func (i *mount) montarParticion() {
 		if i.path == particion.path && auxNameParticion == particion.particion.Name {
 			// ya fue montada
 			fmt.Println("La particiòn ya se encuentra montada :D")
-
 			return
 		}
 	}

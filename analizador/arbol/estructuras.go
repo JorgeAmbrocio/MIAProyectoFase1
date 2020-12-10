@@ -26,6 +26,7 @@ func (i Instruccion) Ejecutar() {
 		break
 	case "exec":
 		fmt.Println("Se ha ejecutado -> ", i.Tipo, "\n\t->", i.Parametros)
+		Eexec(i.Parametros)
 		break
 	case "mkdisk":
 		fmt.Println("Se ha ejecutado -> ", i.Tipo, "\n\t->", i.Parametros)
