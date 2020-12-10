@@ -54,7 +54,7 @@ var auxPath string
 %% /* The grammar follows.  */
 
 INICIO:
-    LISTA_INSTRUCCION   { AddAST(); fmt.Println("AST -> ", lAST);}
+    LISTA_INSTRUCCION   { AddAST(); }
 ;
 
 LISTA_INSTRUCCION:
@@ -63,14 +63,14 @@ LISTA_INSTRUCCION:
 ;
 
 INSTRUCCION:
-    pause                   {fmt.Println("pausa->",$1); AddInstruccion("pause"); }
-    |exec PARAMETRO_PATH    {fmt.Println("INSTRUCCION->",$1,$2); EjecutarExec(); }
-    |mkdisk LST_MKDIS       {fmt.Println("INSTRUCCION->",$1,$2); AddInstruccion("mkdisk"); }
-    |rmdisk PARAMETRO_PATH  {fmt.Println("INSTRUCCION->",$1,$2); AddParametro(); AddInstruccion("rmdisk"); }
-    |fdisk LST_FDISK        {fmt.Println("INSTRUCCION->",$1,$2); AddInstruccion("fdisk"); }
-    |mount LST_MOUNT        {fmt.Println("INSTRUCCION->",$1,$2); AddInstruccion("mount"); }
-    |unmount PARAMETRO_IDN  {fmt.Println("INSTRUCCION->",$1,$2); AddInstruccion("unmount"); }
-    |rep LST_REP            {fmt.Println("INSTRUCCION->",$1,$2); AddInstruccion("rep"); }
+    pause                   {AddInstruccion("pause"); }
+    |exec PARAMETRO_PATH    { EjecutarExec(); }
+    |mkdisk LST_MKDIS       { AddInstruccion("mkdisk"); }
+    |rmdisk PARAMETRO_PATH  { AddParametro(); AddInstruccion("rmdisk"); }
+    |fdisk LST_FDISK        { AddInstruccion("fdisk"); }
+    |mount LST_MOUNT        { AddInstruccion("mount"); }
+    |unmount PARAMETRO_ID   { AddParametro(); AddInstruccion("unmount"); }
+    |rep LST_REP            { AddInstruccion("rep"); }
 ;
 
 LST_REP:

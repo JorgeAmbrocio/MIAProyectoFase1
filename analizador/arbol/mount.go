@@ -45,8 +45,6 @@ func (i *mount) Validar() bool {
 }
 
 func Emount(p []Parametro) {
-	fmt.Println("Soy el mount y me estoy ejecutando")
-
 	i := mount{}
 	i.MatchParametros(p)
 	if i.Validar() {
@@ -66,7 +64,7 @@ func (i *mount) montarParticion() {
 
 		if i.path == particion.path {
 			auxNumero++
-			
+
 		} else {
 			if auxLetra <= particion.letra {
 				auxLetra = particion.letra + 1

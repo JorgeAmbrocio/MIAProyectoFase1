@@ -46,6 +46,7 @@ func (i Instruccion) Ejecutar() {
 		break
 	case "unmount":
 		fmt.Println("Se ha ejecutado -> ", i.Tipo, "\n\t->", i.Parametros)
+		Eunmount(i.Parametros)
 		break
 	case "rep":
 		fmt.Println("Se ha ejecutado -> ", i.Tipo, "\n\t->", i.Parametros)
