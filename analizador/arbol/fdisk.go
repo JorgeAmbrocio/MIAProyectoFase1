@@ -87,8 +87,6 @@ func (i *fdisk) Validar() bool {
 }
 
 func Efdisk(p []Parametro) {
-	fmt.Println("spy el fdisk y me estoy ejecutando")
-
 	i := fdisk{}
 	i.MatchParametros(p)
 	if i.Validar() {
@@ -240,8 +238,14 @@ func (i *fdisk) crearParticionPE() {
 			auxMbr.Partitions[idParticionLibre].Type = i.tipo[0]
 			copy(auxMbr.Partitions[idParticionLibre].Name[:], i.name)
 
+			if i.tipo[0] == 'e' {
+				auxEbr := Ebr{0, 'f', 0, 0, -1, [16]byte{}}
+				escribirEBR(i.path, auxEbr, int64(inicioCorrecto))
+			}
+
 			// escribir mbr
 			escribirMBR(i.path, auxMbr)
+			fmt.Println("Particiòn creada con èxito")
 
 		} else {
 			// no se encontrò espacio adecuado
@@ -253,7 +257,20 @@ func (i *fdisk) crearParticionPE() {
 }
 
 func (i *fdisk) crearParticionL() {
-	fmt.Println("Funciòn actualmente en fase dev, contacte al programador")
+	// recuperar el mbr
+	i.mbr = RecuperarMBR(i.path)
+	auxMbr := i.mbr
+	//fmt.Println(i.mbr)
+
+	// encontrar la particiòn con el tipo Extendido
+	var nombreByte [16]byte
+	copy(nombreByte[:], i.name)
+	for _, particion := range auxMbr.Partitions {
+		if particion.Type == 'e' {
+			// sì existe la particiòn exentendida
+
+		}
+	}
 }
 
 func (i *fdisk) eliminarParticion() {
@@ -284,13 +301,13 @@ func (i *fdisk) eliminarParticion() {
 				file.Close()
 			}
 			escribirMBR(i.path, auxMbr)
+			fmt.Println("Particiòn eliminada con èxito")
 			break
 		}
 	}
 }
 
 func (i *fdisk) addParticion() {
-	fmt.Println("Funciòn actualmente en fase dev, contacte al programador")
 	// recuperar el mbr
 	i.mbr = RecuperarMBR(i.path)
 	auxMbr := i.mbr
@@ -318,6 +335,7 @@ func (i *fdisk) addParticion() {
 
 							// guardar mbr
 							escribirMBR(i.path, auxMbr)
+							fmt.Println("Particiòn editada con èxito")
 						}
 					}
 				}
@@ -329,6 +347,7 @@ func (i *fdisk) addParticion() {
 
 					// guardar mbr
 					escribirMBR(i.path, auxMbr)
+					fmt.Println("Particiòn editada con èxito")
 				}
 			}
 

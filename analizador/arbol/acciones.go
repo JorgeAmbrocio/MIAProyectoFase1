@@ -49,6 +49,46 @@ func escribirMBR(path string, mbr Mbr) {
 	WriteNextBytes(file, binario.Bytes())
 }
 
+func escribirEBR(path string, ebr Ebr, seek int64) {
+	// recuperar mbr
+	// abrir archivo
+	file, err := os.OpenFile(path, os.O_RDWR, 0777)
+	defer file.Close()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// escribir la estructura
+	file.Seek(seek, 0)
+	var binario bytes.Buffer
+	binary.Write(&binario, binary.BigEndian, &ebr)
+	WriteNextBytes(file, binario.Bytes())
+}
+
+func RecuperarEBR(path string, seek int64) (bool, Ebr) {
+	// recuperar mbr
+	// abrir archivo
+	file, err := os.OpenFile(path, os.O_RDWR, 0777)
+	defer file.Close()
+	if err != nil {
+		log.Fatal(err)
+	}
+	// preparar estructura mbr
+	ebr := Ebr{}
+	ebr.Size = -1
+
+	file.Seek(seek, 0)
+	var tamano = binary.Size(ebr)
+	datos := ReadNextBytes(file, tamano)
+	buffer := bytes.NewBuffer(datos)
+	err = binary.Read(buffer, binary.BigEndian, &ebr)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return false, ebr
+}
+
 func ReadNextBytes(file *os.File, size int) []byte {
 	bytes := make([]byte, size)
 
