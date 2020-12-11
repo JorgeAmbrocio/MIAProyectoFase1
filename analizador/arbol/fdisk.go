@@ -260,8 +260,8 @@ func (i *fdisk) crearParticionPE() {
 
 func (i *fdisk) crearParticionL() {
 	fmt.Println("Funciòn en fase development. Intente en la pròxima actualizaciòn")
-	return
-	/*/ recuperar el mbr
+	//return
+	// recuperar el mbr
 	i.mbr = RecuperarMBR(i.path)
 	auxMbr := i.mbr
 	//fmt.Println(i.mbr)
@@ -272,9 +272,118 @@ func (i *fdisk) crearParticionL() {
 	for _, particion := range auxMbr.Partitions {
 		if particion.Type == 'e' {
 			// sì existe la particiòn exentendida
+			var posActual int64 = particion.Start
+			var espaciosLibres = EspaciosL{}
 
+			// encontrar los espacios libres para las particiones lògicas
+			for {
+				if activo, auxEbr := RecuperarEBR(i.path, posActual); !activo {
+					if auxEbr.Status != 1 {
+						if auxEbr.Next == -1 {
+							// estamos al final de la lista ebr's
+							espaciosLibres.Inicios = append(espaciosLibres.Inicios, int(posActual))
+							espaciosLibres.Finales = append(espaciosLibres.Finales, int(particion.Start+particion.Size))
+							espaciosLibres.ebrs = append(espaciosLibres.ebrs, Ebr{Next: -1})
+							break
+						} else {
+							espaciosLibres.Inicios = append(espaciosLibres.Inicios, int(posActual))
+							espaciosLibres.Finales = append(espaciosLibres.Finales, int(auxEbr.Next))
+							espaciosLibres.ebrs = append(espaciosLibres.ebrs, auxEbr)
+						}
+					} else {
+						// particiòn activa
+						if auxEbr.Next == -1 {
+							if (particion.Start + particion.Size - posActual - auxEbr.Size) > 0 {
+								espaciosLibres.Inicios = append(espaciosLibres.Inicios, int(posActual+auxEbr.Size))
+								espaciosLibres.Finales = append(espaciosLibres.Finales, int(particion.Start+particion.Size))
+								espaciosLibres.ebrs = append(espaciosLibres.ebrs, auxEbr)
+							}
+							break
+						} else {
+							// aùn hay particiòn siguiente
+							// verificar si hay espacio entre la particiòn actual y la siguiente
+							diferencia := auxEbr.Next - (posActual + auxEbr.Size)
+							if diferencia > 0 {
+								// hay espacio entre las dos particiones
+								espaciosLibres.Inicios = append(espaciosLibres.Inicios, int(posActual+auxEbr.Size))
+								espaciosLibres.Finales = append(espaciosLibres.Finales, int(auxEbr.Next))
+								espaciosLibres.ebrs = append(espaciosLibres.ebrs, auxEbr)
+							}
+						}
+					}
+
+					posActual = auxEbr.Next
+				}
+
+			}
+
+			// fusionar espacios vacìos
+			espaciosLibres = fusionarEspaciosVacios(espaciosLibres)
+
+			// revisar en espacios dependiendo del tipo de fit
+			var inicioCorrecto int = -1
+			var tamanoCorrecto int = 0
+			var ebrCorrecto Ebr = Ebr{}
+			for indice, objeto := range espaciosLibres.Inicios {
+				tamano := espaciosLibres.Finales[indice] - objeto
+				if i.sizeBytes <= tamano {
+					// la particiòn nueva sì cabe en el espacio disponible
+					if particion.Fit == 'f' {
+						// primer ajuste
+						// guarda el inicio de èste espacio vacìo
+						// y termina el ciclo
+						inicioCorrecto = objeto
+						tamanoCorrecto = tamano
+						ebrCorrecto = espaciosLibres.ebrs[indice]
+						break
+					}
+
+					if particion.Fit == 'w' {
+						// peor ajuste
+						// compara el espacio cactual
+						// con el espacio ya guardado
+						// se queda con el espacio màs grande
+						if tamano > tamanoCorrecto {
+							inicioCorrecto = objeto
+							tamanoCorrecto = tamano
+							ebrCorrecto = espaciosLibres.ebrs[indice]
+						}
+					}
+
+					if particion.Fit == 'b' {
+						// mejor ajuste
+						// compara el espacio actual con el anterior
+						// se queda con el espacio màs pequeño
+						if tamano < tamanoCorrecto {
+							inicioCorrecto = objeto
+							tamanoCorrecto = tamano
+							ebrCorrecto = espaciosLibres.ebrs[indice]
+						}
+					}
+				}
+			}
+
+			if inicioCorrecto != -1 {
+				// sì encontrò un espacio correcto
+				// llenar el ebr con los datos adecuados
+				var nameBytes [16]byte
+				copy(nameBytes[:], i.name)
+				nuevoEbr := Ebr{1, i.fit[0], int64(inicioCorrecto), int64(i.sizeBytes), int64(ebrCorrecto.Next), nameBytes}
+				escribirEBR(i.path, nuevoEbr, nuevoEbr.Start)
+
+				// modificar el next del ebr anterior
+				if ebrCorrecto.Status == 1 {
+					ebrCorrecto.Next = nuevoEbr.Start
+					escribirEBR(i.path, ebrCorrecto, ebrCorrecto.Start)
+				}
+
+				fmt.Println("Particiòn lògica creada con èxito")
+			} else {
+				// no encontrò un espacio correcto
+				fmt.Println("No se encontrò un espacio para la particiòn :-( " + i.name)
+			}
 		}
-	}*/
+	}
 }
 
 func (i *fdisk) eliminarParticion() {

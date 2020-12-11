@@ -149,6 +149,17 @@ type Espacios struct {
 	Finales []int
 }
 
+type EspaciosL struct {
+	Inicios []int
+	Finales []int
+	ebrs    []Ebr
+}
+type EspacioL struct {
+	Inicio int
+	Final  int
+	ebr    Ebr
+}
+
 func getEspaciosLibres(mbr Mbr) Espacios {
 	var espaciosVacios Espacios
 	var iniciaLibre int = binary.Size(mbr) // inicia el espacio libre
@@ -193,4 +204,55 @@ func getEspaciosLlenos(mbr Mbr) {
 		espacios.Inicios = append(espacios.Inicios, int(paricion.Start))
 		espacios.Finales = append(espacios.Finales, int(paricion.Start+paricion.Size))
 	}
+}
+
+func fusionarEspaciosVacios(espacios EspaciosL) EspaciosL {
+	var auxEspacios EspaciosL
+	var espacioActual EspacioL
+	for i := 0; i < len(espacios.Inicios)-1; i++ {
+		if espacios.Finales[i] == espacios.Inicios[i+1] {
+			if espacioActual.Inicio == 0 { // es la primera vez que se juntan espacios
+				espacioActual.Inicio = espacios.Inicios[i]
+				espacioActual.ebr = espacios.ebrs[i]
+			}
+
+			espacioActual.Final = espacios.Finales[i]
+
+		} else {
+			if espacioActual.Inicio != 0 {
+				// guardar espacios finales actual
+				auxEspacios.Inicios = append(auxEspacios.Inicios, int(espacioActual.Inicio))
+				auxEspacios.Finales = append(auxEspacios.Finales, int(espacioActual.Final))
+				auxEspacios.ebrs = append(auxEspacios.ebrs, espacioActual.ebr)
+
+				espacioActual.Inicio = 0
+				espacioActual.Final = 0
+				espacioActual.ebr = Ebr{}
+			} else {
+				// guardar el espacio en la posiciòn I
+				auxEspacios.Inicios = append(auxEspacios.Inicios, int(espacios.Inicios[i]))
+				auxEspacios.Finales = append(auxEspacios.Finales, int(espacios.Finales[i]))
+				auxEspacios.ebrs = append(auxEspacios.ebrs, espacios.ebrs[i])
+
+				espacioActual.Inicio = 0
+				espacioActual.Final = 0
+				espacioActual.ebr = Ebr{}
+			}
+		}
+	}
+
+	if espacioActual.Inicio != 0 {
+		// guardar espacios finales actual
+		auxEspacios.Inicios = append(auxEspacios.Inicios, int(espacioActual.Inicio))
+		auxEspacios.Finales = append(auxEspacios.Finales, int(espacioActual.Final))
+		auxEspacios.ebrs = append(auxEspacios.ebrs, espacioActual.ebr)
+	} else {
+		// guardar el espacio en la posiciòn I
+		i := len(espacios.Inicios) - 1
+		auxEspacios.Inicios = append(auxEspacios.Inicios, int(espacios.Inicios[i]))
+		auxEspacios.Finales = append(auxEspacios.Finales, int(espacios.Finales[i]))
+		auxEspacios.ebrs = append(auxEspacios.ebrs, espacios.ebrs[i])
+	}
+
+	return auxEspacios
 }
