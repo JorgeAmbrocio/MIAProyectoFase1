@@ -85,7 +85,7 @@ func (i *rep) crearReporte() {
 			// es un reporte de espacios
 			// es un reporte mbr descripciòn
 			var auxMbr = RecuperarMBR(particionMontada.path)
-			var contenido = getReporteDSK(auxMbr)
+			var contenido = getReporteDSK(auxMbr, particionMontada.path)
 
 			// crear el archivo
 			file, err := os.Create(i.path + ".dot")
@@ -194,7 +194,7 @@ func getReporteMBR(mbr Mbr, path string) string {
 	return retorno
 }
 
-func getReporteDSK(mbr Mbr) string {
+func getReporteDSK(mbr Mbr, path string) string {
 	var retorno = ""
 
 	retorno += "digraph G {\n"
@@ -242,7 +242,34 @@ func getReporteDSK(mbr Mbr) string {
 			if mbr.Partitions[particionCorrecta].Type == 'p' {
 				retorno += "|{ Primaria " + BytesToString(mbr.Partitions[particionCorrecta].Name[:]) + " " + strconv.Itoa(int(int(mbr.Partitions[particionCorrecta].Size)*100/int(mbr.Size))) + "% }"
 			} else {
-				retorno += "|{ Extendida " + BytesToString(mbr.Partitions[particionCorrecta].Name[:]) + " " + strconv.Itoa(int(int(mbr.Partitions[particionCorrecta].Size)*100/int(mbr.Size))) + "% |}"
+				retorno += "|{ Extendida " + BytesToString(mbr.Partitions[particionCorrecta].Name[:]) + " " + strconv.Itoa(int(int(mbr.Partitions[particionCorrecta].Size)*100/int(mbr.Size))) + "% |"
+
+				// es extendida
+				// recorrer todos los ebr's
+				posActual := mbr.Partitions[particionCorrecta].Start
+				//contador := 1
+				for {
+					exito, auxEbr := RecuperarEBR(path, posActual)
+
+					if !exito {
+						// sì encontrò el ebr
+						if auxEbr.Status == 1 && auxEbr.Size > 0 {
+							retorno += " " + BytesToString(auxEbr.Name[:]) + " "
+							retorno += strconv.Itoa(int(int(auxEbr.Size)*100/int(mbr.Size))) + "% "
+
+						}
+						// indicar la posiciòn siguiente
+						if auxEbr.Next == -1 {
+							break
+						} else {
+							posActual = auxEbr.Next
+						}
+					} else {
+						break
+					}
+				}
+
+				retorno += "}"
 			}
 		}
 	}
