@@ -259,7 +259,7 @@ func (i *fdisk) crearParticionPE() {
 }
 
 func (i *fdisk) crearParticionL() {
-	fmt.Println("Funciòn en fase development. Intente en la pròxima actualizaciòn")
+	//fmt.Println("Funciòn en fase development. Intente en la pròxima actualizaciòn")
 	//return
 	// recuperar el mbr
 	i.mbr = RecuperarMBR(i.path)
@@ -378,6 +378,8 @@ func (i *fdisk) crearParticionL() {
 				}
 
 				fmt.Println("Particiòn lògica creada con èxito")
+				fmt.Println("\t" + i.path)
+				fmt.Println("\t" + i.name)
 			} else {
 				// no encontrò un espacio correcto
 				fmt.Println("No se encontrò un espacio para la particiòn :-( " + i.name)

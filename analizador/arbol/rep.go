@@ -63,7 +63,7 @@ func (i *rep) crearReporte() {
 		if i.name == "mbr" {
 			// es un reporte mbr descripciòn
 			var auxMbr = RecuperarMBR(particionMontada.path)
-			var contenido = getReporteMBR(auxMbr)
+			var contenido = getReporteMBR(auxMbr, particionMontada.path)
 
 			// crear el archivo
 			file, err := os.Create(i.path + ".dot")
@@ -120,13 +120,15 @@ func (i *rep) crearReporte() {
 	}
 }
 
-func getReporteMBR(mbr Mbr) string {
+func getReporteMBR(mbr Mbr, path string) string {
 	var retorno = ""
 
 	retorno += "digraph test {\n"
 	retorno += "	graph [ratio=fill];\n"
 	retorno += "	node [label=\"\\N\", fontsize=15, shape=plaintext];\n"
 	retorno += "	graph [bb=\"0,0,352,154\"];\n"
+
+	/*formato dot para mbr*/
 	retorno += "	arset [label=<\n"
 	retorno += "		<table>\n"
 	retorno += "		<tr><td>Atributo</td><td>Valor</td></tr>\n"
@@ -146,6 +148,48 @@ func getReporteMBR(mbr Mbr) string {
 
 	retorno += "		</table>\n"
 	retorno += "	>, ];\n"
+
+	/*formato dot para ebr*/
+	for j := 0; j < 4; j++ {
+		if mbr.Partitions[j].Type == 'e' {
+			// es extendida
+			// recorrer todos los ebr's
+			posActual := mbr.Partitions[j].Start
+			contador := 1
+			for {
+				exito, auxEbr := RecuperarEBR(path, posActual)
+
+				if !exito {
+					// sì encontrò el ebr
+					retorno += "	" + BytesToString(auxEbr.Name[:]) + " [label=<\n"
+					retorno += "		<table>\n"
+					retorno += "		<tr><td>Atributo</td><td>Valor</td></tr>\n"
+
+					// crear el contenido para el ebr
+					retorno += "		<tr><td>part_status_" + strconv.Itoa(contador+1) + "</td><td>" + strconv.Itoa(int(auxEbr.Status)) + "</td></tr>\n"
+					retorno += "		<tr><td>part_type_" + strconv.Itoa(contador+1) + "</td><td>L</td></tr>\n"
+					retorno += "		<tr><td>part_fit_" + strconv.Itoa(contador+1) + "</td><td>" + ByteToString(auxEbr.Fit) + "</td></tr>\n"
+					retorno += "		<tr><td>part_start_" + strconv.Itoa(contador+1) + "</td><td>" + strconv.Itoa(int(auxEbr.Start)) + "</td></tr>\n"
+					retorno += "		<tr><td>part_size_" + strconv.Itoa(contador+1) + "</td><td>" + strconv.Itoa(int(auxEbr.Size)) + "</td></tr>\n"
+					retorno += "		<tr><td>part_name_" + strconv.Itoa(contador+1) + "</td><td>" + BytesToString(auxEbr.Name[:]) + "</td></tr>\n"
+
+					retorno += "		</table>\n"
+					retorno += "	>, ];\n"
+
+					// indicar la posiciòn siguiente
+					if auxEbr.Next == -1 {
+						break
+					} else {
+						posActual = auxEbr.Next
+					}
+				} else {
+					break
+				}
+			}
+			break
+		}
+	}
+
 	retorno += "}\n"
 	return retorno
 }
