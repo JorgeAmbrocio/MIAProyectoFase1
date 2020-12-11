@@ -424,6 +424,10 @@ func (i *fdisk) eliminarParticion() {
 	}
 }
 
+func (i *fdisk) eliminarParticionL() {
+
+}
+
 func (i *fdisk) addParticion() {
 	// recuperar el mbr
 	i.mbr = RecuperarMBR(i.path)
@@ -465,6 +469,78 @@ func (i *fdisk) addParticion() {
 					// guardar mbr
 					escribirMBR(i.path, auxMbr)
 					fmt.Println("Particiòn editada con èxito")
+				}
+			}
+
+			break
+		}
+	}
+
+	// no encontrò el nombre de la particiòn primaria o extendida
+	// podrìa ser una particiòn lògica
+	fmt.Println("No se encontrò la particiòn primaria o extenddia, se buscarà entre las particiones lògicas")
+	i.addParticionL()
+}
+
+func (i *fdisk) addParticionL() {
+	// recuperar el mbr
+	i.mbr = RecuperarMBR(i.path)
+	auxMbr := i.mbr
+	//fmt.Println(i.mbr)
+
+	// encontrar la particiòn con el nombre a eliminar
+	var nombreByte [16]byte
+	copy(nombreByte[:], i.name)
+	for indice := 0; indice <= 3; indice++ {
+		auxParticion := auxMbr.Partitions[indice]
+		// verificar que la particiòn sea de tipo extendida y que se encuentre activa
+		if auxParticion.Status == 1 && auxParticion.Type == 'e' {
+			// la particiòn sì es la adecuada
+			// recorrer todos los ebr's de la particiòn extendida
+			// recuperar ebr's
+			// es extendida
+			// recorrer todos los ebr's
+			posActual := auxParticion.Start
+			//contador := 1
+			for {
+				exito, auxEbr := RecuperarEBR(i.path, posActual)
+
+				if !exito {
+					// sì encontrò el ebr
+					// verificar que el ebr sea el correcto para editar
+					var auxNombre [16]byte
+					copy(auxNombre[:], i.name)
+					if auxEbr.Status == 1 && auxEbr.Size > 0 && auxNombre == auxEbr.Name {
+						// el ebr a editar es el actual
+						// obtener espacios libres
+						if i.size > 0 {
+							// hay que añadir espacio
+
+							// verificar si hay espacio a la derecha para incrementar la particiòn
+
+						} else {
+							// hay que reducir espacio
+
+							// verifica que la particiòn sea de tamaño mayor al valor que se desea reducir
+							if (auxEbr.Size - int64(i.addBytes)) > 0 {
+								// editar el ebr
+								auxEbr.Size += int64(i.addBytes)
+
+								// guardar el ebr
+								escribirEBR(i.path, auxEbr, auxEbr.Start)
+							} else {
+								fmt.Println("La particiòn es demasiado pequeña para la reducciòn " + strconv.Itoa(i.size) + " " + i.unit)
+							}
+						}
+					}
+					// indicar la posiciòn siguiente
+					if auxEbr.Next == -1 {
+						break
+					} else {
+						posActual = auxEbr.Next
+					}
+				} else {
+					break
 				}
 			}
 
