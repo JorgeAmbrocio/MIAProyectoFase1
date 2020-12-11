@@ -7,8 +7,6 @@ import (
 )
 
 func main() {
-	fmt.Println("hola mundo")
-
 	//cadena := "mkdisk -size->5 -path->/home/disco/archivo.dsk \n"
 	//cadena += "exec -path->/ruta/ \n"
 	//cadena += "pause\n"
@@ -20,7 +18,7 @@ func main() {
 	//cadena := "mount -name->particion2   -path->/home/folder/algo/archivo.dsk \n"
 	//cadena += "mount -name->particion1   -path->/home/folder/algo/archivo.dsk \n"
 	//cadena += "rep -path->/home/folder/algo/reporte.jpg -name->disk -id->vda1 \n"
-	cadena := "exec -path->/home/script.arch \n"
+	cadena := "exec -path->/home/entrada.arch \n"
 
 	reader := bufio.NewReader(strings.NewReader(cadena))
 	yyParse(newLexer(reader))

@@ -52,13 +52,14 @@ func (y *yylexer) Lex(lval *yySymType) int {
 numero              [0-9]+
 letra               [a-zñA-ZÑ_]
 id                  ({letra}|{numero})+
-archivo             {id}(".arch"|".dsk"|".jpg")
+archivo             {id}(".arch"|".dsk"|".jpg"|".disk"|".png"|".pdf")
 rutaSimple          "/"({id}"/")*({archivo}?)
 rutaCompleja        \"[^\"\n\t\r]*\"
 
 %%
     y.buf = y.buf[:0]
 #.*
+#.*\n
 "/*\n"
 [ \t\r]+
 "->"                            lval.value = string(y.buf); return asignacion

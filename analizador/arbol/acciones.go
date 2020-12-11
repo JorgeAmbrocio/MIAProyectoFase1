@@ -3,7 +3,6 @@ package arbol
 import (
 	"bytes"
 	"encoding/binary"
-	"fmt"
 	"log"
 	"os"
 	"sort"
@@ -123,7 +122,6 @@ func getFechaByte() [20]byte {
 	fechastr += strconv.Itoa(int(fecha.Second()))
 
 	copy(fechab[:], fechastr)
-	fmt.Println(fechastr)
 	return fechab
 }
 

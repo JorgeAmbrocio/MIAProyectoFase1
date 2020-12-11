@@ -1,8 +1,9 @@
 package arbol
 
 import (
-	"log"
+	"fmt"
 	"os"
+	"strings"
 )
 
 type rmdisk struct {
@@ -13,7 +14,7 @@ type rmdisk struct {
 // a los atributos del struct mkdisk
 func (i *rmdisk) MatchParametros(lp []Parametro) {
 	for _, p := range lp {
-		switch p.Tipo {
+		switch strings.ToLower(p.Tipo) {
 		case "path":
 			i.path = QuitarComillas(p.Valor)
 			break
@@ -42,8 +43,10 @@ func Ermdisk(p []Parametro) {
 		// eliminar archivo
 		err := os.Remove(i.path)
 		if err != nil {
-			log.Fatal(err)
+			fmt.Println(err)
+			return
 		}
 	}
-
+	fmt.Println("Disco eliminado con èxito >_<")
+	fmt.Println("\t" + i.path)
 }

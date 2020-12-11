@@ -2,6 +2,7 @@ package arbol
 
 import (
 	"fmt"
+	"strings"
 )
 
 type execs struct {
@@ -10,7 +11,7 @@ type execs struct {
 
 func (i *execs) MatchParametros(lp []Parametro) {
 	for _, p := range lp {
-		switch p.Tipo {
+		switch strings.ToLower(p.Tipo) {
 		case "path":
 			i.path = QuitarComillas(p.Valor)
 			break

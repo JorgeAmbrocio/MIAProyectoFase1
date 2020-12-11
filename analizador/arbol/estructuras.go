@@ -19,37 +19,37 @@ type Instruccion struct {
 func (i Instruccion) Ejecutar() {
 	switch i.Tipo {
 	case "pause":
-		fmt.Println("Se ha ejecutado -> ", i.Tipo, "\n\t->", i.Parametros)
+		//fmt.Println("Se ha ejecutado -> ", i.Tipo, "\n\t->", i.Parametros)
 		fmt.Println("Presiona enter para continuar")
 		reader := bufio.NewReader(os.Stdin)
 		reader.ReadString('\n')
 		break
 	case "exec":
-		fmt.Println("Se ha ejecutado -> ", i.Tipo, "\n\t->", i.Parametros)
+		//fmt.Println("Se ha ejecutado -> ", i.Tipo, "\n\t->", i.Parametros)
 		Eexec(i.Parametros)
 		break
 	case "mkdisk":
-		fmt.Println("Se ha ejecutado -> ", i.Tipo, "\n\t->", i.Parametros)
+		//fmt.Println("Se ha ejecutado -> ", i.Tipo, "\n\t->", i.Parametros)
 		Emkdisk(i.Parametros)
 		break
 	case "rmdisk":
-		fmt.Println("Se ha ejecutado -> ", i.Tipo, "\n\t->", i.Parametros)
+		//fmt.Println("Se ha ejecutado -> ", i.Tipo, "\n\t->", i.Parametros)
 		Ermdisk(i.Parametros)
 		break
 	case "fdisk":
-		fmt.Println("Se ha ejecutado -> ", i.Tipo, "\n\t->", i.Parametros)
+		//fmt.Println("Se ha ejecutado -> ", i.Tipo, "\n\t->", i.Parametros)
 		Efdisk(i.Parametros)
 		break
 	case "mount":
-		fmt.Println("Se ha ejecutado -> ", i.Tipo, "\n\t->", i.Parametros)
+		//fmt.Println("Se ha ejecutado -> ", i.Tipo, "\n\t->", i.Parametros)
 		Emount(i.Parametros)
 		break
 	case "unmount":
-		fmt.Println("Se ha ejecutado -> ", i.Tipo, "\n\t->", i.Parametros)
+		//fmt.Println("Se ha ejecutado -> ", i.Tipo, "\n\t->", i.Parametros)
 		Eunmount(i.Parametros)
 		break
 	case "rep":
-		fmt.Println("Se ha ejecutado -> ", i.Tipo, "\n\t->", i.Parametros)
+		//fmt.Println("Se ha ejecutado -> ", i.Tipo, "\n\t->", i.Parametros)
 		Erep(i.Parametros)
 		break
 	default:

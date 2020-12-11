@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"strings"
 )
 
 type fdisk struct {
@@ -26,7 +27,7 @@ type fdisk struct {
 // a los atributos del struct fdisk
 func (i *fdisk) MatchParametros(lp []Parametro) {
 	for _, p := range lp {
-		switch p.Tipo {
+		switch strings.ToLower(p.Tipo) {
 		case "size":
 			if valor, err := strconv.Atoi(p.Valor); err != nil {
 				fmt.Println("ERROR FDISK: size no es válido ", p.Valor)
@@ -41,16 +42,16 @@ func (i *fdisk) MatchParametros(lp []Parametro) {
 			i.name = p.Valor
 			break
 		case "unit":
-			i.unit = p.Valor
+			i.unit = strings.ToLower(p.Valor)
 			break
 		case "type":
-			i.tipo = p.Valor
+			i.tipo = strings.ToLower(p.Valor)
 			break
 		case "fit":
-			i.fit = p.Valor
+			i.fit = strings.ToLower(p.Valor)
 			break
 		case "delete":
-			i.delete = p.Valor
+			i.delete = strings.ToLower(p.Valor)
 			break
 		case "add":
 			if valor, err := strconv.Atoi(p.Valor); err != nil {
@@ -179,8 +180,8 @@ func (i *fdisk) crearParticionPE() {
 	// ya tengo el id de la particiòn libre que puedo utilizar para crear
 	if idParticionLibre != -1 {
 		// sì hay una particiòn libre
-		auxParticion := auxMbr.Partitions[idParticionLibre]
-		fmt.Println(auxParticion)
+		//auxParticion := auxMbr.Partitions[idParticionLibre]
+		//fmt.Println(auxParticion)
 
 		// buscar espacios libres
 		var espaciosVacios = getEspaciosLibres(auxMbr)
@@ -246,7 +247,8 @@ func (i *fdisk) crearParticionPE() {
 			// escribir mbr
 			escribirMBR(i.path, auxMbr)
 			fmt.Println("Particiòn creada con èxito")
-
+			fmt.Println("\t" + i.path)
+			fmt.Println("\t" + i.name)
 		} else {
 			// no se encontrò espacio adecuado
 			fmt.Println("No se ha encontrado espacio libre adecuado para crear èsta particiòn")
@@ -257,7 +259,9 @@ func (i *fdisk) crearParticionPE() {
 }
 
 func (i *fdisk) crearParticionL() {
-	// recuperar el mbr
+	fmt.Println("Funciòn en fase development. Intente en la pròxima actualizaciòn")
+	return
+	/*/ recuperar el mbr
 	i.mbr = RecuperarMBR(i.path)
 	auxMbr := i.mbr
 	//fmt.Println(i.mbr)
@@ -270,7 +274,7 @@ func (i *fdisk) crearParticionL() {
 			// sì existe la particiòn exentendida
 
 		}
-	}
+	}*/
 }
 
 func (i *fdisk) eliminarParticion() {
@@ -302,6 +306,8 @@ func (i *fdisk) eliminarParticion() {
 			}
 			escribirMBR(i.path, auxMbr)
 			fmt.Println("Particiòn eliminada con èxito")
+			fmt.Println("\t" + i.path)
+			fmt.Println("\n" + i.name)
 			break
 		}
 	}

@@ -240,6 +240,8 @@ func EjecutarExec () {
         ast := lAST[len(lAST)-1]
 	    ast.EjecutarAST()
         lAST = lAST[:len(lAST)-1]
+
+        fmt.Println("Se ha ejecutado el archivo con èxito")
 	} else {
 		fmt.Println("No se ha podido abrir el archivo")
 		log.Panic(err)

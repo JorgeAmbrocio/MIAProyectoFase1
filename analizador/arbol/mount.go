@@ -3,6 +3,7 @@ package arbol
 import (
 	"fmt"
 	"strconv"
+	"strings"
 )
 
 type mount struct {
@@ -22,7 +23,7 @@ var particionesMontadas []Montada
 
 func (i *mount) MatchParametros(lp []Parametro) {
 	for _, p := range lp {
-		switch p.Tipo {
+		switch strings.ToLower(p.Tipo) {
 		case "path":
 			i.path = QuitarComillas(p.Valor)
 			break
@@ -100,8 +101,12 @@ func (i *mount) montarParticion() {
 			montada.id = "vd" + string(montada.letra) + strconv.Itoa(montada.numero)
 
 			particionesMontadas = append(particionesMontadas, montada)
-			part := particionesMontadas
-			fmt.Println(part)
+			fmt.Println("Particiòn montada con èxito :D")
+			fmt.Println("\t" + montada.id)
+			fmt.Println("\t" + i.path)
+			fmt.Println("\t" + i.name)
+			//part := particionesMontadas
+			//fmt.Println(part)
 			break
 		}
 	}

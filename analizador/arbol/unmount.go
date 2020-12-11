@@ -1,6 +1,9 @@
 package arbol
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 type unmount struct {
 	id string
@@ -8,7 +11,7 @@ type unmount struct {
 
 func (i *unmount) MatchParametros(lp []Parametro) {
 	for _, p := range lp {
-		switch p.Tipo {
+		switch strings.ToLower(p.Tipo) {
 		case "id":
 			i.id = p.Valor
 			break
@@ -29,8 +32,8 @@ func Eunmount(p []Parametro) {
 	i.MatchParametros(p)
 	if i.Validar() {
 		// ejecutar la funciòn
-		pp := &particionesMontadas
-		fmt.Println(pp)
+		//pp := &particionesMontadas
+		//fmt.Println(pp)
 		for indice, particion := range particionesMontadas {
 			if particion.id == i.id {
 				if len(particionesMontadas) == 1 {

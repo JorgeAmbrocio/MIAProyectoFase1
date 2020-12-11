@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
-	"log"
 	"math/rand"
 	"os"
 	"strconv"
@@ -25,7 +24,7 @@ type mkdisk struct {
 // a los atributos del struct mkdisk
 func (i *mkdisk) MatchParametros(lp []Parametro) {
 	for _, p := range lp {
-		switch p.Tipo {
+		switch strings.ToLower(p.Tipo) {
 		case "size":
 			if valor, err := strconv.Atoi(p.Valor); err != nil {
 				fmt.Println("ERROR MKDISK: size no es válido ", p.Valor)
@@ -43,18 +42,15 @@ func (i *mkdisk) MatchParametros(lp []Parametro) {
 			CrearTodasCarpetas(directorio)
 			break
 		case "unit":
-			i.unit = p.Valor
+			i.unit = strings.ToLower(p.Valor)
 			break
 		case "fit":
-			i.unit = p.Valor
+			i.unit = strings.ToLower(p.Valor)
 		}
 	}
 
 	if i.unit == "" {
 		i.unit = "m"
-		i.multiplicador = 1024 * 1024
-	} else {
-		i.multiplicador = 1024
 	}
 
 	if i.fit == "" {
@@ -80,10 +76,17 @@ func (i mkdisk) CrearBinario() {
 	defer file.Close()
 
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
+		//log.Fatal(err)
 	}
 
 	// llenar el archivo de ceros
+	if i.unit == "m" {
+		i.multiplicador = 1024 * 1024
+	} else {
+		i.multiplicador = 1024
+	}
+
 	var auxTamano [1024]byte // 1 kilobyte
 
 	for contador := 0; contador < (i.multiplicador/1024)*i.size; contador++ {
@@ -110,6 +113,9 @@ func (i mkdisk) CrearBinario() {
 	WriteNextBytes(file, binario.Bytes())
 
 	file.Close()
+
+	fmt.Println("Disco creado con èxito")
+	fmt.Println("\t" + i.path)
 }
 
 // Emkdisk es la ejecución del mkdisk

@@ -7,6 +7,7 @@ import (
 	"os/exec"
 	"sort"
 	"strconv"
+	"strings"
 )
 
 type rep struct {
@@ -17,9 +18,15 @@ type rep struct {
 
 func (i *rep) MatchParametros(lp []Parametro) {
 	for _, p := range lp {
-		switch p.Tipo {
+		switch strings.ToLower(p.Tipo) {
 		case "path":
 			i.path = QuitarComillas(p.Valor)
+			spliteado := strings.Split(i.path, "/")
+			var directorio string = ""
+			for _, str := range spliteado[1 : len(spliteado)-1] {
+				directorio += "/" + str
+			}
+			CrearTodasCarpetas(directorio)
 			break
 		case "name":
 			i.name = p.Valor
@@ -42,8 +49,6 @@ func (i *rep) Validar() bool {
 }
 
 func Erep(p []Parametro) {
-	fmt.Println("Soy el rep y me estoy ejecutando")
-
 	i := rep{}
 	i.MatchParametros(p)
 	if i.Validar() {
@@ -75,6 +80,7 @@ func (i *rep) crearReporte() {
 				fmt.Println(err)
 			}
 			fmt.Println("Se ha creado el reporte con èxito")
+			fmt.Println("\t" + i.path)
 		} else {
 			// es un reporte de espacios
 			// es un reporte mbr descripciòn
@@ -91,11 +97,25 @@ func (i *rep) crearReporte() {
 			file.Close()
 
 			// compilar el archivo creado
-			comando := exec.Command("dot", i.path+".dot", "-Tjpg", "-o", i.path)
-			if err := comando.Run(); err != nil {
-				fmt.Println(err)
+			if strings.Contains(i.path, ".jpg") {
+				comando := exec.Command("dot", i.path+".dot", "-Tjpg", "-o", i.path)
+				if err := comando.Run(); err != nil {
+					fmt.Println(err)
+				}
+			} else if strings.Contains(i.path, ".png") {
+				comando := exec.Command("dot", i.path+".dot", "-Tpng", "-o", i.path)
+				if err := comando.Run(); err != nil {
+					fmt.Println(err)
+				}
+			} else if strings.Contains(i.path, ".pdf") {
+				comando := exec.Command("dot", i.path+".dot", "-Tpdf", "-o", i.path)
+				if err := comando.Run(); err != nil {
+					fmt.Println(err)
+				}
 			}
+
 			fmt.Println("Se ha creado el reporte con èxito")
+			fmt.Println("\t" + i.path)
 		}
 	}
 }
@@ -163,7 +183,7 @@ func getReporteDSK(mbr Mbr) string {
 		// identificar si el espacio es libre o particiòn
 		var particionCorrecta int = -1
 		for in, part := range mbr.Partitions {
-			if part.Start == int64(espacio) {
+			if part.Start == int64(espacio) && part.Status == 1 {
 				particionCorrecta = in
 				break
 			}
@@ -176,9 +196,9 @@ func getReporteDSK(mbr Mbr) string {
 		} else {
 			// es una particiòn
 			if mbr.Partitions[particionCorrecta].Type == 'p' {
-				retorno += "|{ Primaria " + BytesToString(mbr.Partitions[particionCorrecta].Name[:]) + strconv.Itoa(int(int(mbr.Partitions[particionCorrecta].Size)*100/int(mbr.Size))) + "% }"
+				retorno += "|{ Primaria " + BytesToString(mbr.Partitions[particionCorrecta].Name[:]) + " " + strconv.Itoa(int(int(mbr.Partitions[particionCorrecta].Size)*100/int(mbr.Size))) + "% }"
 			} else {
-				retorno += "|{ Extendida " + BytesToString(mbr.Partitions[particionCorrecta].Name[:]) + strconv.Itoa(int(int(mbr.Partitions[particionCorrecta].Size)*100/int(mbr.Size))) + "% |}"
+				retorno += "|{ Extendida " + BytesToString(mbr.Partitions[particionCorrecta].Name[:]) + " " + strconv.Itoa(int(int(mbr.Partitions[particionCorrecta].Size)*100/int(mbr.Size))) + "% |}"
 			}
 		}
 	}
