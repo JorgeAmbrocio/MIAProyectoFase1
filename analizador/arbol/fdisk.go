@@ -496,10 +496,7 @@ func (i *fdisk) addParticionL() {
 		// verificar que la particiòn sea de tipo extendida y que se encuentre activa
 		if auxParticion.Status == 1 && auxParticion.Type == 'e' {
 			// la particiòn sì es la adecuada
-			// recorrer todos los ebr's de la particiòn extendida
-			// recuperar ebr's
-			// es extendida
-			// recorrer todos los ebr's
+
 			posActual := auxParticion.Start
 			//contador := 1
 			for {
@@ -513,24 +510,40 @@ func (i *fdisk) addParticionL() {
 					if auxEbr.Status == 1 && auxEbr.Size > 0 && auxNombre == auxEbr.Name {
 						// el ebr a editar es el actual
 						// obtener espacios libres
-						if i.size > 0 {
+						if i.add > 0 {
 							// hay que añadir espacio
-
-							// verificar si hay espacio a la derecha para incrementar la particiòn
-
+							if auxEbr.Next != -1 {
+								// verificar si hay espacio entre la particiòn actual y la siguinete
+								if int64(i.addBytes) <= (auxEbr.Next - (auxEbr.Start + auxEbr.Size)) {
+									// añadir espacio a la particiòn
+									auxEbr.Size += int64(i.addBytes)
+									// guardar la particiòn
+									escribirEBR(i.path, auxEbr, auxEbr.Start)
+								}
+							} else {
+								// el ebr actual es el ùltimo ebr de la lista
+								if int64(i.addBytes) <= ((auxParticion.Start + auxParticion.Size) - (auxEbr.Start + auxEbr.Size)) {
+									// añadir espacio a la particiòn
+									auxEbr.Size += int64(i.addBytes)
+									// guardar la particiòn
+									escribirEBR(i.path, auxEbr, auxEbr.Start)
+								}
+							}
 						} else {
 							// hay que reducir espacio
-
 							// verifica que la particiòn sea de tamaño mayor al valor que se desea reducir
-							if (auxEbr.Size - int64(i.addBytes)) > 0 {
+							if (auxEbr.Size + int64(i.addBytes)) > 0 {
 								// editar el ebr
 								auxEbr.Size += int64(i.addBytes)
 
 								// guardar el ebr
 								escribirEBR(i.path, auxEbr, auxEbr.Start)
+								break
 							} else {
 								fmt.Println("La particiòn es demasiado pequeña para la reducciòn " + strconv.Itoa(i.size) + " " + i.unit)
 							}
+
+							break
 						}
 					}
 					// indicar la posiciòn siguiente
@@ -543,7 +556,6 @@ func (i *fdisk) addParticionL() {
 					break
 				}
 			}
-
 			break
 		}
 	}
