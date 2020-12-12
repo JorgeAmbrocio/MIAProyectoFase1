@@ -419,13 +419,60 @@ func (i *fdisk) eliminarParticion() {
 			fmt.Println("Particiòn eliminada con èxito")
 			fmt.Println("\t" + i.path)
 			fmt.Println("\n" + i.name)
-			break
+			return
 		}
 	}
+
+	// no se encontrò la particiòn primaria o extendida
+	fmt.Println("No se encontrò particiòn primaria o extendida, se buscaraà en lògicas")
+	i.eliminarParticionL()
 }
 
 func (i *fdisk) eliminarParticionL() {
+	// recuperar el mbr
+	i.mbr = RecuperarMBR(i.path)
+	auxMbr := i.mbr
+	//fmt.Println(i.mbr)
 
+	// encontrar la particiòn con el nombre a eliminar
+	var nombreByte [16]byte
+	copy(nombreByte[:], i.name)
+	for indice := 0; indice <= 3; indice++ {
+		auxParticion := auxMbr.Partitions[indice]
+		// verificar que la particiòn sea de tipo extendida y que se encuentre activa
+		if auxParticion.Status == 1 && auxParticion.Type == 'e' {
+			// la particiòn sì es la adecuada
+
+			posActual := auxParticion.Start
+			ebrAtnerior := Ebr{}
+			for {
+
+				exito, auxEbr := RecuperarEBR(i.path, posActual)
+
+				if !exito {
+					// sì encontrò el ebr
+					// verificar que el ebr sea el correcto para editar
+					var auxNombre [16]byte
+					copy(auxNombre[:], i.name)
+					if auxEbr.Status == 1 && auxEbr.Size > 0 && auxNombre == auxEbr.Name {
+						// el ebr a eliminar actual
+						ebrAtnerior.Next = auxEbr.Next
+						escribirEBR(i.path, ebrAtnerior, ebrAtnerior.Start)
+					}
+					// indicar la posiciòn siguiente
+					if auxEbr.Next == -1 {
+						break
+					} else {
+						ebrAtnerior = auxEbr
+						posActual = auxEbr.Next
+					}
+				} else {
+					break
+				}
+			}
+			break
+		}
+	}
 }
 
 func (i *fdisk) addParticion() {
