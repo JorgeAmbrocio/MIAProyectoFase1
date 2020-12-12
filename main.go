@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"os"
 	"strings"
 )
 
@@ -18,15 +19,28 @@ func main() {
 	//cadena := "mount -name->particion2   -path->/home/folder/algo/archivo.dsk \n"
 	//cadena += "mount -name->particion1   -path->/home/folder/algo/archivo.dsk \n"
 	//cadena += "rep -path->/home/folder/algo/reporte.jpg -name->disk -id->vda1 \n"
-	cadena := "exec -path->/home/entrada.arch \n"
+	//cadena := "exec -path->/home/entrada.arch \n"
 
-	reader := bufio.NewReader(strings.NewReader(cadena))
-	yyParse(newLexer(reader))
+	//reader := bufio.NewReader(strings.NewReader(cadena))
+	//yyParse(newLexer(reader))
+	//reader := bufio.NewReader(os.Stdin)
+	for {
+		fmt.Println("Escribe un comando")
+		fmt.Print("-> ")
+		//text, _ := reader.ReadString('\n')
 
-	fmt.Println("Terminó el análisis")
-	fmt.Println(lInstruccion)
-	ast := lAST[len(lAST)-1]
-	ast.EjecutarAST()
+		text := bufio.NewReader(os.Stdin)
+
+		texto, _ := text.ReadString('\n')
+		fmt.Println(texto)
+		//texto = texto + "\n"
+		yyParse(newLexer(bufio.NewReader(strings.NewReader(texto))))
+
+		//fmt.Println("Terminó el análisis")
+		//fmt.Println(lInstruccion)
+		ast := lAST[len(lAST)-1]
+		ast.EjecutarAST()
+	}
 }
 
 //os.Exit(yyParse(newLexer(bufio.NewReader(os.Stdin))))
