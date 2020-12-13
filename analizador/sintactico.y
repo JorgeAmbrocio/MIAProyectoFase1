@@ -55,11 +55,13 @@ var auxPath string
 
 INICIO:
     LISTA_INSTRUCCION   { AddAST(); }
+    //| '\n' {}
 ;
 
 LISTA_INSTRUCCION:
-    LISTA_INSTRUCCION INSTRUCCION '\n'
-    |INSTRUCCION '\n'
+    LISTA_INSTRUCCION INSTRUCCION //'\n'
+    |INSTRUCCION //'\n'
+    //|'\n'
 ;
 
 INSTRUCCION:

@@ -96,12 +96,6 @@ func Efdisk(p []Parametro) {
 		// crear una particiòn
 		if i.size != 0 {
 			// se està creando una particiòn
-			if i.fit != "" {
-				i.fit = "ff"
-			}
-			if i.unit != "" {
-				i.unit = "k"
-			}
 
 			// calcular el tamaño en bytes de la nueva particiòn
 			if i.unit == "m" {
@@ -125,9 +119,6 @@ func Efdisk(p []Parametro) {
 
 		if i.add != 0 {
 			// editando el tamaño de una particiòn
-			if i.unit == "" {
-				i.unit = "k"
-			}
 
 			// calcular el tamaño en bytes de la nueva particiòn
 			if i.unit == "m" {
@@ -147,7 +138,6 @@ func Efdisk(p []Parametro) {
 			i.eliminarParticion()
 			return
 		}
-
 	}
 
 }
@@ -180,8 +170,6 @@ func (i *fdisk) crearParticionPE() {
 	// ya tengo el id de la particiòn libre que puedo utilizar para crear
 	if idParticionLibre != -1 {
 		// sì hay una particiòn libre
-		//auxParticion := auxMbr.Partitions[idParticionLibre]
-		//fmt.Println(auxParticion)
 
 		// buscar espacios libres
 		var espaciosVacios = getEspaciosLibres(auxMbr)
@@ -189,8 +177,9 @@ func (i *fdisk) crearParticionPE() {
 		// revisar en espacios dependiendo del tipo de fit
 		var inicioCorrecto int = -1
 		var tamanoCorrecto int = 0
+		var banderaPrimerIteraccion bool = true
 		for indice, objeto := range espaciosVacios.Inicios {
-			tamano := espaciosVacios.Finales[indice] - objeto
+			tamano := espaciosVacios.Finales[indice] - objeto + 1
 			if i.sizeBytes <= tamano {
 				// la particiòn nueva sì cabe en el espacio disponible
 				if auxMbr.Fit == 'f' {
@@ -207,9 +196,10 @@ func (i *fdisk) crearParticionPE() {
 					// compara el espacio cactual
 					// con el espacio ya guardado
 					// se queda con el espacio màs grande
-					if tamano > tamanoCorrecto {
+					if tamano > tamanoCorrecto || banderaPrimerIteraccion {
 						inicioCorrecto = objeto
 						tamanoCorrecto = tamano
+						banderaPrimerIteraccion = false
 					}
 				}
 
@@ -217,9 +207,10 @@ func (i *fdisk) crearParticionPE() {
 					// mejor ajuste
 					// compara el espacio actual con el anterior
 					// se queda con el espacio màs pequeño
-					if tamano < tamanoCorrecto {
+					if tamano < tamanoCorrecto || banderaPrimerIteraccion {
 						inicioCorrecto = objeto
 						tamanoCorrecto = tamano
+						banderaPrimerIteraccion = false
 					}
 				}
 			}
@@ -240,7 +231,7 @@ func (i *fdisk) crearParticionPE() {
 			copy(auxMbr.Partitions[idParticionLibre].Name[:], i.name)
 
 			if i.tipo[0] == 'e' {
-				auxEbr := Ebr{0, 'f', 0, 0, -1, [16]byte{}}
+				auxEbr := Ebr{0, 'f', 0, 0, -1, [16]byte{'i', 'i', 'i'}}
 				escribirEBR(i.path, auxEbr, int64(inicioCorrecto))
 			}
 
@@ -325,7 +316,7 @@ func (i *fdisk) crearParticionL() {
 			var tamanoCorrecto int = 0
 			var ebrCorrecto Ebr = Ebr{}
 			for indice, objeto := range espaciosLibres.Inicios {
-				tamano := espaciosLibres.Finales[indice] - objeto
+				tamano := espaciosLibres.Finales[indice] - objeto + 1
 				if i.sizeBytes <= tamano {
 					// la particiòn nueva sì cabe en el espacio disponible
 					if particion.Fit == 'f' {

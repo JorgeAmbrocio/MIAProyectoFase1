@@ -168,8 +168,11 @@ func getEspaciosLibres(mbr Mbr) Espacios {
 	// recorrer las particiones activas
 	var espaciosLlenos Espacios
 	for i := 0; i <= 3; i++ {
-		espaciosLlenos.Inicios = append(espaciosLlenos.Inicios, int(mbr.Partitions[i].Start))
-		espaciosLlenos.Finales = append(espaciosLlenos.Finales, int(mbr.Partitions[i].Start+mbr.Partitions[i].Size))
+		if mbr.Partitions[i].Status == 1 {
+			espaciosLlenos.Inicios = append(espaciosLlenos.Inicios, int(mbr.Partitions[i].Start))
+			espaciosLlenos.Finales = append(espaciosLlenos.Finales, int(mbr.Partitions[i].Start+mbr.Partitions[i].Size))
+
+		}
 	}
 
 	// ordenar espacios llenos de menor a mayor

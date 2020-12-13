@@ -58,10 +58,9 @@ rutaCompleja        \"[^\"\n\t\r]*\"
 
 %%
     y.buf = y.buf[:0]
-#.*
-#.*\n
+#[^\n]*
 "/*\n"
-[ \t\r]+
+[ \t\r\n]+
 "->"                            lval.value = string(y.buf); return asignacion
 "-"                             lval.value = string(y.buf); return guion
 [Ee][Xx][Ee][Cc]                lval.value = string(y.buf); return exec

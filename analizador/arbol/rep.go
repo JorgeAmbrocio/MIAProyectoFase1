@@ -236,13 +236,15 @@ func getReporteDSK(mbr Mbr, path string) string {
 		if particionCorrecta == -1 {
 			// es un espacio libre
 			tamano := espaciosTotales.Finales[indice] - espacio
-			retorno += "|{ Libre " + strconv.Itoa(int(int(tamano)*100/int(mbr.Size))) + "% }"
+			percent := float32(float32(tamano) * 100 / float32(mbr.Size))
+			retorno += "|{ Libre " + fmt.Sprintf("%.2f", percent) + "% }"
 		} else {
 			// es una particiòn
+			percent := float32(float32(mbr.Partitions[particionCorrecta].Size) * 100 / float32(mbr.Size))
 			if mbr.Partitions[particionCorrecta].Type == 'p' {
-				retorno += "|{ Primaria " + BytesToString(mbr.Partitions[particionCorrecta].Name[:]) + " " + strconv.Itoa(int(int(mbr.Partitions[particionCorrecta].Size)*100/int(mbr.Size))) + "% }"
+				retorno += "|{ Primaria " + BytesToString(mbr.Partitions[particionCorrecta].Name[:]) + " " + fmt.Sprintf("%.2f", percent) + "% }"
 			} else {
-				retorno += "|{ Extendida " + BytesToString(mbr.Partitions[particionCorrecta].Name[:]) + " " + strconv.Itoa(int(int(mbr.Partitions[particionCorrecta].Size)*100/int(mbr.Size))) + "% |"
+				retorno += "|{ Extendida " + BytesToString(mbr.Partitions[particionCorrecta].Name[:]) + " " + fmt.Sprintf("%.2f", percent) + "% |"
 
 				// es extendida
 				// recorrer todos los ebr's
@@ -254,9 +256,9 @@ func getReporteDSK(mbr Mbr, path string) string {
 					if !exito {
 						// sì encontrò el ebr
 						if auxEbr.Status == 1 && auxEbr.Size > 0 {
+							percent := float32(float32(auxEbr.Size) * 100 / float32(mbr.Size))
 							retorno += " " + BytesToString(auxEbr.Name[:]) + " "
-							retorno += strconv.Itoa(int(int(auxEbr.Size)*100/int(mbr.Size))) + "% "
-
+							retorno += fmt.Sprintf("%.2f", percent) + "% "
 						}
 						// indicar la posiciòn siguiente
 						if auxEbr.Next == -1 {
@@ -268,7 +270,6 @@ func getReporteDSK(mbr Mbr, path string) string {
 						break
 					}
 				}
-
 				retorno += "}"
 			}
 		}

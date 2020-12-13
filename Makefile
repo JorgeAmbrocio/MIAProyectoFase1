@@ -7,6 +7,8 @@ build:
 	go build main.go sintactico.go lexico.go
 
 run:
+	rm -rf /home/mia
+	rm -rf /home/archivos
 	./main
 
 cbrun: cleanconsole clean compile build run

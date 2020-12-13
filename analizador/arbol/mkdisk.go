@@ -45,7 +45,7 @@ func (i *mkdisk) MatchParametros(lp []Parametro) {
 			i.unit = strings.ToLower(p.Valor)
 			break
 		case "fit":
-			i.unit = strings.ToLower(p.Valor)
+			i.fit = strings.ToLower(p.Valor)
 		}
 	}
 
