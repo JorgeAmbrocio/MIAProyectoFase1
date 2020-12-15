@@ -90,9 +90,9 @@ func (i mkdisk) CrearBinario() {
 	var auxTamano [1024]byte // 1 kilobyte
 
 	for contador := 0; contador < (i.multiplicador/1024)*i.size; contador++ {
-		var binario bytes.Buffer
-		binary.Write(&binario, binary.BigEndian, &auxTamano)
-		WriteNextBytes(file, binario.Bytes())
+		//var binario bytes.Buffer
+		//binary.Write(&binario, binary.BigEndian, &auxTamano)
+		WriteNextBytes(file, auxTamano[:])
 	}
 
 	// regresar putero a la posiciòn inicial

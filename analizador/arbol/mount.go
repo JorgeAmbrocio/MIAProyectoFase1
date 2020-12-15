@@ -107,9 +107,17 @@ func (i *mount) montarParticion() {
 			fmt.Println("\t" + i.name)
 			//part := particionesMontadas
 			//fmt.Println(part)
-			break
+			return
 		}
 	}
+
+	// si llegamos hasta acà significa que no encontramos la particiòn primaria o extendida
+	fmt.Println("No se ha encontrado la particiòn primaria o extendida, se buscarà entre las particiones lògicas")
+	i.montarParticionL()
+}
+
+func (i *mount) montarParticionL() {
+	// recuperar el mbr
 
 }
 

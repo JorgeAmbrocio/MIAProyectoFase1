@@ -8,7 +8,7 @@ import (
     "fmt"
     "log"
     //"archivos/MIA-Proyecto1_201709454/analizador/arbol"
-    "proyectos/MIAProyectoFase1/analizador/arbol"
+    
     "os"
 )
 
@@ -46,7 +46,8 @@ var auxPath string
 %type <value> PARAMETRO_SIZE, PARAMETRO_NAME, VALOR_NAME, PARAMETRO_UNIT, VALOR_UNIT 
 %type <value> PARAMETRO_TYPE, VALOR_TYPE, PARAMETRO_FIT, VALOR_FIT
 %type <value> PARAMETRO_DELETE, VALOR_DELETE, PARAMETRO_ADD, PARAMETRO_IDN
-%type <value> LST_FDISK, LST_MKDIS, LST_MOUNT,PARAMETRO_ID,LST_REP
+%type <value> LST_FDISK, LST_MKDIS, LST_MOUNT,PARAMETRO_ID,LST_REP,PARAMETRO_TYPE_FS
+%type <value> LST_MKFS
 
 
 %start INICIO
@@ -73,7 +74,16 @@ INSTRUCCION:
     |mount LST_MOUNT        { AddInstruccion("mount"); }
     |unmount PARAMETRO_ID   { AddParametro(); AddInstruccion("unmount"); }
     |rep LST_REP            { AddInstruccion("rep"); }
+    |mkfs LST_MKFS          { AddInstruccion("mkfs")}
 ;
+
+LST_MKFS:
+    LST_MKFS PARAMETRO_ID               { $$=$1+$2; AddParametro(); }
+    |LST_MKFS PARAMETRO_TYPE_FS         { $$=$1+$2; AddParametro(); }
+    |PARAMETRO_ID                       { $$=$1; AddParametro(); }
+    |PARAMETRO_TYPE_FS                  { $$=$1; AddParametro(); }
+;
+
 
 LST_REP:
     LST_REP PARAMETRO_NAME          { $$=$1+$2; AddParametro(); }
@@ -90,6 +100,8 @@ LST_MOUNT:
     |PARAMETRO_PATH             { $$=$1; AddParametro(); }
     |PARAMETRO_NAME             { $$=$1; AddParametro(); }
 ;
+
+
 
 LST_FDISK:
     LST_FDISK PARAMETRO_SIZE        { $$=$1+$2; AddParametro(); }
@@ -179,6 +191,10 @@ VALOR_FIT:
 
 PARAMETRO_DELETE:
     guion delete asignacion VALOR_DELETE { $$=$1+$2+$3+$4; CrearParametro($2,$4); }
+;
+
+PARAMETRO_TYPE_FS:
+    guion rtype asignacion VALOR_DELETE { $$=$1+$2+$3+$4; CrearParametro($2,$4); }
 ;
 
 VALOR_DELETE:

@@ -52,6 +52,9 @@ func (i Instruccion) Ejecutar() {
 		//fmt.Println("Se ha ejecutado -> ", i.Tipo, "\n\t->", i.Parametros)
 		Erep(i.Parametros)
 		break
+	case "mkfs":
+		Emkfs(i.Parametros)
+		break
 	default:
 		fmt.Println("No se reconoce la instrucción -> ", i.Tipo)
 	}
@@ -103,4 +106,54 @@ type Ebr struct {
 	Size   int64 // en tamaño bytes
 	Next   int64
 	Name   [16]byte
+}
+
+/*ESTRUCTURAS FASE DOS*/
+type SuperBlock struct {
+	Type             byte
+	InodesCount      int32
+	BlocksCount      int32
+	FreeBlocksCount  int32
+	FreeInodesCount  int32
+	MountedTime      [20]byte
+	UnMountedTime    [20]byte
+	MountedCount     int32
+	Magic            int32
+	InodeSize        int32
+	BlockSize        int32
+	FirstInode       int32
+	FirstBlock       int32
+	BitMapInodeStart int64
+	BitMapBlockStart int64
+	InodeStart       int64
+	BlockStart       int64
+}
+
+type Inodo struct {
+	UID   int32
+	GID   int32
+	Size  int32
+	Atmie [20]byte
+	Ctime [20]byte
+	Mtime [20]byte
+	Block [15]int32
+	Type  byte
+	Perm  [3]int8
+}
+
+type BloqueCarpeta struct {
+	Content [4]Contenido
+}
+
+type Contenido struct {
+	Name         [12]byte
+	PointerInode int32
+}
+
+type BloqueArchivo struct {
+	Content [64]byte
+}
+
+type BloqueApuntadores struct {
+	Apuntadores [16]int32
 }

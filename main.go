@@ -2,7 +2,10 @@ package main
 
 import (
 	"bufio"
+	"encoding/binary"
 	"fmt"
+	"proyectos/MIAProyectoFase1/analizador/arbol"
+	"strconv"
 	"strings"
 )
 
@@ -17,7 +20,7 @@ func main() {
 
 		//text := bufio.NewReader(os.Stdin)
 		//texto, _ := text.ReadString('\n')
-		texto := "exec -path->/home/ajustes.arch \n"
+		texto := "exec -path->/home/fase2.arch \n"
 		yyParse(newLexer(bufio.NewReader(strings.NewReader(texto))))
 
 		ast := lAST[len(lAST)-1]
@@ -27,12 +30,8 @@ func main() {
 }
 
 func prueba() {
-	var a int = 10
-	var b int = 3
-
-	//var c float32 = float32(a) / float32(b)
-	var algo string
-	algo = fmt.Sprintf("%.2f", float32(a)/float32(b))
-	fmt.Println(algo)
+	fmt.Println(strconv.Itoa(binary.Size(arbol.BloqueCarpeta{})))
+	fmt.Println(strconv.Itoa(binary.Size(arbol.BloqueApuntadores{})))
+	fmt.Println(strconv.Itoa(binary.Size(arbol.BloqueArchivo{})))
 
 }

@@ -99,103 +99,105 @@ const (
 	wf           = 57402
 
 	yyMaxDepth = 200
-	yyTabOfs   = -74
+	yyTabOfs   = -80
 )
 
 var (
 	yyPrec = map[int]int{}
 
 	yyXLAT = map[int]int{
-		57347: 0,  // guion (73x)
-		57344: 1,  // $end (72x)
-		57348: 2,  // exec (72x)
-		57352: 3,  // fdisk (72x)
-		57350: 4,  // mkdisk (72x)
-		57353: 5,  // mount (72x)
-		57349: 6,  // pause (72x)
-		57374: 7,  // rep (72x)
-		57351: 8,  // rmdisk (72x)
-		57354: 9,  // unmount (72x)
-		57346: 10, // asignacion (10x)
-		57424: 11, // PARAMETRO_PATH (10x)
-		57423: 12, // PARAMETRO_NAME (6x)
-		57375: 13, // path (5x)
-		57420: 14, // PARAMETRO_FIT (4x)
-		57425: 15, // PARAMETRO_SIZE (4x)
-		57427: 16, // PARAMETRO_UNIT (4x)
-		57384: 17, // id (3x)
-		57377: 18, // name (3x)
-		57406: 19, // numero (3x)
-		57421: 20, // PARAMETRO_ID (3x)
-		57405: 21, // rid (3x)
-		57380: 22, // fit (2x)
-		57412: 23, // INSTRUCCION (2x)
-		57418: 24, // PARAMETRO_ADD (2x)
-		57419: 25, // PARAMETRO_DELETE (2x)
-		57426: 26, // PARAMETRO_TYPE (2x)
-		57408: 27, // rutaCompleja (2x)
-		57376: 28, // size (2x)
-		57378: 29, // unit (2x)
-		57382: 30, // add (1x)
-		57409: 31, // archivo (1x)
-		57400: 32, // bf (1x)
-		57381: 33, // delete (1x)
-		57398: 34, // e (1x)
-		57404: 35, // fast (1x)
-		57401: 36, // ff (1x)
-		57403: 37, // full (1x)
-		57411: 38, // INICIO (1x)
-		57396: 39, // k (1x)
-		57399: 40, // l (1x)
-		57413: 41, // LISTA_INSTRUCCION (1x)
-		57414: 42, // LST_FDISK (1x)
-		57415: 43, // LST_MKDIS (1x)
-		57416: 44, // LST_MOUNT (1x)
-		57417: 45, // LST_REP (1x)
-		57397: 46, // m (1x)
-		57391: 47, // p (1x)
-		57379: 48, // rtype (1x)
-		57407: 49, // rutaSimple (1x)
-		57428: 50, // VALOR_DELETE (1x)
-		57429: 51, // VALOR_FIT (1x)
-		57430: 52, // VALOR_NAME (1x)
-		57431: 53, // VALOR_PATH (1x)
-		57432: 54, // VALOR_TYPE (1x)
-		57433: 55, // VALOR_UNIT (1x)
-		57402: 56, // wf (1x)
-		57410: 57, // $default (0x)
-		57364: 58, // cat (0x)
-		57373: 59, // chgrp (0x)
-		57362: 60, // chmod (0x)
-		57372: 61, // chown (0x)
-		57392: 62, // cont (0x)
-		57369: 63, // cp (0x)
-		57395: 64, // dest (0x)
-		57366: 65, // edit (0x)
-		57345: 66, // error (0x)
-		57393: 67, // filen (0x)
-		57371: 68, // find (0x)
-		57388: 69, // grp (0x)
-		57383: 70, // idn (0x)
-		57356: 71, // login (0x)
-		57357: 72, // logout (0x)
-		57368: 73, // mkdir (0x)
-		57363: 74, // mkfile (0x)
-		57355: 75, // mkfs (0x)
-		57358: 76, // mkgrp (0x)
-		57360: 77, // mkusr (0x)
-		57370: 78, // mv (0x)
-		57422: 79, // PARAMETRO_IDN (0x)
-		57387: 80, // pwd (0x)
-		57390: 81, // r (0x)
-		57367: 82, // ren (0x)
-		57394: 83, // rf (0x)
-		57365: 84, // rm (0x)
-		57359: 85, // rmgrp (0x)
-		57361: 86, // rmusr (0x)
-		57385: 87, // tipo (0x)
-		57389: 88, // ugo (0x)
-		57386: 89, // usr (0x)
+		57347: 0,  // guion (80x)
+		57344: 1,  // $end (78x)
+		57348: 2,  // exec (78x)
+		57352: 3,  // fdisk (78x)
+		57350: 4,  // mkdisk (78x)
+		57355: 5,  // mkfs (78x)
+		57353: 6,  // mount (78x)
+		57349: 7,  // pause (78x)
+		57374: 8,  // rep (78x)
+		57351: 9,  // rmdisk (78x)
+		57354: 10, // unmount (78x)
+		57346: 11, // asignacion (11x)
+		57425: 12, // PARAMETRO_PATH (10x)
+		57424: 13, // PARAMETRO_NAME (6x)
+		57422: 14, // PARAMETRO_ID (5x)
+		57375: 15, // path (5x)
+		57421: 16, // PARAMETRO_FIT (4x)
+		57426: 17, // PARAMETRO_SIZE (4x)
+		57429: 18, // PARAMETRO_UNIT (4x)
+		57405: 19, // rid (4x)
+		57384: 20, // id (3x)
+		57377: 21, // name (3x)
+		57406: 22, // numero (3x)
+		57404: 23, // fast (2x)
+		57380: 24, // fit (2x)
+		57403: 25, // full (2x)
+		57412: 26, // INSTRUCCION (2x)
+		57419: 27, // PARAMETRO_ADD (2x)
+		57420: 28, // PARAMETRO_DELETE (2x)
+		57427: 29, // PARAMETRO_TYPE (2x)
+		57428: 30, // PARAMETRO_TYPE_FS (2x)
+		57379: 31, // rtype (2x)
+		57408: 32, // rutaCompleja (2x)
+		57376: 33, // size (2x)
+		57378: 34, // unit (2x)
+		57430: 35, // VALOR_DELETE (2x)
+		57382: 36, // add (1x)
+		57409: 37, // archivo (1x)
+		57400: 38, // bf (1x)
+		57381: 39, // delete (1x)
+		57398: 40, // e (1x)
+		57401: 41, // ff (1x)
+		57411: 42, // INICIO (1x)
+		57396: 43, // k (1x)
+		57399: 44, // l (1x)
+		57413: 45, // LISTA_INSTRUCCION (1x)
+		57414: 46, // LST_FDISK (1x)
+		57415: 47, // LST_MKDIS (1x)
+		57416: 48, // LST_MKFS (1x)
+		57417: 49, // LST_MOUNT (1x)
+		57418: 50, // LST_REP (1x)
+		57397: 51, // m (1x)
+		57391: 52, // p (1x)
+		57407: 53, // rutaSimple (1x)
+		57431: 54, // VALOR_FIT (1x)
+		57432: 55, // VALOR_NAME (1x)
+		57433: 56, // VALOR_PATH (1x)
+		57434: 57, // VALOR_TYPE (1x)
+		57435: 58, // VALOR_UNIT (1x)
+		57402: 59, // wf (1x)
+		57410: 60, // $default (0x)
+		57364: 61, // cat (0x)
+		57373: 62, // chgrp (0x)
+		57362: 63, // chmod (0x)
+		57372: 64, // chown (0x)
+		57392: 65, // cont (0x)
+		57369: 66, // cp (0x)
+		57395: 67, // dest (0x)
+		57366: 68, // edit (0x)
+		57345: 69, // error (0x)
+		57393: 70, // filen (0x)
+		57371: 71, // find (0x)
+		57388: 72, // grp (0x)
+		57383: 73, // idn (0x)
+		57356: 74, // login (0x)
+		57357: 75, // logout (0x)
+		57368: 76, // mkdir (0x)
+		57363: 77, // mkfile (0x)
+		57358: 78, // mkgrp (0x)
+		57360: 79, // mkusr (0x)
+		57370: 80, // mv (0x)
+		57423: 81, // PARAMETRO_IDN (0x)
+		57387: 82, // pwd (0x)
+		57390: 83, // r (0x)
+		57367: 84, // ren (0x)
+		57394: 85, // rf (0x)
+		57365: 86, // rm (0x)
+		57359: 87, // rmgrp (0x)
+		57361: 88, // rmusr (0x)
+		57385: 89, // tipo (0x)
+		57389: 90, // ugo (0x)
+		57386: 91, // usr (0x)
 	}
 
 	yySymNames = []string{
@@ -204,6 +206,7 @@ var (
 		"exec",
 		"fdisk",
 		"mkdisk",
+		"mkfs",
 		"mount",
 		"pause",
 		"rep",
@@ -212,44 +215,46 @@ var (
 		"asignacion",
 		"PARAMETRO_PATH",
 		"PARAMETRO_NAME",
+		"PARAMETRO_ID",
 		"path",
 		"PARAMETRO_FIT",
 		"PARAMETRO_SIZE",
 		"PARAMETRO_UNIT",
+		"rid",
 		"id",
 		"name",
 		"numero",
-		"PARAMETRO_ID",
-		"rid",
+		"fast",
 		"fit",
+		"full",
 		"INSTRUCCION",
 		"PARAMETRO_ADD",
 		"PARAMETRO_DELETE",
 		"PARAMETRO_TYPE",
+		"PARAMETRO_TYPE_FS",
+		"rtype",
 		"rutaCompleja",
 		"size",
 		"unit",
+		"VALOR_DELETE",
 		"add",
 		"archivo",
 		"bf",
 		"delete",
 		"e",
-		"fast",
 		"ff",
-		"full",
 		"INICIO",
 		"k",
 		"l",
 		"LISTA_INSTRUCCION",
 		"LST_FDISK",
 		"LST_MKDIS",
+		"LST_MKFS",
 		"LST_MOUNT",
 		"LST_REP",
 		"m",
 		"p",
-		"rtype",
 		"rutaSimple",
-		"VALOR_DELETE",
 		"VALOR_FIT",
 		"VALOR_NAME",
 		"VALOR_PATH",
@@ -274,7 +279,6 @@ var (
 		"logout",
 		"mkdir",
 		"mkfile",
-		"mkfs",
 		"mkgrp",
 		"mkusr",
 		"mv",
@@ -295,214 +299,232 @@ var (
 
 	yyReductions = map[int]struct{ xsym, components int }{
 		0:  {0, 1},
-		1:  {38, 1},
-		2:  {41, 2},
-		3:  {41, 1},
-		4:  {23, 1},
-		5:  {23, 2},
-		6:  {23, 2},
-		7:  {23, 2},
-		8:  {23, 2},
-		9:  {23, 2},
-		10: {23, 2},
-		11: {23, 2},
-		12: {45, 2},
-		13: {45, 2},
-		14: {45, 2},
-		15: {45, 1},
-		16: {45, 1},
-		17: {45, 1},
-		18: {44, 2},
-		19: {44, 2},
-		20: {44, 1},
-		21: {44, 1},
-		22: {42, 2},
-		23: {42, 2},
-		24: {42, 2},
-		25: {42, 2},
-		26: {42, 2},
-		27: {42, 2},
-		28: {42, 2},
-		29: {42, 2},
-		30: {42, 1},
-		31: {42, 1},
-		32: {42, 1},
-		33: {42, 1},
-		34: {42, 1},
-		35: {42, 1},
-		36: {42, 1},
-		37: {42, 1},
-		38: {43, 2},
-		39: {43, 2},
-		40: {43, 2},
-		41: {43, 2},
-		42: {43, 1},
-		43: {43, 1},
-		44: {43, 1},
-		45: {43, 1},
-		46: {11, 4},
-		47: {53, 1},
-		48: {53, 1},
-		49: {15, 4},
-		50: {12, 4},
-		51: {52, 1},
-		52: {52, 1},
-		53: {52, 1},
-		54: {16, 4},
-		55: {55, 1},
+		1:  {42, 1},
+		2:  {45, 2},
+		3:  {45, 1},
+		4:  {26, 1},
+		5:  {26, 2},
+		6:  {26, 2},
+		7:  {26, 2},
+		8:  {26, 2},
+		9:  {26, 2},
+		10: {26, 2},
+		11: {26, 2},
+		12: {26, 2},
+		13: {48, 2},
+		14: {48, 2},
+		15: {48, 1},
+		16: {48, 1},
+		17: {50, 2},
+		18: {50, 2},
+		19: {50, 2},
+		20: {50, 1},
+		21: {50, 1},
+		22: {50, 1},
+		23: {49, 2},
+		24: {49, 2},
+		25: {49, 1},
+		26: {49, 1},
+		27: {46, 2},
+		28: {46, 2},
+		29: {46, 2},
+		30: {46, 2},
+		31: {46, 2},
+		32: {46, 2},
+		33: {46, 2},
+		34: {46, 2},
+		35: {46, 1},
+		36: {46, 1},
+		37: {46, 1},
+		38: {46, 1},
+		39: {46, 1},
+		40: {46, 1},
+		41: {46, 1},
+		42: {46, 1},
+		43: {47, 2},
+		44: {47, 2},
+		45: {47, 2},
+		46: {47, 2},
+		47: {47, 1},
+		48: {47, 1},
+		49: {47, 1},
+		50: {47, 1},
+		51: {12, 4},
+		52: {56, 1},
+		53: {56, 1},
+		54: {17, 4},
+		55: {13, 4},
 		56: {55, 1},
-		57: {26, 4},
-		58: {54, 1},
-		59: {54, 1},
-		60: {54, 1},
-		61: {14, 4},
-		62: {51, 1},
-		63: {51, 1},
-		64: {51, 1},
-		65: {25, 4},
-		66: {50, 1},
-		67: {50, 1},
-		68: {24, 4},
-		69: {24, 5},
-		70: {79, 5},
-		71: {79, 4},
-		72: {20, 5},
-		73: {20, 4},
+		57: {55, 1},
+		58: {55, 1},
+		59: {18, 4},
+		60: {58, 1},
+		61: {58, 1},
+		62: {29, 4},
+		63: {57, 1},
+		64: {57, 1},
+		65: {57, 1},
+		66: {16, 4},
+		67: {54, 1},
+		68: {54, 1},
+		69: {54, 1},
+		70: {28, 4},
+		71: {30, 4},
+		72: {35, 1},
+		73: {35, 1},
+		74: {27, 4},
+		75: {27, 5},
+		76: {81, 5},
+		77: {81, 4},
+		78: {14, 5},
+		79: {14, 4},
 	}
 
 	yyXErrors = map[yyXError]string{}
 
-	yyParseTab = [108][]uint16{
+	yyParseTab = [118][]uint16{
 		// 0
-		{2: 79, 82, 80, 83, 78, 85, 81, 84, 23: 77, 38: 75, 41: 76},
-		{1: 74},
-		{1: 73, 79, 82, 80, 83, 78, 85, 81, 84, 23: 181},
-		{1: 71, 71, 71, 71, 71, 71, 71, 71, 71},
-		{1: 70, 70, 70, 70, 70, 70, 70, 70, 70},
+		{2: 85, 88, 86, 92, 89, 84, 91, 87, 90, 26: 83, 42: 81, 45: 82},
+		{1: 80},
+		{1: 79, 85, 88, 86, 92, 89, 84, 91, 87, 90, 26: 197},
+		{1: 77, 77, 77, 77, 77, 77, 77, 77, 77, 77},
+		{1: 76, 76, 76, 76, 76, 76, 76, 76, 76, 76},
 		// 5
-		{169, 11: 180},
-		{175, 11: 172, 14: 174, 171, 173, 43: 170},
-		{169, 11: 168},
-		{129, 11: 123, 127, 14: 125, 121, 122, 24: 128, 126, 124, 42: 120},
-		{117, 11: 115, 116, 44: 114},
+		{185, 12: 196},
+		{191, 12: 188, 16: 190, 187, 189, 47: 186},
+		{185, 12: 184},
+		{147, 12: 141, 145, 16: 143, 139, 140, 27: 146, 144, 142, 46: 138},
+		{135, 12: 133, 134, 49: 132},
 		// 10
-		{113, 20: 112},
-		{90, 11: 88, 87, 20: 89, 45: 86},
-		{90, 63, 63, 63, 63, 63, 63, 63, 63, 63, 11: 110, 109, 20: 111},
-		{59, 59, 59, 59, 59, 59, 59, 59, 59, 59},
-		{58, 58, 58, 58, 58, 58, 58, 58, 58, 58},
+		{131, 14: 130},
+		{115, 12: 113, 112, 114, 50: 111},
+		{96, 14: 94, 30: 95, 48: 93},
+		{96, 68, 68, 68, 68, 68, 68, 68, 68, 68, 68, 14: 109, 30: 110},
+		{105, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65},
 		// 15
-		{105, 57, 57, 57, 57, 57, 57, 57, 57, 57},
-		{13: 91, 18: 92, 21: 93},
-		{10: 101},
-		{10: 96},
-		{10: 94},
+		{64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64},
+		{19: 98, 31: 97},
+		{11: 101},
+		{11: 99},
+		{20: 100},
 		// 20
-		{17: 95},
-		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-		{17: 99, 27: 100, 31: 98, 52: 97},
-		{24, 24, 24, 24, 24, 24, 24, 24, 24, 24},
-		{23, 23, 23, 23, 23, 23, 23, 23, 23, 23},
+		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+		{23: 104, 25: 103, 35: 102},
+		{9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9},
+		{8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8},
+		{7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7},
 		// 25
-		{22, 22, 22, 22, 22, 22, 22, 22, 22, 22},
-		{21, 21, 21, 21, 21, 21, 21, 21, 21, 21},
-		{27: 104, 49: 103, 53: 102},
-		{28, 28, 28, 28, 28, 28, 28, 28, 28, 28},
-		{27, 27, 27, 27, 27, 27, 27, 27, 27, 27},
+		{19: 106},
+		{11: 107},
+		{20: 108},
+		{2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2},
+		{105, 67, 67, 67, 67, 67, 67, 67, 67, 67, 67},
 		// 30
-		{26, 26, 26, 26, 26, 26, 26, 26, 26, 26},
-		{21: 106},
-		{10: 107},
-		{17: 108},
-		{2, 2, 2, 2, 2, 2, 2, 2, 2, 2},
+		{66, 66, 66, 66, 66, 66, 66, 66, 66, 66, 66},
+		{115, 69, 69, 69, 69, 69, 69, 69, 69, 69, 69, 12: 128, 127, 129},
+		{60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60},
+		{59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59},
+		{105, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58},
 		// 35
-		{62, 62, 62, 62, 62, 62, 62, 62, 62, 62},
-		{61, 61, 61, 61, 61, 61, 61, 61, 61, 61},
-		{105, 60, 60, 60, 60, 60, 60, 60, 60, 60},
-		{105, 64, 64, 64, 64, 64, 64, 64, 64, 64},
-		{21: 93},
+		{15: 116, 19: 98, 21: 117},
+		{11: 123},
+		{11: 118},
+		{20: 121, 32: 122, 37: 120, 55: 119},
+		{25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25},
 		// 40
-		{117, 65, 65, 65, 65, 65, 65, 65, 65, 65, 11: 118, 119},
-		{54, 54, 54, 54, 54, 54, 54, 54, 54, 54},
-		{53, 53, 53, 53, 53, 53, 53, 53, 53, 53},
-		{13: 91, 18: 92},
-		{56, 56, 56, 56, 56, 56, 56, 56, 56, 56},
+		{24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24},
+		{23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23},
+		{22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22},
+		{32: 126, 53: 125, 56: 124},
+		{29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29},
 		// 45
-		{55, 55, 55, 55, 55, 55, 55, 55, 55, 55},
-		{129, 66, 66, 66, 66, 66, 66, 66, 66, 66, 11: 162, 166, 14: 164, 160, 161, 24: 167, 165, 163},
-		{44, 44, 44, 44, 44, 44, 44, 44, 44, 44},
-		{43, 43, 43, 43, 43, 43, 43, 43, 43, 43},
-		{42, 42, 42, 42, 42, 42, 42, 42, 42, 42},
+		{28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28},
+		{27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27},
+		{63, 63, 63, 63, 63, 63, 63, 63, 63, 63, 63},
+		{62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62},
+		{105, 61, 61, 61, 61, 61, 61, 61, 61, 61, 61},
 		// 50
-		{41, 41, 41, 41, 41, 41, 41, 41, 41, 41},
-		{40, 40, 40, 40, 40, 40, 40, 40, 40, 40},
-		{39, 39, 39, 39, 39, 39, 39, 39, 39, 39},
-		{38, 38, 38, 38, 38, 38, 38, 38, 38, 38},
-		{37, 37, 37, 37, 37, 37, 37, 37, 37, 37},
+		{105, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70},
+		{19: 98},
+		{135, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 12: 136, 137},
+		{55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55},
+		{54, 54, 54, 54, 54, 54, 54, 54, 54, 54, 54},
 		// 55
-		{13: 91, 18: 92, 22: 133, 28: 130, 131, 135, 33: 134, 48: 132},
-		{10: 158},
-		{10: 154},
-		{10: 149},
-		{10: 144},
+		{15: 116, 21: 117},
+		{57, 57, 57, 57, 57, 57, 57, 57, 57, 57, 57},
+		{56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56},
+		{147, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 12: 178, 182, 16: 180, 176, 177, 27: 183, 181, 179},
+		{45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45},
 		// 60
-		{10: 140},
-		{10: 136},
-		{138, 19: 137},
-		{6, 6, 6, 6, 6, 6, 6, 6, 6, 6},
-		{19: 139},
+		{44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44},
+		{43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43},
+		{42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42},
+		{41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41},
+		{40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40},
 		// 65
-		{5, 5, 5, 5, 5, 5, 5, 5, 5, 5},
-		{35: 143, 37: 142, 50: 141},
-		{9, 9, 9, 9, 9, 9, 9, 9, 9, 9},
-		{8, 8, 8, 8, 8, 8, 8, 8, 8, 8},
-		{7, 7, 7, 7, 7, 7, 7, 7, 7, 7},
+		{39, 39, 39, 39, 39, 39, 39, 39, 39, 39, 39},
+		{38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38},
+		{15: 116, 21: 117, 24: 151, 31: 150, 33: 148, 149, 36: 153, 39: 152},
+		{11: 174},
+		{11: 170},
 		// 70
-		{32: 146, 36: 147, 51: 145, 56: 148},
-		{13, 13, 13, 13, 13, 13, 13, 13, 13, 13},
-		{12, 12, 12, 12, 12, 12, 12, 12, 12, 12},
-		{11, 11, 11, 11, 11, 11, 11, 11, 11, 11},
-		{10, 10, 10, 10, 10, 10, 10, 10, 10, 10},
+		{11: 165},
+		{11: 160},
+		{11: 158},
+		{11: 154},
+		{156, 22: 155},
 		// 75
-		{34: 152, 40: 153, 47: 151, 54: 150},
-		{17, 17, 17, 17, 17, 17, 17, 17, 17, 17},
-		{16, 16, 16, 16, 16, 16, 16, 16, 16, 16},
-		{15, 15, 15, 15, 15, 15, 15, 15, 15, 15},
-		{14, 14, 14, 14, 14, 14, 14, 14, 14, 14},
+		{6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6},
+		{22: 157},
+		{5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5},
+		{23: 104, 25: 103, 35: 159},
+		{10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10},
 		// 80
-		{39: 156, 46: 157, 55: 155},
-		{20, 20, 20, 20, 20, 20, 20, 20, 20, 20},
-		{19, 19, 19, 19, 19, 19, 19, 19, 19, 19},
-		{18, 18, 18, 18, 18, 18, 18, 18, 18, 18},
-		{19: 159},
+		{38: 162, 41: 163, 54: 161, 59: 164},
+		{14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14},
+		{13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13},
+		{12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12},
+		{11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11},
 		// 85
-		{25, 25, 25, 25, 25, 25, 25, 25, 25, 25},
-		{52, 52, 52, 52, 52, 52, 52, 52, 52, 52},
-		{51, 51, 51, 51, 51, 51, 51, 51, 51, 51},
-		{50, 50, 50, 50, 50, 50, 50, 50, 50, 50},
-		{49, 49, 49, 49, 49, 49, 49, 49, 49, 49},
+		{40: 168, 44: 169, 52: 167, 57: 166},
+		{18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18},
+		{17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17},
+		{16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16},
+		{15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15},
 		// 90
-		{48, 48, 48, 48, 48, 48, 48, 48, 48, 48},
-		{47, 47, 47, 47, 47, 47, 47, 47, 47, 47},
-		{46, 46, 46, 46, 46, 46, 46, 46, 46, 46},
-		{45, 45, 45, 45, 45, 45, 45, 45, 45, 45},
-		{1: 67, 67, 67, 67, 67, 67, 67, 67, 67},
+		{43: 172, 51: 173, 58: 171},
+		{21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21},
+		{20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20},
+		{19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19},
+		{22: 175},
 		// 95
-		{13: 91},
-		{175, 68, 68, 68, 68, 68, 68, 68, 68, 68, 11: 177, 14: 179, 176, 178},
-		{32, 32, 32, 32, 32, 32, 32, 32, 32, 32},
-		{31, 31, 31, 31, 31, 31, 31, 31, 31, 31},
-		{30, 30, 30, 30, 30, 30, 30, 30, 30, 30},
+		{26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26},
+		{53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 53},
+		{52, 52, 52, 52, 52, 52, 52, 52, 52, 52, 52},
+		{51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51},
+		{50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50},
 		// 100
-		{29, 29, 29, 29, 29, 29, 29, 29, 29, 29},
-		{13: 91, 22: 133, 28: 130, 131},
-		{36, 36, 36, 36, 36, 36, 36, 36, 36, 36},
-		{35, 35, 35, 35, 35, 35, 35, 35, 35, 35},
-		{34, 34, 34, 34, 34, 34, 34, 34, 34, 34},
+		{49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49},
+		{48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48},
+		{47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47},
+		{46, 46, 46, 46, 46, 46, 46, 46, 46, 46, 46},
+		{1: 73, 73, 73, 73, 73, 73, 73, 73, 73, 73},
 		// 105
-		{33, 33, 33, 33, 33, 33, 33, 33, 33, 33},
-		{1: 69, 69, 69, 69, 69, 69, 69, 69, 69},
-		{1: 72, 72, 72, 72, 72, 72, 72, 72, 72},
+		{15: 116},
+		{191, 74, 74, 74, 74, 74, 74, 74, 74, 74, 74, 12: 193, 16: 195, 192, 194},
+		{33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33},
+		{32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32},
+		{31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31},
+		// 110
+		{30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30},
+		{15: 116, 24: 151, 33: 148, 149},
+		{37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37},
+		{36, 36, 36, 36, 36, 36, 36, 36, 36, 36, 36},
+		{35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35},
+		// 115
+		{34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34},
+		{1: 75, 75, 75, 75, 75, 75, 75, 75, 75, 75},
+		{1: 78, 78, 78, 78, 78, 78, 78, 78, 78, 78},
 	}
 )
 
@@ -543,7 +565,7 @@ func yylex1(yylex yyLexer, lval *yySymType) (n int) {
 }
 
 func yyParse(yylex yyLexer) int {
-	const yyError = 66
+	const yyError = 69
 
 	yyEx, _ := yylex.(yyLexerEx)
 	var yyn int
@@ -771,8 +793,7 @@ yynewstate:
 		}
 	case 12:
 		{
-			yyVAL.value = yyS[yypt-1].value + yyS[yypt-0].value
-			AddParametro()
+			AddInstruccion("mkfs")
 		}
 	case 13:
 		{
@@ -796,7 +817,7 @@ yynewstate:
 		}
 	case 17:
 		{
-			yyVAL.value = yyS[yypt-0].value
+			yyVAL.value = yyS[yypt-1].value + yyS[yypt-0].value
 			AddParametro()
 		}
 	case 18:
@@ -821,7 +842,7 @@ yynewstate:
 		}
 	case 22:
 		{
-			yyVAL.value = yyS[yypt-1].value + yyS[yypt-0].value
+			yyVAL.value = yyS[yypt-0].value
 			AddParametro()
 		}
 	case 23:
@@ -836,12 +857,12 @@ yynewstate:
 		}
 	case 25:
 		{
-			yyVAL.value = yyS[yypt-1].value + yyS[yypt-0].value
+			yyVAL.value = yyS[yypt-0].value
 			AddParametro()
 		}
 	case 26:
 		{
-			yyVAL.value = yyS[yypt-1].value + yyS[yypt-0].value
+			yyVAL.value = yyS[yypt-0].value
 			AddParametro()
 		}
 	case 27:
@@ -861,27 +882,27 @@ yynewstate:
 		}
 	case 30:
 		{
-			yyVAL.value = yyS[yypt-0].value
+			yyVAL.value = yyS[yypt-1].value + yyS[yypt-0].value
 			AddParametro()
 		}
 	case 31:
 		{
-			yyVAL.value = yyS[yypt-0].value
+			yyVAL.value = yyS[yypt-1].value + yyS[yypt-0].value
 			AddParametro()
 		}
 	case 32:
 		{
-			yyVAL.value = yyS[yypt-0].value
+			yyVAL.value = yyS[yypt-1].value + yyS[yypt-0].value
 			AddParametro()
 		}
 	case 33:
 		{
-			yyVAL.value = yyS[yypt-0].value
+			yyVAL.value = yyS[yypt-1].value + yyS[yypt-0].value
 			AddParametro()
 		}
 	case 34:
 		{
-			yyVAL.value = yyS[yypt-0].value
+			yyVAL.value = yyS[yypt-1].value + yyS[yypt-0].value
 			AddParametro()
 		}
 	case 35:
@@ -901,22 +922,22 @@ yynewstate:
 		}
 	case 38:
 		{
-			yyVAL.value = yyS[yypt-1].value
+			yyVAL.value = yyS[yypt-0].value
 			AddParametro()
 		}
 	case 39:
 		{
-			yyVAL.value = yyS[yypt-1].value
+			yyVAL.value = yyS[yypt-0].value
 			AddParametro()
 		}
 	case 40:
 		{
-			yyVAL.value = yyS[yypt-1].value
+			yyVAL.value = yyS[yypt-0].value
 			AddParametro()
 		}
 	case 41:
 		{
-			yyVAL.value = yyS[yypt-1].value
+			yyVAL.value = yyS[yypt-0].value
 			AddParametro()
 		}
 	case 42:
@@ -926,46 +947,49 @@ yynewstate:
 		}
 	case 43:
 		{
-			yyVAL.value = yyS[yypt-0].value
+			yyVAL.value = yyS[yypt-1].value
 			AddParametro()
 		}
 	case 44:
 		{
-			yyVAL.value = yyS[yypt-0].value
+			yyVAL.value = yyS[yypt-1].value
 			AddParametro()
 		}
 	case 45:
 		{
-			yyVAL.value = yyS[yypt-0].value
+			yyVAL.value = yyS[yypt-1].value
 			AddParametro()
 		}
 	case 46:
 		{
-			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
-			auxPath = yyS[yypt-0].value
-			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
+			yyVAL.value = yyS[yypt-1].value
+			AddParametro()
 		}
 	case 47:
 		{
 			yyVAL.value = yyS[yypt-0].value
+			AddParametro()
 		}
 	case 48:
 		{
 			yyVAL.value = yyS[yypt-0].value
+			AddParametro()
 		}
 	case 49:
 		{
-			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
-			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
+			yyVAL.value = yyS[yypt-0].value
+			AddParametro()
 		}
 	case 50:
 		{
-			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
-			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
+			yyVAL.value = yyS[yypt-0].value
+			AddParametro()
 		}
 	case 51:
 		{
-			yyVAL.value = yyS[yypt-0].value
+			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
+			auxPath = yyS[yypt-0].value
+			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
 		}
 	case 52:
 		{
@@ -982,7 +1006,8 @@ yynewstate:
 		}
 	case 55:
 		{
-			yyVAL.value = yyS[yypt-0].value
+			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
+			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
 		}
 	case 56:
 		{
@@ -990,8 +1015,7 @@ yynewstate:
 		}
 	case 57:
 		{
-			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
-			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
+			yyVAL.value = yyS[yypt-0].value
 		}
 	case 58:
 		{
@@ -999,7 +1023,8 @@ yynewstate:
 		}
 	case 59:
 		{
-			yyVAL.value = yyS[yypt-0].value
+			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
+			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
 		}
 	case 60:
 		{
@@ -1007,12 +1032,12 @@ yynewstate:
 		}
 	case 61:
 		{
-			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
-			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
+			yyVAL.value = yyS[yypt-0].value
 		}
 	case 62:
 		{
-			yyVAL.value = yyS[yypt-0].value
+			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
+			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
 		}
 	case 63:
 		{
@@ -1024,12 +1049,12 @@ yynewstate:
 		}
 	case 65:
 		{
-			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
-			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
+			yyVAL.value = yyS[yypt-0].value
 		}
 	case 66:
 		{
-			yyVAL.value = yyS[yypt-0].value
+			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
+			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
 		}
 	case 67:
 		{
@@ -1037,28 +1062,54 @@ yynewstate:
 		}
 	case 68:
 		{
-			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
-			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
+			yyVAL.value = yyS[yypt-0].value
 		}
 	case 69:
 		{
-			yyVAL.value = yyS[yypt-4].value + yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
-			CrearParametro(yyS[yypt-3].value, "-"+yyS[yypt-0].value)
+			yyVAL.value = yyS[yypt-0].value
 		}
 	case 70:
 		{
-			yyVAL.value = yyS[yypt-4].value + yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
+			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
+			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
 		}
 	case 71:
 		{
 			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
+			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
 		}
 	case 72:
+		{
+			yyVAL.value = yyS[yypt-0].value
+		}
+	case 73:
+		{
+			yyVAL.value = yyS[yypt-0].value
+		}
+	case 74:
+		{
+			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
+			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
+		}
+	case 75:
+		{
+			yyVAL.value = yyS[yypt-4].value + yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
+			CrearParametro(yyS[yypt-3].value, "-"+yyS[yypt-0].value)
+		}
+	case 76:
+		{
+			yyVAL.value = yyS[yypt-4].value + yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
+		}
+	case 77:
+		{
+			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
+		}
+	case 78:
 		{
 			yyVAL.value = yyS[yypt-4].value + yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
 			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
 		}
-	case 73:
+	case 79:
 		{
 			yyVAL.value = yyS[yypt-3].value + yyS[yypt-2].value + yyS[yypt-1].value + yyS[yypt-0].value
 			CrearParametro(yyS[yypt-2].value, yyS[yypt-0].value)
