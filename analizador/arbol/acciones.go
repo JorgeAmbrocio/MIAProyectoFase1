@@ -8,7 +8,6 @@ import (
 	"os"
 	"sort"
 	"strconv"
-	"strings"
 	"time"
 )
 
@@ -686,7 +685,7 @@ func getContenidoArchivo(inodo Inodo, particion ParticionMontada) (contenido str
 			// OBTENER EL BLOQUE ARCHIVO
 			_, bloqueArchivo := recuperarBloqueArchivo(particion.path, particion.sp.BlockStart+int64(particion.sp.BlockSize)*int64(apuntador))
 			contenido2 := BytesToString(bloqueArchivo.Content[:])
-			contenido2 = strings.ReplaceAll(contenido2, "\n", "\\n")
+			contenido += contenido2
 			break
 		case indice == 13 && apuntador != -1:
 			// apuntador indirecto
@@ -697,4 +696,17 @@ func getContenidoArchivo(inodo Inodo, particion ParticionMontada) (contenido str
 		}
 	}
 	return contenido
+}
+
+/*USUARIOS*/
+func getUsuario(usr string) (bool, UsuarioArchivo) {
+	retorno := UsuarioArchivo{}
+
+	return false, retorno
+}
+
+func getGrupo(grp string) (bool, GrupoArchivo) {
+	retorno := GrupoArchivo{}
+
+	return false, retorno
 }

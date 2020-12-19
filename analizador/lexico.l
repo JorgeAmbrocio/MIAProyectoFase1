@@ -51,7 +51,7 @@ func (y *yylexer) Lex(lval *yySymType) int {
 
 numero              [0-9]+
 letra               [a-zñA-ZÑ_]
-id                  ({letra}|{numero})+
+id                  {letra}({letra}|{numero})+
 archivo             {id}(".arch"|".dsk"|".jpg"|".disk"|".png"|".pdf"|".txt")
 rutaSimple          "/"({id}"/")*({archivo}?)
 rutaCompleja        \"[^\"\n\t\r]*\"
@@ -102,7 +102,7 @@ rutaCompleja        \"[^\"\n\t\r]*\"
 [Ii][Dd]                    lval.value = string(y.buf); return rid
 [Tt][Ii][Pp][Oo]            lval.value = string(y.buf); return tipo
 [Uu][Ss][Rr]                lval.value = string(y.buf); return usr
-[Pp][Dd][Ww][Dd]            lval.value = string(y.buf); return pwd
+[Pp][Ww][Dd]                lval.value = string(y.buf); return pwd
 [Gg][Rr][Pp]                lval.value = string(y.buf); return grp
 [Uu][Gg][Oo]                lval.value = string(y.buf); return ugo
 [Rr]                        lval.value = string(y.buf); return r
@@ -124,10 +124,10 @@ rutaCompleja        \"[^\"\n\t\r]*\"
 
 
 {numero}                    lval.value = string(y.buf); return numero
-{id}                        lval.value = string(y.buf); return id
 {rutaSimple}                lval.value = string(y.buf); return rutaSimple
 {rutaCompleja}              lval.value = string(y.buf); return rutaCompleja
 {archivo}                   lval.value = string(y.buf); return archivo
+{id}                        lval.value = string(y.buf); return id
 
 %%
     y.empty = true

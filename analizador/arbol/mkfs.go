@@ -97,7 +97,7 @@ func (i *mkfs) CrearSistemaDeArchivos() {
 
 		// bloque de archivo 1
 		var auxCont [64]byte
-		copy(auxCont[:], "1,G,root,1\n1,U,root,root,123\n")
+		copy(auxCont[:], "1,G,root\n1,U,root,root,123\n")
 		bloqueArchivo := BloqueArchivo{
 			Content: auxCont,
 		}

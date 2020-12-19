@@ -47,7 +47,7 @@ var auxPath string
 %type <value> PARAMETRO_TYPE, VALOR_TYPE, PARAMETRO_FIT, VALOR_FIT
 %type <value> PARAMETRO_DELETE, VALOR_DELETE, PARAMETRO_ADD, PARAMETRO_IDN
 %type <value> LST_FDISK, LST_MKDIS, LST_MOUNT,PARAMETRO_ID,LST_REP,PARAMETRO_TYPE_FS
-%type <value> LST_MKFS
+%type <value> LST_MKFS, LST_LOGIN,PARAMETRO_USR,PARAMETRO_PWD
 
 
 %start INICIO
@@ -67,6 +67,7 @@ LISTA_INSTRUCCION:
 
 INSTRUCCION:
     pause                   {AddInstruccion("pause"); }
+    |logout                 {AddInstruccion("logout");}
     |exec PARAMETRO_PATH    { EjecutarExec(); }
     |mkdisk LST_MKDIS       { AddInstruccion("mkdisk"); }
     |rmdisk PARAMETRO_PATH  { AddParametro(); AddInstruccion("rmdisk"); }
@@ -75,6 +76,16 @@ INSTRUCCION:
     |unmount PARAMETRO_ID   { AddParametro(); AddInstruccion("unmount"); }
     |rep LST_REP            { AddInstruccion("rep"); }
     |mkfs LST_MKFS          { AddInstruccion("mkfs")}
+    |login LST_LOGIN        { AddInstruccion("login")}
+;
+
+LST_LOGIN:
+    LST_LOGIN PARAMETRO_USR          { $$=$1+$2; AddParametro(); }
+    |LST_LOGIN PARAMETRO_PWD         { $$=$1+$2; AddParametro(); }
+    |LST_LOGIN PARAMETRO_ID           { $$=$1+$2; AddParametro(); }
+    |PARAMETRO_USR                 { $$=$1; AddParametro(); }
+    |PARAMETRO_PWD                 { $$=$1; AddParametro(); }
+    |PARAMETRO_ID                   { $$=$1; AddParametro(); }
 ;
 
 LST_MKFS:
@@ -158,6 +169,18 @@ VALOR_NAME:
     archivo         { $$=$1 }
     |id             { $$=$1 }
     |rutaCompleja   { $$=$1 }
+;
+
+PARAMETRO_USR:
+    guion usr asignacion id { $$=$1+$2+$3+$4; CrearParametro($2,$4);}
+;
+
+PARAMETRO_PWD:
+    guion pwd asignacion id { $$=$1+$2+$3+$4; CrearParametro($2,$4);}
+;
+
+PARAMETRO_USR:
+    guion usr asignacion id { $$=$1+$2+$3+$4; CrearParametro($2,$4);}
 ;
 
 PARAMETRO_UNIT:
