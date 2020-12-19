@@ -138,7 +138,7 @@ type Inodo struct {
 	Mtime [20]byte
 	Block [15]int32
 	Type  byte
-	Perm  [3]int8
+	Perm  [3]int8 // bit 1: usuario, bit 2: grupo, bit 3 otros
 }
 
 type BloqueCarpeta struct {
@@ -156,4 +156,14 @@ type BloqueArchivo struct {
 
 type BloqueApuntadores struct {
 	Apuntadores [16]int32
+}
+
+type Journaling struct {
+	TipoOperacion [10]byte
+	Tipo          byte
+	Nombre        [12]byte
+	Contenid      [64]byte
+	Fecha         [20]byte
+	Propietario   [10]byte
+	Permisos      int64
 }

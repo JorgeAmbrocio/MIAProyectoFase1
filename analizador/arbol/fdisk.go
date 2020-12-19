@@ -409,7 +409,7 @@ func (i *fdisk) eliminarParticion() {
 			escribirMBR(i.path, auxMbr)
 			fmt.Println("Particiòn eliminada con èxito")
 			fmt.Println("\t" + i.path)
-			fmt.Println("\n" + i.name)
+			fmt.Println("\t" + i.name)
 			return
 		}
 	}
@@ -449,6 +449,12 @@ func (i *fdisk) eliminarParticionL() {
 						// el ebr a eliminar actual
 						ebrAtnerior.Next = auxEbr.Next
 						escribirEBR(i.path, ebrAtnerior, ebrAtnerior.Start)
+						if i.delete == "full" {
+							WriteCeros(i.path, auxEbr.Start, auxEbr.Start+auxEbr.Size)
+						}
+						fmt.Println("Particiòn eliminada con èxito")
+						fmt.Println("\t" + i.path)
+						fmt.Println("\t" + i.name)
 					}
 					// indicar la posiciòn siguiente
 					if auxEbr.Next == -1 {
@@ -557,6 +563,7 @@ func (i *fdisk) addParticionL() {
 									auxEbr.Size += int64(i.addBytes)
 									// guardar la particiòn
 									escribirEBR(i.path, auxEbr, auxEbr.Start)
+									fmt.Println("Particiòn editada con èxito")
 								}
 							} else {
 								// el ebr actual es el ùltimo ebr de la lista
@@ -565,6 +572,7 @@ func (i *fdisk) addParticionL() {
 									auxEbr.Size += int64(i.addBytes)
 									// guardar la particiòn
 									escribirEBR(i.path, auxEbr, auxEbr.Start)
+									fmt.Println("Particiòn editada con èxito")
 								}
 							}
 						} else {
@@ -576,6 +584,7 @@ func (i *fdisk) addParticionL() {
 
 								// guardar el ebr
 								escribirEBR(i.path, auxEbr, auxEbr.Start)
+								fmt.Println("Particiòn editada con èxito")
 								break
 							} else {
 								fmt.Println("La particiòn es demasiado pequeña para la reducciòn " + strconv.Itoa(i.size) + " " + i.unit)

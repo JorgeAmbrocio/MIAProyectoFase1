@@ -8,7 +8,7 @@ import (
     "fmt"
     "log"
     //"archivos/MIA-Proyecto1_201709454/analizador/arbol"
-    
+    "proyectos/MIAProyectoFase1/analizador/arbol"
     "os"
 )
 

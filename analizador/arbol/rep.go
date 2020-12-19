@@ -74,14 +74,7 @@ func (i *rep) crearReporte() {
 			file.WriteString(contenido)
 			file.Close()
 
-			// compilar el archivo creado
-			comando := exec.Command("dot", i.path+".dot", "-Tjpg", "-o", i.path)
-			if err := comando.Run(); err != nil {
-				fmt.Println(err)
-			}
-			fmt.Println("Se ha creado el reporte con èxito")
-			fmt.Println("\t" + i.path)
-		} else {
+		} else if i.name == "disk" {
 			// es un reporte de espacios
 			// es un reporte mbr descripciòn
 			var auxMbr = RecuperarMBR(particionMontada.path)
@@ -96,27 +89,95 @@ func (i *rep) crearReporte() {
 			file.WriteString(contenido)
 			file.Close()
 
-			// compilar el archivo creado
-			if strings.Contains(i.path, ".jpg") {
-				comando := exec.Command("dot", i.path+".dot", "-Tjpg", "-o", i.path)
-				if err := comando.Run(); err != nil {
-					fmt.Println(err)
-				}
-			} else if strings.Contains(i.path, ".png") {
-				comando := exec.Command("dot", i.path+".dot", "-Tpng", "-o", i.path)
-				if err := comando.Run(); err != nil {
-					fmt.Println(err)
-				}
-			} else if strings.Contains(i.path, ".pdf") {
-				comando := exec.Command("dot", i.path+".dot", "-Tpdf", "-o", i.path)
-				if err := comando.Run(); err != nil {
-					fmt.Println(err)
-				}
+		} else if i.name == "tree" {
+			//var superBloque = particionMontada.sp
+			var contenido = getReporteTree(*particionMontada)
+
+			// crear el archivo
+			file, err := os.Create(i.path + ".dot")
+			if err != nil {
+				log.Fatal(err)
 			}
 
-			fmt.Println("Se ha creado el reporte con èxito")
-			fmt.Println("\t" + i.path)
+			file.WriteString(contenido)
+			file.Close()
+
+		} else if i.name == "sb" {
+			//var superBloque = particionMontada.sp
+			var contenido = getReporteSuperBloque(*particionMontada)
+
+			// crear el archivo
+			file, err := os.Create(i.path + ".dot")
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			file.WriteString(contenido)
+			file.Close()
+		} else if i.name == "bm_inode" {
+			//var superBloque = particionMontada.sp
+			// recuperar el bitmap inodo
+			_, bitmap := recuperarBitMap(particionMontada.path, particionMontada.sp.BitMapInodeStart, int64(particionMontada.sp.InodesCount))
+			var contenido = getReporteBitMap(bitmap)
+
+			// crear el archivo
+			file, err := os.Create(i.path + ".txt")
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			file.WriteString(contenido)
+			file.Close()
+		} else if i.name == "bm_block" {
+			//var superBloque = particionMontada.sp
+			// recuperar el bitmap inodo
+			_, bitmap := recuperarBitMap(particionMontada.path, particionMontada.sp.BitMapBlockStart, int64(particionMontada.sp.BlocksCount))
+			var contenido = getReporteBitMap(bitmap)
+
+			// crear el archivo
+			file, err := os.Create(i.path + ".txt")
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			file.WriteString(contenido)
+			file.Close()
+		} else if i.name == "inode" {
+			//var superBloque = particionMontada.sp
+			// recuperar el bitmap inodo
+			_, bitmap := recuperarBitMap(particionMontada.path, particionMontada.sp.BitMapBlockStart, int64(particionMontada.sp.BlocksCount))
+			var contenido = getReporteInodos(bitmap, *particionMontada)
+
+			// crear el archivo
+			file, err := os.Create(i.path + ".dot")
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			file.WriteString(contenido)
+			file.Close()
 		}
+
+		// compilar el archivo creado
+		if strings.Contains(i.path, ".jpg") {
+			comando := exec.Command("dot", i.path+".dot", "-Tjpg", "-o", i.path)
+			if err := comando.Run(); err != nil {
+				fmt.Println(err)
+			}
+		} else if strings.Contains(i.path, ".png") {
+			comando := exec.Command("dot", i.path+".dot", "-Tpng", "-o", i.path)
+			if err := comando.Run(); err != nil {
+				fmt.Println(err)
+			}
+		} else if strings.Contains(i.path, ".pdf") {
+			comando := exec.Command("dot", i.path+".dot", "-Tpdf", "-o", i.path)
+			if err := comando.Run(); err != nil {
+				fmt.Println(err)
+			}
+		}
+
+		fmt.Println("Se ha creado el reporte con èxito")
+		fmt.Println("\t" + i.path)
 	}
 }
 
@@ -279,4 +340,223 @@ func getReporteDSK(mbr Mbr, path string) string {
 	retorno += "}"
 
 	return retorno
+}
+
+func getReporteTree(particionMontada ParticionMontada) string {
+	var retorno string
+
+	retorno += "digraph G {\n"
+	retorno += "	concentrate=True;"
+	retorno += "	rankdir=LR;"
+	retorno += "	node[shape=record];"
+
+	labels, arrow, _ := getRecursiveTree(0, particionMontada)
+
+	retorno += labels + "\n"
+	retorno += arrow + "\n"
+
+	retorno += "}"
+
+	return retorno
+}
+
+func getReporteSuperBloque(paricionMontada ParticionMontada) (retorno string) {
+
+	retorno += "digraph g{\nrankdir = LR;\nnode[shape = record, width = .1, heigth = .1, width = 1.5];\n" +
+		"inodo0[label = \"{NOMBRE | VALOR} |{s_inodes_count| " + strconv.Itoa(int(paricionMontada.sp.InodesCount)) +
+		" }|{s_blocks_count| " + strconv.Itoa(int(paricionMontada.sp.BlocksCount)) +
+		" }|{s_free_blocks_count| " + strconv.Itoa(int(paricionMontada.sp.FreeBlocksCount)) +
+		" }|{s_free_inodes_count| " + strconv.Itoa(int(paricionMontada.sp.FreeInodesCount)) +
+		" }|{s_mtime| " + BytesToString(paricionMontada.sp.MountedTime[:]) +
+		" }|{s_umtime| " + BytesToString(paricionMontada.sp.UnMountedTime[:]) +
+		" }|{s_mnt_count| " + strconv.Itoa(int(paricionMontada.sp.MountedCount)) +
+		" }|{s_magic| " + strconv.Itoa(int(paricionMontada.sp.Magic)) +
+		" }|{s_inode_size| " + strconv.Itoa(int(paricionMontada.sp.InodeSize)) +
+		" }|{s_block_size| " + strconv.Itoa(int(paricionMontada.sp.BlockSize)) +
+		" }|{s_first_ino| " + strconv.Itoa(int(paricionMontada.sp.FirstInode)) +
+		" }|{s_first_blo| " + strconv.Itoa(int(paricionMontada.sp.FirstBlock)) +
+		" }|{s_bm_inodde_start| " + strconv.Itoa(int(paricionMontada.sp.InodeStart)) +
+		" }|{s_bm_block_start| " + strconv.Itoa(int(paricionMontada.sp.BlockStart)) + " }\"]" +
+		"\n}"
+
+	return retorno
+}
+
+func getReporteBitMap(bitmap []byte) (retorno string) {
+
+	for indice, bit := range bitmap {
+		retorno += strconv.Itoa(int(bit)) + " "
+		if (indice+1)%20 == 0 {
+			retorno += "\n"
+		}
+	}
+	return retorno
+}
+
+func getReporteInodos(bitmap []byte, particion ParticionMontada) (retorno string) {
+	retorno += "digraph g{\n\trankdir = LR;\n\tnode[shape = record, width = .1, heigth = .1, width = 1.5];\n\t"
+	arrows := ""
+	for indice, bit := range bitmap {
+		// recuperar
+		if bit == 1 {
+			// inodo activo, recueprar el inodo
+			_, inodo := recuperarInodo(particion.path, int64(particion.sp.InodeStart)+int64(particion.sp.InodeSize)*int64(indice))
+
+			// crear el reporte inodo
+			retorno += getLabelInodoData(int32(indice), inodo)
+			if arrows != "" {
+				arrows += " nd_i" + strconv.Itoa(int(indice)) + ":t \n"
+			}
+			arrows += "nd_i" + strconv.Itoa(int(indice)) + ":t ->"
+		}
+	}
+
+	arrows = arrows[:len(arrows)-12]
+
+	retorno += "\n\n"
+	retorno += arrows
+	retorno += "\n\n}"
+	return retorno
+}
+
+func getRecursiveTree(indiceInodo int32, particionMontada ParticionMontada) (labels string, arrows string, idSiguiente string) {
+
+	// obtener el inodo
+	var sp = particionMontada.sp
+	_, inodo := recuperarInodo(particionMontada.path, sp.InodeStart+int64(int64(sp.InodeSize)*int64(indiceInodo)))
+
+	nombreLabel := "nd_i" + strconv.Itoa(int(indiceInodo))
+	labels = getLabelInodo(indiceInodo, inodo)
+
+	if inodo.Type == 0 {
+		// es inodo de carpetas
+		for indice, bloque := range inodo.Block {
+			if indice == 0 && bloque != -1 {
+				// el bloque carpeta existe y debemos bucarlo
+				// recueprar el bloque de carpetas
+				_, bloqueCarpeta := recuperarBloqueCarpeta(particionMontada.path, sp.BlockStart+int64(bloque)*int64(sp.BlockSize))
+				//fmt.Println(bloqueCarpeta)
+				nombre, labelT := getLabelCarpeta(bloque, bloqueCarpeta)
+				labels += labelT + "\n"
+				arrows += nombreLabel + ":a" + strconv.Itoa(indice) + " -> " + nombre + ":t\n"
+
+				for ii, apuntador := range bloqueCarpeta.Content[2:] {
+					if apuntador.PointerInode != -1 {
+						labelT, arrowt, sigt := getRecursiveTree(apuntador.PointerInode, particionMontada)
+						labels += labelT + "\n"
+						arrows += nombre + ":a" + strconv.Itoa(ii) + " -> " + sigt + ":t" + "\n"
+
+						arrows += arrowt
+					}
+				}
+			} else if indice != 0 && indice < 13 && bloque != -1 {
+				// el bloque carpeta existe y debemos bucarlo
+				// recueprar el bloque de carpetas
+				_, bloqueCarpeta := recuperarBloqueCarpeta(particionMontada.path, sp.BlockStart+int64(bloque)*int64(sp.BlockSize))
+				//fmt.Println(bloqueCarpeta)
+				nombre, labelT := getLabelCarpeta(bloque, bloqueCarpeta)
+				labels += labelT + "\n"
+				arrows += nombreLabel + ":a" + strconv.Itoa(indice) + " -> " + nombre + ":t\n"
+
+				for ii, apuntador := range bloqueCarpeta.Content {
+					if apuntador.PointerInode != -1 {
+						labelT, arrowt, sigt := getRecursiveTree(apuntador.PointerInode, particionMontada)
+						labels += labelT + "\n"
+						arrows += nombre + ":a" + strconv.Itoa(ii) + " -> " + sigt + ":t" + "\n"
+
+						arrows += arrowt
+					}
+				}
+			} else if indice == 13 && bloque != -1 {
+				// llamar al bloque indirecto
+				// por cada indirecto llamar a cada carpeta
+			} else if indice == 14 && bloque != -1 {
+				// por cada apuntador del indirecto, llamar al segundo bloque indirecto
+				//por cada indirectsecundario llamar a carpetas llamar a recursivas
+			}
+		}
+	} else {
+		// es inodo de archivos
+		for indice, bloque := range inodo.Block {
+			if indice < 13 && bloque != -1 {
+				// obtener el bloque archivo
+				_, bloqueArchivo := recuperarBloqueArchivo(particionMontada.path, sp.BlockStart+int64(sp.BlockSize)*int64(bloque))
+				nombre, labelT := getLabelArchivo(bloque, bloqueArchivo)
+
+				labels += labelT
+				arrows += nombreLabel + ":a" + strconv.Itoa(indice) + " -> " + nombre + ":p\n"
+			}
+		}
+	}
+
+	return labels, arrows, nombreLabel
+}
+
+func getLabelInodo(indiceInodo int32, inodo Inodo) string {
+	strIndice := strconv.Itoa(int(indiceInodo))
+	retorno := "nd_i" + strIndice +
+		"[label=\"<t>inodo: " + strIndice +
+		"|tipo: " + strconv.Itoa(int(inodo.Type)) +
+		"|tamano: " + strconv.Itoa(int(inodo.Size))
+
+	for indice, bloque := range inodo.Block {
+		strI := strconv.Itoa(indice)
+		retorno += "|<a" + strI + ">a" + strI + ": " + strconv.Itoa(int(bloque))
+	}
+
+	retorno += "\"]\n"
+	return retorno
+}
+
+func getLabelInodoData(indiceInodo int32, inodo Inodo) string {
+	strIndice := strconv.Itoa(int(indiceInodo))
+	retorno := "nd_i" + strIndice +
+		"[label=\"<t>inodo: " + strIndice +
+		"|tipo: " + strconv.Itoa(int(inodo.Type)) +
+		"|tamano: " + strconv.Itoa(int(inodo.Size)) +
+		"|uid: " + strconv.Itoa(int(inodo.UID)) +
+		"|gid: " + strconv.Itoa(int(inodo.GID)) +
+		"|atime: " + BytesToString(inodo.Atmie[:]) +
+		"|ctime: " + BytesToString(inodo.Ctime[:]) +
+		"|mtime: " + BytesToString(inodo.Mtime[:]) +
+		"|perms: " + strconv.Itoa(int(inodo.Type))
+
+	for indice, bloque := range inodo.Block {
+		strI := strconv.Itoa(indice)
+		retorno += "|<a" + strI + ">block_" + strI + ": " + strconv.Itoa(int(bloque))
+	}
+
+	retorno += "\"]\n"
+	return retorno
+}
+
+func getLabelCarpeta(indiceInodo int32, inodo BloqueCarpeta) (string, string) {
+	strIndice := strconv.Itoa(int(indiceInodo))
+	retorno := "nd_b" + strIndice +
+		"[label=\"<t>carpeta: " + strIndice
+
+	for indice, bloque := range inodo.Content {
+		strI := strconv.Itoa(indice)
+		retorno += "|<a" + strI + ">" + BytesToString(bloque.Name[:]) + strI + ": " + strconv.Itoa(int(bloque.PointerInode))
+	}
+
+	retorno += "\"]"
+
+	apuntador := "nd_b" + strIndice
+	return apuntador, retorno
+}
+
+func getLabelArchivo(indiceInodo int32, bloqueArchivo BloqueArchivo) (string, string) {
+	strIndice := strconv.Itoa(int(indiceInodo))
+	retorno := "nd_b" + strIndice +
+		"[label=\"<t>archivo: " + strIndice
+
+	retorno2 := BytesToString(bloqueArchivo.Content[:])
+	retorno2 = strings.ReplaceAll(retorno2, "\n", "\\n")
+
+	retorno += "|" + retorno2
+	retorno += "\"]\n"
+
+	apuntador := "nd_b" + strIndice
+	return apuntador, retorno
 }

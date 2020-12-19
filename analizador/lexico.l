@@ -52,7 +52,7 @@ func (y *yylexer) Lex(lval *yySymType) int {
 numero              [0-9]+
 letra               [a-zñA-ZÑ_]
 id                  ({letra}|{numero})+
-archivo             {id}(".arch"|".dsk"|".jpg"|".disk"|".png"|".pdf")
+archivo             {id}(".arch"|".dsk"|".jpg"|".disk"|".png"|".pdf"|".txt")
 rutaSimple          "/"({id}"/")*({archivo}?)
 rutaCompleja        \"[^\"\n\t\r]*\"
 
