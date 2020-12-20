@@ -48,7 +48,7 @@ var auxPath string
 %type <value> PARAMETRO_DELETE, VALOR_DELETE, PARAMETRO_ADD, PARAMETRO_IDN
 %type <value> LST_FDISK, LST_MKDIS, LST_MOUNT,PARAMETRO_ID,LST_REP,PARAMETRO_TYPE_FS
 %type <value> LST_MKFS, LST_LOGIN,PARAMETRO_USR,PARAMETRO_PWD,LST_MKGRP,PARAMETRO_GRP
-%type <value> LST_MKUSR, LST_MKFILE, PARAMETRO_P
+%type <value> LST_MKUSR, LST_MKFILE, PARAMETRO_P,LST_MKDIR
 
 
 %start INICIO
@@ -81,6 +81,14 @@ INSTRUCCION:
     |mkgrp LST_MKGRP        { AddInstruccion("mkgrp")}
     |mkusr LST_MKUSR        { AddInstruccion("mkusr")}
     |mkfile LST_MKFILE      { AddInstruccion("mkfile")}
+    |mkdir LST_MKDIR        { AddInstruccion("mkdir")}
+;
+
+LST_MKDIR:
+    LST_MKFILE PARAMETRO_PATH       { $$=$1+$2; AddParametro(); }
+    |LST_MKFILE PARAMETRO_P         { $$=$1+$2; AddParametro(); }
+    |PARAMETRO_PATH                 { $$=$1; AddParametro(); }
+    |PARAMETRO_P                    { $$=$1; AddParametro(); }
 ;
 
 LST_MKFILE:

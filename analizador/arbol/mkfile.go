@@ -85,6 +85,7 @@ func (i *mkfile) crearArchivo() {
 					} else {
 						// mostrar error porque la ruta no es vàlida
 						fmt.Println("\tNo se ha encontrado el directorio " + carpeta)
+						return
 					}
 				}
 			}

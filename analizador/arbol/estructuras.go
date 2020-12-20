@@ -18,7 +18,6 @@ type Instruccion struct {
 // luego la manda a ejecutar según sea el caso
 func (i Instruccion) Ejecutar() {
 	//fmt.Println("Se ha ejecutado -> ", i.Tipo, "\n\t->", i.Parametros)
-
 	switch i.Tipo {
 	case "pause":
 		fmt.Println("Presiona enter para continuar")
@@ -63,6 +62,9 @@ func (i Instruccion) Ejecutar() {
 		break
 	case "mkfile":
 		Emkfile(i.Parametros)
+		break
+	case "mkdir":
+		Emkdir(i.Parametros)
 		break
 	default:
 		fmt.Println("No se reconoce la instrucción -> ", i.Tipo)
