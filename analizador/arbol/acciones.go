@@ -332,6 +332,16 @@ func (ii *SuperBlock) getNextIndiceBloque(particion ParticionMontada) (indice in
 	return indice
 }
 
+func (ii *SuperBlock) getNextIndiceInodo(particion ParticionMontada) (indice int32) {
+	indice = ii.FirstInode
+	// encontrar nuevo bloque vacìo
+	_, bitmap := recuperarBitMap(particion.path, particion.sp.BitMapInodeStart, int64(particion.sp.InodesCount))
+	bitmap[ii.FirstInode] = 1 // indicar que èste bit serà utilizado
+	ii.encontrarSiguienteInodoLibre(bitmap)
+	escribirBitMap(particion.path, bitmap, particion.sp.BitMapInodeStart)
+	return indice
+}
+
 func addInodo(path string, inodo Inodo, sp *SuperBlock) {
 	// encontrar la primer posiciòn del bitmap vacìa
 	if file, err := os.OpenFile(path, os.O_RDWR, 0777); err == nil {
@@ -801,7 +811,6 @@ func getUsuarioYGrupo(particion ParticionMontada) (map[string]UsuarioArchivo, ma
 		atributos := strings.Split(fila, ",")
 		if len(atributos) == 5 {
 			// usuario
-
 			if uid, err := strconv.Atoi(atributos[0]); err == nil {
 				usr := UsuarioArchivo{UID: int32(uid), grupo: atributos[2], nombre: atributos[3], contrasena: atributos[4]}
 				mapaUsuario[usr.nombre] = usr
@@ -821,4 +830,274 @@ func getContenidoArchivoUsuarios(particion ParticionMontada) string {
 	contenidoArchivo := getContenidoArchivo(inodo, particion)
 
 	return contenidoArchivo
+}
+
+func getCarpetaFromInodo(nombreBuscar string, inodo Inodo, particion ParticionMontada) (int, int, int32) {
+	// recorrer todos los apuntadores
+	for i, apuntador := range inodo.Block {
+		switch {
+		case i <= 12 && apuntador != -1:
+			// apuntadores directos conº contenido
+			// obtener el bloque archivo
+			_, bloqueCarpeta := recuperarBloqueCarpeta(particion.path, particion.sp.BlockStart+int64(particion.sp.BlockSize)*int64(apuntador))
+
+			// recorrer los apuntadores de la carpeta
+			for j, contenidoCarpeta := range bloqueCarpeta.Content {
+				var auxNombreCarpeta [12]byte
+				copy(auxNombreCarpeta[:], nombreBuscar)
+				if auxNombreCarpeta == contenidoCarpeta.Name {
+					// sì es el nombre de la carpeta
+					// retornar el apuntador y la carpeta
+					// indice apuntador del inodo,
+					return i, j, contenidoCarpeta.PointerInode
+				}
+			}
+			break
+		case i == 13:
+			// apuntador indirecto
+			break
+		case i == 14:
+			// apuntador indirecto doble
+			break
+		}
+	}
+
+	return -1, -1, -1
+}
+
+func crearArchivoEnInodo(indiceInodo int, inodo Inodo, particion *ParticionMontada, cantidadCaracteres int, nombre string) {
+	// buscar un apuntador libre para crear el archivo
+
+	for indiceParaCarpeta, apuntador := range inodo.Block {
+		if apuntador != -1 {
+			// ya existe un bloque de carpeta
+			// recorrer todos los apuntadores de carpeta
+			_, bloqueCarpeta := recuperarBloqueCarpeta(particion.path, particion.sp.BlockStart+int64(particion.sp.BlockSize)*int64(apuntador))
+
+			// recorrer los apuntadores de la carpeta
+			for indiceCarpeta, contenidoCarpeta := range bloqueCarpeta.Content {
+				if contenidoCarpeta.PointerInode == -1 {
+					// carpeta libre, podemos crear aquì el archivo
+
+					// encontrar inodo libre
+					indiceInodoLibre := particion.sp.getNextIndiceInodo(*particion)
+
+					// preparar el contenido de la carpeta
+					var auxNombreCarpeta [12]byte
+					copy(auxNombreCarpeta[:], nombre)
+					// asignar valroes a la carpeta
+					bloqueCarpeta.Content[indiceCarpeta].Name = auxNombreCarpeta
+					bloqueCarpeta.Content[indiceCarpeta].PointerInode = indiceInodoLibre
+
+					// crear el inodo
+					inodoNuevo := crearInodo()
+					inodoNuevo.iniciarPunteros()
+					inodoNuevo.Type = 1 // indicar que es inodo de archivos
+					inodoNuevo.Ctime = getFechaByte()
+					inodoNuevo.GID = UsuarioActualLogueado.GUID
+					inodoNuevo.UID = UsuarioActualLogueado.UID
+					inodoNuevo.Perm = [3]int8{7, 7, 7}
+					inodoNuevo.Size = int32(cantidadCaracteres)
+
+					// escribir las estructuras utilizadas
+					escribirBloqueCarpeta(particion.path, bloqueCarpeta, particion.sp.BlockStart+int64(particion.sp.BlockSize)*int64(apuntador))
+					escribirInodo(particion.path, inodoNuevo, particion.sp.InodeStart+int64(particion.sp.InodeSize)*int64(indiceInodoLibre))
+
+					// ya se ha creado el inodo
+					// escribir el archivo
+					contenido := ""
+					for i := 0; i < cantidadCaracteres; i++ {
+						contenido += "1"
+					}
+
+					escribirContenidoArchivo(contenido, int64(indiceInodoLibre), particion)
+					fmt.Println("Archivo creado con èxito :D, el programador està muy feliz")
+					return
+				}
+			}
+		} else {
+			// no existe un bloque carpeta
+			// crear un bloque nuevo de carpeta
+			apuntadorCarpeta, bloqueCarpeta := crearCarpetaEnIndiceInodo(int64(indiceInodo), inodo, int32(indiceParaCarpeta), particion)
+			// recorrer los apuntadores de la carpeta
+			for indiceCarpeta, contenidoCarpeta := range bloqueCarpeta.Content {
+				if contenidoCarpeta.PointerInode == -1 {
+					// carpeta libre, podemos crear aquì el archivo
+
+					// encontrar inodo libre
+					indiceInodoLibre := particion.sp.getNextIndiceInodo(*particion)
+
+					// preparar el contenido de la carpeta
+					var auxNombreCarpeta [12]byte
+					copy(auxNombreCarpeta[:], nombre)
+					// asignar valroes a la carpeta
+					bloqueCarpeta.Content[indiceCarpeta].Name = auxNombreCarpeta
+					bloqueCarpeta.Content[indiceCarpeta].PointerInode = indiceInodoLibre
+
+					// crear el inodo
+					inodoNuevo := crearInodo()
+					inodoNuevo.iniciarPunteros()
+					inodoNuevo.Type = 1 // indicar que es inodo de archivos
+					inodoNuevo.Ctime = getFechaByte()
+					inodoNuevo.GID = UsuarioActualLogueado.GUID
+					inodoNuevo.UID = UsuarioActualLogueado.UID
+					inodoNuevo.Perm = [3]int8{7, 7, 7}
+					inodoNuevo.Size = int32(cantidadCaracteres)
+
+					// escribir las estructuras utilizadas
+					escribirBloqueCarpeta(particion.path, bloqueCarpeta, particion.sp.BlockStart+int64(particion.sp.BlockSize)*int64(apuntadorCarpeta))
+					escribirInodo(particion.path, inodoNuevo, particion.sp.InodeStart+int64(particion.sp.InodeSize)*int64(indiceInodoLibre))
+
+					// ya se ha creado el inodo
+					// escribir el archivo
+					contenido := ""
+					for i := 0; i < cantidadCaracteres; i++ {
+						contenido += "1"
+					}
+
+					escribirContenidoArchivo(contenido, int64(indiceInodoLibre), particion)
+					fmt.Println("Archivo creado con èxito :D, el programador està muy feliz")
+					return
+				}
+			}
+		}
+	}
+}
+
+func crearCarpetaEnIndiceInodo(indiceInodo int64, inodo Inodo, indiceParaCarpeta int32, particion *ParticionMontada) (int32, BloqueCarpeta) {
+
+	// obtener el bit en el que se puede crear la carpeta
+	indiceCarpeta := particion.sp.getNextIndiceBloque(*particion)
+
+	// apuntar el inodo al ìndice de carpeta futuro
+	inodo.Block[indiceParaCarpeta] = indiceCarpeta
+
+	// crear el objeto bloque carpeta
+	bloqueCarpeta := BloqueCarpeta{}
+	bloqueCarpeta.iniciarPunteros()
+	//bloqueCarpeta.indicarPadreyActual(0, indiceCarpeta)
+
+	// escribir el bloque con punteros vacìos
+	escribirBloqueCarpeta(particion.path, bloqueCarpeta, particion.sp.BlockStart+int64(particion.sp.BlockSize)*int64(indiceCarpeta))
+	escribirInodo(particion.path, inodo, particion.sp.InodeStart+int64(particion.sp.InodeSize)*indiceInodo)
+
+	return indiceCarpeta, bloqueCarpeta
+}
+
+func crearCarpetaEnInodo(indiceInodo int64, inodo Inodo, particion *ParticionMontada, nombreCarpeta string) (retorno int32) {
+	for indiceParaCarpeta, apuntador := range inodo.Block {
+		if apuntador != -1 {
+			// ya existe un bloque de carpeta
+			// recorrer todos los apuntadores de carpeta
+			_, bloqueCarpeta := recuperarBloqueCarpeta(particion.path, particion.sp.BlockStart+int64(particion.sp.BlockSize)*int64(apuntador))
+
+			// recorrer los apuntadores de la carpeta
+			for indiceCarpeta, contenidoCarpeta := range bloqueCarpeta.Content {
+				if contenidoCarpeta.PointerInode == -1 {
+					// carpeta libre, podemos crear aquì la carpeta nueva
+
+					// encontrar inodo libre
+					indiceInodoLibre := particion.sp.getNextIndiceInodo(*particion)
+					retorno = indiceInodoLibre
+					// preparar el contenido de la carpeta
+					var auxNombreCarpeta [12]byte
+					copy(auxNombreCarpeta[:], nombreCarpeta)
+					// asignar valroes a la carpeta
+					bloqueCarpeta.Content[indiceCarpeta].Name = auxNombreCarpeta
+					bloqueCarpeta.Content[indiceCarpeta].PointerInode = indiceInodoLibre
+
+					// crear el inodo
+					inodoNuevo := crearInodo()
+					inodoNuevo.iniciarPunteros()
+					inodoNuevo.Type = 0 // indicar que es inodo de archivos
+					inodoNuevo.Ctime = getFechaByte()
+					inodoNuevo.GID = UsuarioActualLogueado.GUID
+					inodoNuevo.UID = UsuarioActualLogueado.UID
+					inodoNuevo.Perm = [3]int8{7, 7, 7}
+					inodoNuevo.Size = int32(0)
+
+					// apuntar al primer bloque de carpeta
+					// obtener el bit en el que se puede crear la carpeta
+					indiceCarpeta2 := particion.sp.getNextIndiceBloque(*particion)
+
+					// apuntar el inodo al ìndice de carpeta futuro
+					inodoNuevo.Block[0] = indiceCarpeta2
+
+					// crear el objeto bloque carpeta
+					bloqueCarpeta2 := BloqueCarpeta{}
+					bloqueCarpeta2.iniciarPunteros()
+					bloqueCarpeta2.indicarPadreyActual(int32(indiceInodo), indiceInodoLibre)
+
+					// escribir las estructuras utilizadas
+					escribirBloqueCarpeta(particion.path, bloqueCarpeta2, particion.sp.BlockStart+int64(particion.sp.BlockSize)*int64(indiceCarpeta2))
+					escribirBloqueCarpeta(particion.path, bloqueCarpeta, particion.sp.BlockStart+int64(particion.sp.BlockSize)*int64(apuntador))
+					escribirInodo(particion.path, inodoNuevo, particion.sp.InodeStart+int64(particion.sp.InodeSize)*int64(indiceInodoLibre))
+
+					// ya se ha creado el inodo
+					// escribir el archivo
+
+					/*contenido := ""
+					for i := 0; i < cantidadCaracteres; i++ {
+						contenido += "1"
+					}*/
+
+					//escribirContenidoArchivo(contenido, int64(indiceInodoLibre), particion)
+					fmt.Println("Carpeta creada con èxito :D, el programador està muy feliz")
+					return retorno
+				}
+			}
+		} else {
+			// no existe un bloque carpeta
+			// crear un bloque nuevo de carpeta
+			apuntadorCarpeta, bloqueCarpeta := crearCarpetaEnIndiceInodo(int64(indiceInodo), inodo, int32(indiceParaCarpeta), particion)
+			// recorrer los apuntadores de la carpeta
+			for indiceCarpeta, contenidoCarpeta := range bloqueCarpeta.Content {
+				if contenidoCarpeta.PointerInode == -1 {
+					// carpeta libre, podemos crear aquì el archivo
+
+					// encontrar inodo libre
+					indiceInodoLibre := particion.sp.getNextIndiceInodo(*particion)
+
+					// preparar el contenido de la carpeta
+					var auxNombreCarpeta [12]byte
+					copy(auxNombreCarpeta[:], nombreCarpeta)
+					// asignar valroes a la carpeta
+					bloqueCarpeta.Content[indiceCarpeta].Name = auxNombreCarpeta
+					bloqueCarpeta.Content[indiceCarpeta].PointerInode = indiceInodoLibre
+
+					// crear el inodo
+					inodoNuevo := crearInodo()
+					inodoNuevo.iniciarPunteros()
+					inodoNuevo.Type = 0 // indicar que es inodo de archivos
+					inodoNuevo.Ctime = getFechaByte()
+					inodoNuevo.GID = UsuarioActualLogueado.GUID
+					inodoNuevo.UID = UsuarioActualLogueado.UID
+					inodoNuevo.Perm = [3]int8{7, 7, 7}
+					inodoNuevo.Size = int32(0)
+
+					// apuntar al primer bloque de carpeta
+					// obtener el bit en el que se puede crear la carpeta
+					indiceCarpeta2 := particion.sp.getNextIndiceBloque(*particion)
+
+					// apuntar el inodo al ìndice de carpeta futuro
+					inodoNuevo.Block[0] = indiceCarpeta2
+
+					// crear el objeto bloque carpeta
+					bloqueCarpeta2 := BloqueCarpeta{}
+					bloqueCarpeta2.iniciarPunteros()
+					bloqueCarpeta2.indicarPadreyActual(int32(indiceInodo), indiceInodoLibre)
+
+					// escribir las estructuras utilizadas
+					escribirBloqueCarpeta(particion.path, bloqueCarpeta2, particion.sp.BlockStart+int64(particion.sp.BlockSize)*int64(indiceCarpeta2))
+					escribirBloqueCarpeta(particion.path, bloqueCarpeta, particion.sp.BlockStart+int64(particion.sp.BlockSize)*int64(apuntadorCarpeta))
+					escribirInodo(particion.path, inodoNuevo, particion.sp.InodeStart+int64(particion.sp.InodeSize)*int64(indiceInodoLibre))
+
+					fmt.Println("Carpeta creada con èxito :D, el programador està muy feliz")
+					return indiceInodoLibre
+				}
+			}
+		}
+	}
+
+	return -1
 }

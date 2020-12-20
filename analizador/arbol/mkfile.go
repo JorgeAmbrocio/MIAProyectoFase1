@@ -26,14 +26,8 @@ func (i *mkfile) MatchParametros(lp []Parametro) {
 			break
 		case "path":
 			i.path = QuitarComillas(p.Valor)
-			spliteado := strings.Split(i.path, "/")
-			var directorio string = ""
-			for _, str := range spliteado[1 : len(spliteado)-1] {
-				directorio += "/" + str
-			}
-			CrearTodasCarpetas(directorio)
 			break
-		case "unit":
+		case "p":
 			i.p = strings.ToLower(p.Valor)
 			break
 		}
@@ -43,11 +37,9 @@ func (i *mkfile) MatchParametros(lp []Parametro) {
 // Validar : indica si el objeto cuenta con los parámetros suficientes para ejecutarse
 func (i mkfile) Validar() bool {
 	retorno := true
-
-	if i.size < 0 || i.path == "" {
+	if i.size <= 0 || i.path == "" {
 		retorno = false
 	}
-
 	return retorno
 }
 
@@ -61,6 +53,46 @@ func Emkfile(p []Parametro) {
 	i.MatchParametros(p)
 	if i.Validar() {
 		//i.CrearBinario()
-		fmt.Println("vamo a crear el archivo")
+		i.crearArchivo()
+	}
+}
+
+func (i *mkfile) crearArchivo() {
+	fmt.Println("Creando archivo " + i.path)
+
+	if UsuarioActualLogueado.UID != 0 {
+		// recuperar el primer inodo
+		_, inodo := recuperarInodo(UsuarioActualLogueado.particion.path, UsuarioActualLogueado.particion.sp.InodeStart)
+		var indiceInodo = 0
+		// recorrer todas las carpetas
+		pathSplit := strings.Split(i.path, "/")
+		for indice, carpeta := range pathSplit {
+			if indice != 0 && indice != (len(pathSplit)-1) {
+				// recuperar carpeta del inodo
+				_, _, iInodoCarpetaSiguiente := getCarpetaFromInodo(carpeta, inodo, *UsuarioActualLogueado.particion)
+				if iInodoCarpetaSiguiente != -1 {
+					// la carpeta existe
+					_, inodo = recuperarInodo(UsuarioActualLogueado.particion.path, UsuarioActualLogueado.particion.sp.InodeStart+int64(UsuarioActualLogueado.particion.sp.InodeSize)*int64(iInodoCarpetaSiguiente))
+				} else {
+					// la carpeta no existe
+					if i.p == "p" {
+						// crear carpeta de manera forzada
+						indiceCarpetaNueva := crearCarpetaEnInodo(int64(indiceInodo), inodo, UsuarioActualLogueado.particion, carpeta)
+						if indiceCarpetaNueva != -1 {
+							_, inodo = recuperarInodo(UsuarioActualLogueado.particion.path, UsuarioActualLogueado.particion.sp.InodeStart+int64(UsuarioActualLogueado.particion.sp.InodeSize)*int64(indiceCarpetaNueva))
+
+						}
+					} else {
+						// mostrar error porque la ruta no es vàlida
+						fmt.Println("\tNo se ha encontrado el directorio " + carpeta)
+					}
+				}
+			}
+		}
+		// llegamos al item del archivo
+		// crear archivo
+		crearArchivoEnInodo(indiceInodo, inodo, UsuarioActualLogueado.particion, i.size, pathSplit[len(pathSplit)-1])
+	} else {
+		fmt.Println("Necesitas estar logueado para poder utilizar èste comando.")
 	}
 }

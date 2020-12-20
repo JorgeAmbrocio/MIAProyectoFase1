@@ -444,7 +444,7 @@ func getRecursiveTree(indiceInodo int32, particionMontada ParticionMontada) (lab
 					if apuntador.PointerInode != -1 {
 						labelT, arrowt, sigt := getRecursiveTree(apuntador.PointerInode, particionMontada)
 						labels += labelT + "\n"
-						arrows += nombre + ":a" + strconv.Itoa(ii) + " -> " + sigt + ":t" + "\n"
+						arrows += nombre + ":a" + strconv.Itoa(ii+2) + " -> " + sigt + ":t" + "\n"
 
 						arrows += arrowt
 					}
