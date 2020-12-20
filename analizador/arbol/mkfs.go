@@ -53,7 +53,10 @@ func (i *mkfs) CrearSistemaDeArchivos() {
 		}
 		// escribir el super boque
 		particionMontada.sp = crearSuperBloque(*particionMontada)
-
+		particionMontada.sp.FirstBlock = 2
+		particionMontada.sp.FirstInode = 2
+		particionMontada.sp.FreeInodesCount -= 2
+		particionMontada.sp.FreeBlocksCount -= 2
 		escribirSuperBloque(particionMontada.path, particionMontada.sp, particionMontada.Start)
 
 		// crear primer inodo
@@ -111,9 +114,6 @@ func (i *mkfs) CrearSistemaDeArchivos() {
 		for i := 1; i < int(particionMontada.sp.BlocksCount-2); i++ {
 			bitmapBloques = append(bitmapBloques, 0)
 		}
-
-		particionMontada.sp.FreeInodesCount -= 2
-		particionMontada.sp.FreeBlocksCount -= 2
 
 		// escribir el super bloque
 		escribirSuperBloque(particionMontada.path, particionMontada.sp, particionMontada.Start)

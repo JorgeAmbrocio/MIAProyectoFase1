@@ -8,6 +8,7 @@ import (
 	"os"
 	"sort"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -315,10 +316,20 @@ func (ii *SuperBlock) encontrarSiguienteBloqueLibre(bitmap []byte) {
 		// recuperar el bit
 		if bit == 0 {
 			// inodo libre
-			ii.FirstInode = int32(indice)
+			ii.FirstBlock = int32(indice)
 			break
 		}
 	}
+}
+
+func (ii *SuperBlock) getNextIndiceBloque(particion ParticionMontada) (indice int32) {
+	indice = ii.FirstBlock
+	// encontrar nuevo bloque vacìo
+	_, bitmap := recuperarBitMap(particion.path, particion.sp.BitMapBlockStart, int64(particion.sp.BlocksCount))
+	bitmap[ii.FirstBlock] = 1 // indicar que èste bit serà utilizado
+	ii.encontrarSiguienteBloqueLibre(bitmap)
+	escribirBitMap(particion.path, bitmap, particion.sp.BitMapBlockStart)
+	return indice
 }
 
 func addInodo(path string, inodo Inodo, sp *SuperBlock) {
@@ -698,15 +709,116 @@ func getContenidoArchivo(inodo Inodo, particion ParticionMontada) (contenido str
 	return contenido
 }
 
-/*USUARIOS*/
-func getUsuario(usr string) (bool, UsuarioArchivo) {
-	retorno := UsuarioArchivo{}
+func escribirContenidoArchivo(contenido string, indiceInodo int64, particion *ParticionMontada) {
 
-	return false, retorno
+	// recueprar el inodo
+	_, inodo := recuperarInodo(particion.path, particion.sp.InodeStart+int64(particion.sp.InodeSize)*indiceInodo)
+
+	// recorrer todos los apuntadores para empezar a escribir
+	indiceCaracterEscribir := 0
+	for indice, apuntador := range inodo.Block {
+		// verifica que aùn hay caracteres por escribir
+		if indiceCaracterEscribir < len(contenido)-1 {
+			switch {
+			case indice <= 12:
+
+				if apuntador != -1 {
+					// apuntadores directos con contenido
+					// reescribr el bloque
+					// OBTENER EL BLOQUE ARCHIVO
+					_, bloqueArchivo := recuperarBloqueArchivo(particion.path, particion.sp.BlockStart+int64(particion.sp.BlockSize)*int64(apuntador))
+					bloqueArchivo.Content = [64]byte{} // limpiar el contenido anterior
+
+					var cantidadCaracteres = len(contenido) //- indiceCaracterEscribir
+					if cantidadCaracteres > indiceCaracterEscribir+63 {
+						cantidadCaracteres = indiceCaracterEscribir + 63
+					}
+					copy(bloqueArchivo.Content[:], contenido[indiceCaracterEscribir:cantidadCaracteres])
+					indiceCaracterEscribir += 63
+					escribirBloqueArchivo(particion.path, bloqueArchivo, particion.sp.BlockStart+int64(particion.sp.BlockSize)*int64(apuntador))
+
+				} else {
+					// apuntadores directos vacìos
+					// buscar un nuevo bloque en bitmap para añadir el contenido extra
+					apuntador2 := particion.sp.FirstBlock
+					inodo.Block[indice] = apuntador2
+					// encontrar nuevo bloque vacìo
+					_, bitmap := recuperarBitMap(particion.path, particion.sp.BitMapBlockStart, int64(particion.sp.BlocksCount))
+					bitmap[apuntador2] = 1 // indicar que èste bit serà utilizado
+					particion.sp.encontrarSiguienteBloqueLibre(bitmap)
+					escribirBitMap(particion.path, bitmap, particion.sp.BitMapBlockStart)
+
+					bloqueArchivo := BloqueArchivo{}        // crear nuevo bloque
+					var cantidadCaracteres = len(contenido) //- indiceCaracterEscribir
+					if cantidadCaracteres > indiceCaracterEscribir+63 {
+						cantidadCaracteres = indiceCaracterEscribir + 63
+					}
+					copy(bloqueArchivo.Content[:], contenido[indiceCaracterEscribir:cantidadCaracteres])
+					indiceCaracterEscribir += 63
+					escribirBloqueArchivo(particion.path, bloqueArchivo, particion.sp.BlockStart+int64(particion.sp.BlockSize)*int64(apuntador2))
+
+				}
+				break
+			case indice == 13:
+				// apuntador indirecto
+				break
+			case indice == 14:
+				// apuntador indirecto doble
+				break
+			}
+		} else {
+			// ya no hay caracteres por escribir
+			// indicar a todos los bloques como -1
+			switch {
+			case indice <= 12 && indice != -1:
+				// apuntadores directos con contenido
+				inodo.Block[indice] = -1
+				break
+			case indice == 13:
+				// apuntador indirecto
+				break
+			case indice == 14:
+				// apuntador indirecto doble
+				break
+			}
+		}
+	}
+
+	// escribir los nuevos datos
+	escribirInodo(particion.path, inodo, particion.sp.InodeStart+int64(particion.sp.InodeSize)*indiceInodo)
 }
 
-func getGrupo(grp string) (bool, GrupoArchivo) {
-	retorno := GrupoArchivo{}
+/*USUARIOS*/
+func getUsuarioYGrupo(particion ParticionMontada) (map[string]UsuarioArchivo, map[string]int) {
+	_, inodo := recuperarInodo(particion.path, particion.sp.InodeStart+1*int64(particion.sp.InodeSize))
+	contenidoArchivo := getContenidoArchivo(inodo, particion)
 
-	return false, retorno
+	mapaUsuario := make(map[string]UsuarioArchivo)
+	mapaGrupo := make(map[string]int)
+
+	filas := strings.Split(contenidoArchivo, "\n")
+	for _, fila := range filas {
+		atributos := strings.Split(fila, ",")
+		if len(atributos) == 5 {
+			// usuario
+
+			if uid, err := strconv.Atoi(atributos[0]); err == nil {
+				usr := UsuarioArchivo{UID: int32(uid), grupo: atributos[2], nombre: atributos[3], contrasena: atributos[4]}
+				mapaUsuario[usr.nombre] = usr
+			}
+		} else {
+			// grupo
+			if gid, err := strconv.Atoi(atributos[0]); err == nil {
+				mapaGrupo[atributos[2]] = gid
+			}
+		}
+	}
+	return mapaUsuario, mapaGrupo
+}
+
+func getContenidoArchivoUsuarios(particion ParticionMontada) string {
+	_, inodo := recuperarInodo(particion.path, particion.sp.InodeStart+1*int64(particion.sp.InodeSize))
+	contenidoArchivo := getContenidoArchivo(inodo, particion)
+
+	return contenidoArchivo
 }

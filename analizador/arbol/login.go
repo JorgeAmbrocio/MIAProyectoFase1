@@ -2,7 +2,6 @@ package arbol
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 )
 
@@ -49,33 +48,12 @@ func Elogin(p []Parametro) {
 }
 
 func (i *login) ingresar() {
+	fmt.Println("Iniciando login")
 	// recuperar la particiòn montada
 	if exito, particion := RecuperarParticionMontada(i.id); exito {
 		// recupear inodo del archivo
 		// i know que el inodo de usuarios.txt es el inodo "1"
-		_, inodo := recuperarInodo(particion.path, particion.sp.InodeStart+1*int64(particion.sp.InodeSize))
-		contenidoArchivo := getContenidoArchivo(inodo, *particion)
-
-		mapaUsuario := make(map[string]UsuarioArchivo)
-		mapaGrupo := make(map[string]int)
-
-		filas := strings.Split(contenidoArchivo, "\n")
-		for _, fila := range filas {
-			atributos := strings.Split(fila, ",")
-			if len(atributos) == 5 {
-				// usuario
-
-				if uid, err := strconv.Atoi(atributos[0]); err == nil {
-					usr := UsuarioArchivo{UID: int32(uid), grupo: atributos[2], nombre: atributos[3], contrasena: atributos[4]}
-					mapaUsuario[usr.nombre] = usr
-				}
-			} else {
-				// grupo
-				if gid, err := strconv.Atoi(atributos[0]); err == nil {
-					mapaGrupo[atributos[2]] = gid
-				}
-			}
-		}
+		mapaUsuario, mapaGrupo := getUsuarioYGrupo(*particion)
 		// obtener usuario
 		if usr := mapaUsuario[i.usr]; usr.UID != 0 && usr.contrasena == i.pwd {
 			// sì encontramos el usuario
@@ -83,15 +61,15 @@ func (i *login) ingresar() {
 			if grp := mapaGrupo[usr.grupo]; grp != 0 {
 				// sì existe el grupo
 				// cargar el usuario
-				UsuarioActualLogueado = Usuario{GUID: int32(grp), UID: int32(usr.UID)}
-				fmt.Println("Ya se logueó joven")
+				UsuarioActualLogueado = Usuario{GUID: int32(grp), UID: int32(usr.UID), particion: particion}
+				fmt.Println("\tYa se logueó joven")
 			} else {
-				fmt.Println("Tu grupo no existe")
+				fmt.Println("\tTu grupo no existe")
 			}
 		} else {
-			fmt.Println("Lo siento, bruh, no existes")
+			fmt.Println("\tLo siento, bruh, no existes")
 		}
 	} else {
-		fmt.Println("No se ha encontrado la particiòn con id " + i.id)
+		fmt.Println("\tNo se ha encontrado la particiòn con id " + i.id)
 	}
 }

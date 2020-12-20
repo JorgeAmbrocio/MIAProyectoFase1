@@ -47,7 +47,8 @@ var auxPath string
 %type <value> PARAMETRO_TYPE, VALOR_TYPE, PARAMETRO_FIT, VALOR_FIT
 %type <value> PARAMETRO_DELETE, VALOR_DELETE, PARAMETRO_ADD, PARAMETRO_IDN
 %type <value> LST_FDISK, LST_MKDIS, LST_MOUNT,PARAMETRO_ID,LST_REP,PARAMETRO_TYPE_FS
-%type <value> LST_MKFS, LST_LOGIN,PARAMETRO_USR,PARAMETRO_PWD
+%type <value> LST_MKFS, LST_LOGIN,PARAMETRO_USR,PARAMETRO_PWD,LST_MKGRP,PARAMETRO_GRP
+%type <value> LST_MKUSR
 
 
 %start INICIO
@@ -77,14 +78,30 @@ INSTRUCCION:
     |rep LST_REP            { AddInstruccion("rep"); }
     |mkfs LST_MKFS          { AddInstruccion("mkfs")}
     |login LST_LOGIN        { AddInstruccion("login")}
+    |mkgrp LST_MKGRP        { AddInstruccion("mkgrp")}
+    |mkusr LST_MKUSR        { AddInstruccion("mkusr")}
+;
+
+LST_MKUSR:
+    LST_MKUSR PARAMETRO_USR     { $$=$1+$2; AddParametro(); }
+    |LST_MKUSR PARAMETRO_PWD    { $$=$1+$2; AddParametro(); }
+    |LST_MKUSR PARAMETRO_ID     { $$=$1+$2; AddParametro(); }
+    |PARAMETRO_USR              { $$=$1; AddParametro(); }
+    |PARAMETRO_PWD              { $$=$1; AddParametro(); }
+    |PARAMETRO_ID               { $$=$1; AddParametro(); }
+;
+
+LST_MKGRP:
+    LST_MKGRP PARAMETRO_GRP     { $$=$1+$2; AddParametro(); }
+    |PARAMETRO_GRP              { $$=$1; AddParametro(); }
 ;
 
 LST_LOGIN:
-    LST_LOGIN PARAMETRO_USR          { $$=$1+$2; AddParametro(); }
-    |LST_LOGIN PARAMETRO_PWD         { $$=$1+$2; AddParametro(); }
-    |LST_LOGIN PARAMETRO_ID           { $$=$1+$2; AddParametro(); }
-    |PARAMETRO_USR                 { $$=$1; AddParametro(); }
-    |PARAMETRO_PWD                 { $$=$1; AddParametro(); }
+    LST_LOGIN PARAMETRO_USR         { $$=$1+$2; AddParametro(); }
+    |LST_LOGIN PARAMETRO_PWD        { $$=$1+$2; AddParametro(); }
+    |LST_LOGIN PARAMETRO_ID         { $$=$1+$2; AddParametro(); }
+    |PARAMETRO_USR                  { $$=$1; AddParametro(); }
+    |PARAMETRO_PWD                  { $$=$1; AddParametro(); }
     |PARAMETRO_ID                   { $$=$1; AddParametro(); }
 ;
 
@@ -136,17 +153,19 @@ LST_FDISK:
 LST_MKDIS:
     LST_MKDIS PARAMETRO_SIZE            { $$=$1; AddParametro();}
     |LST_MKDIS PARAMETRO_PATH           { $$=$1; AddParametro();}
-    //|LST_MKDIS PARAMETRO_NAME           { $$=$1; AddParametro();}
+    //|LST_MKDIS PARAMETRO_NAME         { $$=$1; AddParametro();}
     |LST_MKDIS PARAMETRO_UNIT           { $$=$1; AddParametro();}
     |LST_MKDIS PARAMETRO_FIT            { $$=$1; AddParametro();}
     |PARAMETRO_SIZE                     { $$=$1; AddParametro();}
     |PARAMETRO_PATH                     { $$=$1; AddParametro();}
-    //|PARAMETRO_NAME                     { $$=$1; AddParametro();}
+    //|PARAMETRO_NAME                   { $$=$1; AddParametro();}
     |PARAMETRO_UNIT                     { $$=$1; AddParametro();}
     |PARAMETRO_FIT                      { $$=$1; AddParametro();}
 ;
 
-
+PARAMETRO_GRP:
+    guion name asignacion rutaCompleja { $$=$1+$2+$3+$4; CrearParametro($2,$4);}
+;
 
 PARAMETRO_PATH:
     guion path asignacion VALOR_PATH { $$=$1+$2+$3+$4; auxPath = $4; CrearParametro($2,$4);}
@@ -176,7 +195,8 @@ PARAMETRO_USR:
 ;
 
 PARAMETRO_PWD:
-    guion pwd asignacion id { $$=$1+$2+$3+$4; CrearParametro($2,$4);}
+    guion pwd asignacion  id        { $$=$1+$2+$3+$4; CrearParametro($2,$4);}
+    |guion pwd asignacion numero    { $$=$1+$2+$3+$4; CrearParametro($2,$4);}
 ;
 
 PARAMETRO_USR:
@@ -226,8 +246,8 @@ VALOR_DELETE:
 ;
 
 PARAMETRO_ADD:
-    guion add asignacion numero         { $$=$1+$2+$3+$4; CrearParametro($2,$4); }
-    |guion add asignacion guion numero         { $$=$1+$2+$3+$4+$5; CrearParametro($2,"-"+$5); }
+    guion add asignacion numero                 { $$=$1+$2+$3+$4; CrearParametro($2,$4); }
+    |guion add asignacion guion numero          { $$=$1+$2+$3+$4+$5; CrearParametro($2,"-"+$5); }
     
 ;
 
@@ -237,7 +257,7 @@ PARAMETRO_IDN:
 ;
 
 PARAMETRO_ID:
-    PARAMETRO_ID guion rid asignacion id   { $$=$1+$2+$3+$4+$5; CrearParametro($3,$5); }
+    PARAMETRO_ID guion rid asignacion id    { $$=$1+$2+$3+$4+$5; CrearParametro($3,$5); }
     |guion rid asignacion id                { $$=$1+$2+$3+$4; CrearParametro($2,$4); }
 ;
 

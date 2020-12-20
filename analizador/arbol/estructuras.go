@@ -55,6 +55,12 @@ func (i Instruccion) Ejecutar() {
 	case "logout":
 		Elogout(i.Parametros)
 		break
+	case "mkgrp":
+		Emkgrp(i.Parametros)
+		break
+	case "mkusr":
+		Emkusr(i.Parametros)
+		break
 	default:
 		fmt.Println("No se reconoce la instrucción -> ", i.Tipo)
 	}
@@ -170,9 +176,9 @@ type Journaling struct {
 
 /*USUARIO*/
 type Usuario struct {
-	GUID int32
-	UID  int32
-	sp   *SuperBlock
+	GUID      int32
+	UID       int32
+	particion *ParticionMontada
 }
 
 type UsuarioArchivo struct {

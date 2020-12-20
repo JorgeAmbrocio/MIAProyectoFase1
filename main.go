@@ -33,5 +33,4 @@ func prueba() {
 	fmt.Println(strconv.Itoa(binary.Size(arbol.BloqueCarpeta{})))
 	fmt.Println(strconv.Itoa(binary.Size(arbol.BloqueApuntadores{})))
 	fmt.Println(strconv.Itoa(binary.Size(arbol.BloqueArchivo{})))
-
 }
