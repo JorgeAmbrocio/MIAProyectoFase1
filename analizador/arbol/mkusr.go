@@ -50,7 +50,7 @@ func Emkusr(p []Parametro) {
 }
 
 func (i *mkusr) crearUsuario() {
-	fmt.Println("Creando grupo")
+	fmt.Println("Creando usuario")
 	if UsuarioActualLogueado.GUID == 1 && UsuarioActualLogueado.UID == 1 {
 		// sì es el usuario root
 		// crear el grupo de usuarios
@@ -70,7 +70,6 @@ func (i *mkusr) crearUsuario() {
 						nuevoId = int(maxId.UID) + 1
 					}
 				}
-
 				// añadir el nuevo contenido
 				contenido += strconv.Itoa(nuevoId) + ",U," + i.grupo + "," + i.usr + "," + i.pwd + "\n"
 				escribirContenidoArchivo(contenido, 1, UsuarioActualLogueado.particion)

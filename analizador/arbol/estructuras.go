@@ -61,6 +61,9 @@ func (i Instruccion) Ejecutar() {
 	case "mkusr":
 		Emkusr(i.Parametros)
 		break
+	case "mkfile":
+		Emkfile(i.Parametros)
+		break
 	default:
 		fmt.Println("No se reconoce la instrucción -> ", i.Tipo)
 	}
