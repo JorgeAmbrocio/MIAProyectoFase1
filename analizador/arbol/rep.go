@@ -14,6 +14,7 @@ type rep struct {
 	name string
 	path string
 	id   string
+	ruta string
 }
 
 func (i *rep) MatchParametros(lp []Parametro) {
@@ -34,6 +35,9 @@ func (i *rep) MatchParametros(lp []Parametro) {
 		case "id":
 			i.id = p.Valor
 			break
+		case "ruta":
+			i.ruta = QuitarComillas(p.Valor)
+			break
 		}
 	}
 }
@@ -42,6 +46,10 @@ func (i *rep) Validar() bool {
 	retorno := true
 
 	if i.path == "" || i.name == "" || i.id == "" {
+		retorno = false
+	}
+
+	if i.name == "file" && i.ruta == "" {
 		retorno = false
 	}
 
@@ -150,6 +158,33 @@ func (i *rep) crearReporte() {
 
 			// crear el archivo
 			file, err := os.Create(i.path + ".dot")
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			file.WriteString(contenido)
+			file.Close()
+		} else if i.name == "block" {
+			//var superBloque = particionMontada.sp
+			// recuperar el bitmap inodo
+			var contenido = getReporteBloques(particionMontada)
+
+			// crear el archivo
+			file, err := os.Create(i.path + ".dot")
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			file.WriteString(contenido)
+			file.Close()
+		} else if i.name == "file" {
+			//var superBloque = particionMontada.sp
+			// recuperar el bitmap inodo
+
+			var contenido = getReporteFile(i.ruta, particionMontada)
+
+			// crear el archivo
+			file, err := os.Create(i.path + ".txt")
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -559,4 +594,116 @@ func getLabelArchivo(indiceInodo int32, bloqueArchivo BloqueArchivo) (string, st
 
 	apuntador := "nd_b" + strIndice
 	return apuntador, retorno
+}
+
+func getReporteBloques(particion *ParticionMontada) (retorno string) {
+
+	retorno += "digraph g{\n\trankdir = LR;\n\tnode[shape = record, width = .1, heigth = .1, width = 1.5];\n\t"
+
+	// obtener los labels de todos los bloques activos en el àrbol de directorios
+	contenido := getRecursiveTreeBlock(0, *particion)
+	retorno += contenido
+
+	// ordenar la posiciòn de las flechas
+	_, bitmap := recuperarBitMap(particion.path, particion.sp.BitMapBlockStart, int64(particion.sp.BlocksCount))
+	for indice, bit := range bitmap {
+		// recorrer el bitmap
+		// graficar todos los bits con valor 1
+		if bit == 1 {
+			// buscar bloque en el mapa
+			retorno += "nd_b" + strconv.Itoa(indice) + " -> "
+		}
+	}
+
+	retorno = retorno[:len(retorno)-4]
+
+	retorno += "\n\n}"
+	return retorno
+}
+
+func getRecursiveTreeBlock(indiceInodo int32, particionMontada ParticionMontada) (labels string) {
+
+	// obtener el inodo
+	var sp = particionMontada.sp
+	_, inodo := recuperarInodo(particionMontada.path, sp.InodeStart+int64(int64(sp.InodeSize)*int64(indiceInodo)))
+
+	if inodo.Type == 0 {
+		// es inodo de carpetas
+		for indice, bloque := range inodo.Block {
+			if indice == 0 && bloque != -1 {
+				// el bloque carpeta existe y debemos bucarlo
+				// recueprar el bloque de carpetas
+				_, bloqueCarpeta := recuperarBloqueCarpeta(particionMontada.path, sp.BlockStart+int64(bloque)*int64(sp.BlockSize))
+				_, labelTmp := getLabelCarpeta(bloque, bloqueCarpeta)
+				labels += labelTmp + "\n"
+
+				for _, apuntador := range bloqueCarpeta.Content[2:] {
+					if apuntador.PointerInode != -1 {
+						labels2 := getRecursiveTreeBlock(apuntador.PointerInode, particionMontada)
+						labels += labels2
+					}
+				}
+			} else if indice != 0 && indice < 13 && bloque != -1 { // indice > 0; indice < 13
+				// el bloque carpeta existe y debemos bucarlo
+				// recueprar el bloque de carpetas
+				_, bloqueCarpeta := recuperarBloqueCarpeta(particionMontada.path, sp.BlockStart+int64(bloque)*int64(sp.BlockSize))
+				_, labelTmp := getLabelCarpeta(bloque, bloqueCarpeta)
+				labels += labelTmp + "\n"
+
+				for _, apuntador := range bloqueCarpeta.Content {
+					if apuntador.PointerInode != -1 {
+						labels2 := getRecursiveTreeBlock(apuntador.PointerInode, particionMontada)
+						labels += labels2
+					}
+				}
+			} else if indice == 13 && bloque != -1 {
+				// llamar al bloque indirecto
+				// por cada indirecto llamar a cada carpeta
+			} else if indice == 14 && bloque != -1 {
+				// por cada apuntador del indirecto, llamar al segundo bloque indirecto
+				//por cada indirectsecundario llamar a carpetas llamar a recursivas
+			}
+		}
+	} else {
+		// es inodo de archivos
+		for indice, bloque := range inodo.Block {
+			if indice < 13 && bloque != -1 {
+				// obtener el bloque archivo
+				_, bloqueArchivo := recuperarBloqueArchivo(particionMontada.path, particionMontada.sp.BlockStart+int64(particionMontada.sp.BlockSize)*int64(bloque))
+				_, labelBloqueArchivo := getLabelArchivo(bloque, bloqueArchivo)
+				labels += labelBloqueArchivo
+			}
+		}
+	}
+
+	return labels
+}
+
+func getReporteFile(ruta string, particion *ParticionMontada) (retorno string) {
+
+	// recuperar el primer inodo
+	_, inodo := recuperarInodo(particion.path, particion.sp.InodeStart)
+	//var indiceInodo = 0
+	// recorrer todas las carpetas
+	pathSplit := strings.Split(ruta, "/")
+	for indice, carpeta := range pathSplit {
+		if indice != 0 && indice != (len(pathSplit) /*-1*/) {
+			// recuperar carpeta del inodo
+			_, _, iInodoCarpetaSiguiente := getCarpetaFromInodo(carpeta, inodo, *UsuarioActualLogueado.particion)
+			if iInodoCarpetaSiguiente != -1 {
+				// la carpeta existe
+				_, inodo = recuperarInodo(UsuarioActualLogueado.particion.path, UsuarioActualLogueado.particion.sp.InodeStart+int64(UsuarioActualLogueado.particion.sp.InodeSize)*int64(iInodoCarpetaSiguiente))
+			} else {
+				// la carpeta no existe
+				fmt.Println("\tNo se ha encontrado el directorio " + carpeta)
+			}
+		}
+	}
+	// estamos en el inodo del archivo
+	contenidoArchivo := getContenidoArchivo(inodo, *particion)
+
+	// ya tenemos el contenido
+	retorno = pathSplit[len(pathSplit)-1]
+	retorno += "\n" + contenidoArchivo
+	return retorno
 }

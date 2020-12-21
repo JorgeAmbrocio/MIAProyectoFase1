@@ -31,7 +31,7 @@ var auxPath string
 %token  chgrp, rep, path, size, name, unit, rtype, fit, delete
 %token  add, idn, id, tipo, usr, pwd, grp, ugo, r, p, cont
 %token  filen, rf, dest, k, m, e, l, bf,ff, wf, full, fast, rid
-%token  numero, rutaSimple, rutaCompleja, archivo
+%token  numero, rutaSimple, rutaCompleja, archivo,rruta
 
 %type <value> INICIO
 %type <value> asignacion, guion
@@ -41,14 +41,14 @@ var auxPath string
 %type <value> chgrp, rep, path, size, name, unit, rtype, fit, delete
 %type <value> add, idn, id, tipo, usr, pwd, grp, ugo, r, p, cont
 %type <value> filen, rf, dest, k, m, e, l, bf,ff,wf, full, fast, rid
-%type <value>  numero, rutaSimple, rutaCompleja, archivo
+%type <value>  numero, rutaSimple, rutaCompleja, archivo,rruta
 %type <value> INSTRUCCION, LISTA_INSTRUCCION, PARAMETRO_PATH, VALOR_PATH
 %type <value> PARAMETRO_SIZE, PARAMETRO_NAME, VALOR_NAME, PARAMETRO_UNIT, VALOR_UNIT 
 %type <value> PARAMETRO_TYPE, VALOR_TYPE, PARAMETRO_FIT, VALOR_FIT
 %type <value> PARAMETRO_DELETE, VALOR_DELETE, PARAMETRO_ADD, PARAMETRO_IDN
 %type <value> LST_FDISK, LST_MKDIS, LST_MOUNT,PARAMETRO_ID,LST_REP,PARAMETRO_TYPE_FS
 %type <value> LST_MKFS, LST_LOGIN,PARAMETRO_USR,PARAMETRO_PWD,LST_MKGRP,PARAMETRO_GRP
-%type <value> LST_MKUSR, LST_MKFILE, PARAMETRO_P,LST_MKDIR
+%type <value> LST_MKUSR, LST_MKFILE, PARAMETRO_P,LST_MKDIR,PARAMETRO_RUTA
 
 
 %start INICIO
@@ -135,9 +135,11 @@ LST_REP:
     LST_REP PARAMETRO_NAME          { $$=$1+$2; AddParametro(); }
     |LST_REP PARAMETRO_PATH         { $$=$1+$2; AddParametro(); }
     |LST_REP PARAMETRO_ID           { $$=$1+$2; AddParametro(); }
+    |LST_REP PARAMETRO_RUTA         { $$=$1+$2; AddParametro(); }
     |PARAMETRO_NAME                 { $$=$1; AddParametro(); }
     |PARAMETRO_PATH                 { $$=$1; AddParametro(); }
     |PARAMETRO_ID                   { $$=$1; AddParametro(); }
+    |PARAMETRO_RUTA                 { $$=$1; AddParametro(); }
 ;
 
 LST_MOUNT:
@@ -185,6 +187,10 @@ PARAMETRO_GRP:
 
 PARAMETRO_PATH:
     guion path asignacion VALOR_PATH { $$=$1+$2+$3+$4; auxPath = $4; CrearParametro($2,$4);}
+;
+
+PARAMETRO_RUTA:
+    guion rruta asignacion VALOR_PATH { $$=$1+$2+$3+$4; auxPath = $4; CrearParametro($2,$4);}
 ;
 
 VALOR_PATH:

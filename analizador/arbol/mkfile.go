@@ -80,7 +80,6 @@ func (i *mkfile) crearArchivo() {
 						indiceCarpetaNueva := crearCarpetaEnInodo(int64(indiceInodo), inodo, UsuarioActualLogueado.particion, carpeta)
 						if indiceCarpetaNueva != -1 {
 							_, inodo = recuperarInodo(UsuarioActualLogueado.particion.path, UsuarioActualLogueado.particion.sp.InodeStart+int64(UsuarioActualLogueado.particion.sp.InodeSize)*int64(indiceCarpetaNueva))
-
 						}
 					} else {
 						// mostrar error porque la ruta no es vàlida

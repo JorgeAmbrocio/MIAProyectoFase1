@@ -89,6 +89,7 @@ rutaCompleja        \"[^\"\n\t\r]*\"
 [Ff][Ii][Nn][Dd]                lval.value = string(y.buf); return find
 [Cc][Hh][Oo][Ww][Nn]            lval.value = string(y.buf); return chown
 [Cc][Hh][Gg][Rr][Pp]            lval.value = string(y.buf); return chgrp
+[Rr][Uu][Tt][Aa]                lval.value = string(y.buf); return rruta
 [Rr][Ee][Pp]                    lval.value = string(y.buf); return rep
 [Pp][Aa][Tt][Hh]            lval.value = string(y.buf); return path
 [Ss][Ii][Zz][Ee]            lval.value = string(y.buf); return size
