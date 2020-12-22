@@ -49,7 +49,7 @@ var auxPath string
 %type <value> LST_FDISK, LST_MKDIS, LST_MOUNT,PARAMETRO_ID,LST_REP,PARAMETRO_TYPE_FS
 %type <value> LST_MKFS, LST_LOGIN,PARAMETRO_USR,PARAMETRO_PWD,LST_MKGRP,PARAMETRO_GRP
 %type <value> LST_MKUSR, LST_MKFILE, PARAMETRO_P,LST_MKDIR,PARAMETRO_RUTA,LST_REM
-%type <value> PARAMETRO_FILEN,LST_CAT
+%type <value> PARAMETRO_FILEN,LST_CAT,LST_REN
 
 
 %start INICIO
@@ -85,6 +85,14 @@ INSTRUCCION:
     |mkdir LST_MKDIR        { AddInstruccion("mkdir")}
     |rem LST_REM            { AddInstruccion("rem")}
     |cat LST_CAT            { AddInstruccion("cat")}
+    |ren LST_REN            { AddInstruccion("ren")}
+;
+
+LST_REN:
+    LST_REN PARAMETRO_PATH          { $$=$1+$2; AddParametro(); }
+    |LST_REN PARAMETRO_NAME         { $$=$1+$2; AddParametro(); }
+    |PARAMETRO_PATH                 { $$=$1; AddParametro(); }
+    |PARAMETRO_NAME                 { $$=$1; AddParametro(); }
 ;
 
 LST_CAT:    

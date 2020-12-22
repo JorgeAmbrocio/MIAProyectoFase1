@@ -72,6 +72,9 @@ func (i Instruccion) Ejecutar() {
 	case "cat":
 		Ecat(i.Parametros)
 		break
+	case "ren":
+		Eren(i.Parametros)
+		break
 	default:
 		fmt.Println("No se reconoce la instrucción -> ", i.Tipo)
 	}
@@ -176,13 +179,14 @@ type BloqueApuntadores struct {
 }
 
 type Journaling struct {
-	TipoOperacion [10]byte
+	TipoOperacion byte
 	Tipo          byte
 	Nombre        [12]byte
 	Contenid      [64]byte
-	Fecha         [20]byte
-	Propietario   [10]byte
-	Permisos      int64
+	//Content     []byte
+	Fecha       [20]byte
+	Propietario [2]byte // uid, gid
+	Permisos    [3]int8 //
 }
 
 /*USUARIO*/

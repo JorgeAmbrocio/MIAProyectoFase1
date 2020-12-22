@@ -26,6 +26,9 @@ func (i *mkfile) MatchParametros(lp []Parametro) {
 			break
 		case "path":
 			i.path = QuitarComillas(p.Valor)
+			if i.path[len(i.path)-1] == '/' {
+				i.path = i.path[:len(i.path)-1]
+			}
 			break
 		case "p":
 			i.p = strings.ToLower(p.Valor)
