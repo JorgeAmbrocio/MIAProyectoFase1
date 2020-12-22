@@ -69,6 +69,9 @@ func (i Instruccion) Ejecutar() {
 	case "rem":
 		Erem(i.Parametros)
 		break
+	case "cat":
+		Ecat(i.Parametros)
+		break
 	default:
 		fmt.Println("No se reconoce la instrucción -> ", i.Tipo)
 	}
