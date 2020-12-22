@@ -50,12 +50,15 @@ func Eren(p []Parametro) {
 	i.MatchParametros(p)
 	if i.Validar() {
 		fmt.Println("REN")
-
+		if UsuarioActualLogueado.UID == 0 {
+			fmt.Println("\tDebes estar logueado para renombrar")
+			return
+		}
 		// verifica que sì es un archivo
 		inodo, pointerInodo, pointerCarpeta, indiceCarpeta := encontrarArchivo(i.path, *UsuarioActualLogueado.particion)
 
 		if pointerInodo == -1 {
-			fmt.Println("\nNo se ha encontrado la ruta indicada")
+			fmt.Println("\tNo se ha encontrado la ruta indicada")
 			return
 		} else if tienePermiso(inodo, 'w') {
 			// recuperamos el bloque carpeta

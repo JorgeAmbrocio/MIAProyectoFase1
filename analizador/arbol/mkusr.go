@@ -24,7 +24,7 @@ func (i *mkusr) MatchParametros(lp []Parametro) {
 		case "pwd":
 			i.pwd = (p.Valor)
 			break
-		case "id":
+		case "grp":
 			i.grupo = (p.Valor)
 		}
 	}

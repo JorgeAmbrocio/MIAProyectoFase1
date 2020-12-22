@@ -96,6 +96,6 @@ func (i *mkfile) crearArchivo() {
 		// crear archivo
 		crearArchivoEnInodo(indiceInodo, inodo, UsuarioActualLogueado.particion, i.size, pathSplit[len(pathSplit)-1])
 	} else {
-		fmt.Println("Necesitas estar logueado para poder utilizar èste comando.")
+		fmt.Println("\tNecesitas estar logueado para crear archivos")
 	}
 }

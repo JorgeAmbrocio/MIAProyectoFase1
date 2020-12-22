@@ -124,10 +124,10 @@ LST_MKFILE:
 LST_MKUSR:
     LST_MKUSR PARAMETRO_USR     { $$=$1+$2; AddParametro(); }
     |LST_MKUSR PARAMETRO_PWD    { $$=$1+$2; AddParametro(); }
-    |LST_MKUSR PARAMETRO_ID     { $$=$1+$2; AddParametro(); }
+    |LST_MKUSR PARAMETRO_GRP     { $$=$1+$2; AddParametro(); }
     |PARAMETRO_USR              { $$=$1; AddParametro(); }
     |PARAMETRO_PWD              { $$=$1; AddParametro(); }
-    |PARAMETRO_ID               { $$=$1; AddParametro(); }
+    |PARAMETRO_GRP               { $$=$1; AddParametro(); }
 ;
 
 LST_MKGRP:
@@ -204,6 +204,7 @@ LST_MKDIS:
 
 PARAMETRO_GRP:
     guion name asignacion rutaCompleja { $$=$1+$2+$3+$4; CrearParametro($2,$4);}
+    |guion grp asignacion id { $$=$1+$2+$3+$4; CrearParametro($2,$4);}
 ;
 
 PARAMETRO_FILEN:

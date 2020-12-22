@@ -153,7 +153,7 @@ func (i *rep) crearReporte() {
 		} else if i.name == "inode" {
 			//var superBloque = particionMontada.sp
 			// recuperar el bitmap inodo
-			_, bitmap := recuperarBitMap(particionMontada.path, particionMontada.sp.BitMapBlockStart, int64(particionMontada.sp.BlocksCount))
+			_, bitmap := recuperarBitMap(particionMontada.path, particionMontada.sp.BitMapInodeStart, int64(particionMontada.sp.InodesCount))
 			var contenido = getReporteInodos(bitmap, *particionMontada)
 
 			// crear el archivo
@@ -554,7 +554,7 @@ func getLabelInodoData(indiceInodo int32, inodo Inodo) string {
 		"|atime: " + BytesToString(inodo.Atmie[:]) +
 		"|ctime: " + BytesToString(inodo.Ctime[:]) +
 		"|mtime: " + BytesToString(inodo.Mtime[:]) +
-		"|perms: " + strconv.Itoa(int(inodo.Type))
+		"|perms: " + strconv.Itoa(int(inodo.Perm[0])) + strconv.Itoa(int(inodo.Perm[1])) + strconv.Itoa(int(inodo.Perm[2]))
 
 	for indice, bloque := range inodo.Block {
 		strI := strconv.Itoa(indice)
@@ -680,6 +680,11 @@ func getRecursiveTreeBlock(indiceInodo int32, particionMontada ParticionMontada)
 }
 
 func getReporteFile(ruta string, particion *ParticionMontada) (retorno string) {
+
+	if UsuarioActualLogueado.UID == 0 {
+		fmt.Println("\nDebes estar logueado para crear èste reporte, (no se pueden leer permisos)")
+		return
+	}
 
 	// recuperar el primer inodo
 	_, inodo := recuperarInodo(particion.path, particion.sp.InodeStart)

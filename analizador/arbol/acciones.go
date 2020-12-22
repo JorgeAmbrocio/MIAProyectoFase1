@@ -324,6 +324,8 @@ func (ii *SuperBlock) encontrarSiguienteBloqueLibre(bitmap []byte) {
 
 func (ii *SuperBlock) getNextIndiceBloque(particion ParticionMontada) (indice int32) {
 	indice = ii.FirstBlock
+	// indicar la reducciòn de bloques
+	ii.FreeBlocksCount--
 	// encontrar nuevo bloque vacìo
 	_, bitmap := recuperarBitMap(particion.path, particion.sp.BitMapBlockStart, int64(particion.sp.BlocksCount))
 	bitmap[ii.FirstBlock] = 1 // indicar que èste bit serà utilizado
@@ -334,6 +336,9 @@ func (ii *SuperBlock) getNextIndiceBloque(particion ParticionMontada) (indice in
 
 func (ii *SuperBlock) getNextIndiceInodo(particion ParticionMontada) (indice int32) {
 	indice = ii.FirstInode
+	// indicar la reducciòn de inodos
+	ii.FreeInodesCount--
+
 	// encontrar nuevo bloque vacìo
 	_, bitmap := recuperarBitMap(particion.path, particion.sp.BitMapInodeStart, int64(particion.sp.InodesCount))
 	bitmap[ii.FirstInode] = 1 // indicar que èste bit serà utilizado
@@ -477,17 +482,6 @@ func recuperarBloqueArchivo(path string, seek int64) (bool, BloqueArchivo) {
 	}
 
 	return true, sp
-}
-
-// escribir bloque apuntadores
-// crear
-func crearBloqueApuntadores() {
-
-}
-
-// escribir bloque archivos
-func crearBloqueArchivos() {
-
 }
 
 func escribirBloqueArchivo(path string, bc BloqueArchivo, seek int64) {
@@ -844,10 +838,10 @@ func getContenidoArchivoUsuarios(particion ParticionMontada) string {
 
 func getCarpetaFromInodo(nombreBuscar string, inodo Inodo, particion ParticionMontada) (int32, int, int32) {
 
-	if !tienePermiso(inodo, 'r') {
+	/*if !tienePermiso(inodo, 'r') {
 		fmt.Println("No tienes permisos")
 		return -1, -1, -1
-	}
+	}*/
 
 	// recorrer todos los apuntadores
 	for i, apuntador := range inodo.Block {
@@ -918,7 +912,7 @@ func crearArchivoEnInodo(indiceInodo int, inodo Inodo, particion *ParticionMonta
 					inodoNuevo.Ctime = getFechaByte()
 					inodoNuevo.GID = UsuarioActualLogueado.GUID
 					inodoNuevo.UID = UsuarioActualLogueado.UID
-					inodoNuevo.Perm = [3]int8{7, 7, 7}
+					inodoNuevo.Perm = [3]int8{6, 6, 4}
 					inodoNuevo.Size = int32(cantidadCaracteres)
 
 					// escribir las estructuras utilizadas
@@ -963,7 +957,7 @@ func crearArchivoEnInodo(indiceInodo int, inodo Inodo, particion *ParticionMonta
 					inodoNuevo.Ctime = getFechaByte()
 					inodoNuevo.GID = UsuarioActualLogueado.GUID
 					inodoNuevo.UID = UsuarioActualLogueado.UID
-					inodoNuevo.Perm = [3]int8{7, 7, 7}
+					inodoNuevo.Perm = [3]int8{6, 6, 4}
 					inodoNuevo.Size = int32(cantidadCaracteres)
 
 					// escribir las estructuras utilizadas
@@ -989,7 +983,7 @@ func crearArchivoEnInodo(indiceInodo int, inodo Inodo, particion *ParticionMonta
 func crearCarpetaEnIndiceInodo(indiceInodo int64, inodo Inodo, indiceParaCarpeta int32, particion *ParticionMontada) (int32, BloqueCarpeta) {
 
 	if !tienePermiso(inodo, 'w') {
-		fmt.Println("Lo siento, bruh, tu mamà no te dio permiso")
+		fmt.Println("\nNo tienes permiso de escritura para èsta operaciòn")
 		blq := BloqueCarpeta{}
 		blq.iniciarPunteros()
 		return -1, blq
@@ -1016,7 +1010,7 @@ func crearCarpetaEnIndiceInodo(indiceInodo int64, inodo Inodo, indiceParaCarpeta
 func crearCarpetaEnInodo(indiceInodo int64, inodo Inodo, particion *ParticionMontada, nombreCarpeta string) (retorno int32) {
 
 	if !tienePermiso(inodo, 'w') {
-		fmt.Println("No tienes permisos")
+		fmt.Println("\nNo tienes permisos")
 		return -1
 	}
 
@@ -1048,7 +1042,7 @@ func crearCarpetaEnInodo(indiceInodo int64, inodo Inodo, particion *ParticionMon
 					inodoNuevo.Ctime = getFechaByte()
 					inodoNuevo.GID = UsuarioActualLogueado.GUID
 					inodoNuevo.UID = UsuarioActualLogueado.UID
-					inodoNuevo.Perm = [3]int8{7, 7, 7}
+					inodoNuevo.Perm = [3]int8{6, 6, 4}
 					inodoNuevo.Size = int32(0)
 
 					// apuntar al primer bloque de carpeta
@@ -1099,7 +1093,7 @@ func crearCarpetaEnInodo(indiceInodo int64, inodo Inodo, particion *ParticionMon
 					inodoNuevo.Ctime = getFechaByte()
 					inodoNuevo.GID = UsuarioActualLogueado.GUID
 					inodoNuevo.UID = UsuarioActualLogueado.UID
-					inodoNuevo.Perm = [3]int8{7, 7, 7}
+					inodoNuevo.Perm = [3]int8{6, 6, 4}
 					inodoNuevo.Size = int32(0)
 
 					// apuntar al primer bloque de carpeta
@@ -1151,7 +1145,7 @@ func tienePermiso(inodo Inodo, accion byte) (retorno bool) {
 		tipoUsuario = 2
 	}
 
-	// verificar el permiso
+	// verificar el permiso; lectura,escritura,ejecuciòn
 	switch inodo.Perm[tipoUsuario] {
 	case 7: // 111
 		retorno = true

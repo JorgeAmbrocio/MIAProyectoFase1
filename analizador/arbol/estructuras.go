@@ -94,6 +94,9 @@ type AST struct {
 // EjecutarAST todas las instrucciones del árbol
 func (ast AST) EjecutarAST() {
 	fmt.Println("\n\n\tEjecutando AST")
+	UsuarioActualLogueado = Usuario{}
+	UsuarioActualLogueado.particion = &ParticionMontada{}
+	UsuarioActualLogueado.particion.sp = SuperBlock{}
 	for _, instruccion := range ast.Instrucciones {
 		instruccion.Ejecutar()
 	}

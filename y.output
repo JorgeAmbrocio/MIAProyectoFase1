@@ -56,7 +56,7 @@ state 2 // logout [$end]
     rmdisk   shift, and goto state 8
     unmount  shift, and goto state 11
 
-    INSTRUCCION  goto state 190
+    INSTRUCCION  goto state 194
 
 state 3 // logout [$end]
 
@@ -136,19 +136,19 @@ state 6 // exec
 
     guion  shift, and goto state 48
 
-    PARAMETRO_PATH  goto state 189
+    PARAMETRO_PATH  goto state 193
 
 state 7 // mkdisk
 
     7 INSTRUCCION: mkdisk . LST_MKDIS
 
-    guion  shift, and goto state 184
+    guion  shift, and goto state 188
 
-    LST_MKDIS       goto state 179
-    PARAMETRO_FIT   goto state 183
-    PARAMETRO_PATH  goto state 181
-    PARAMETRO_SIZE  goto state 180
-    PARAMETRO_UNIT  goto state 182
+    LST_MKDIS       goto state 183
+    PARAMETRO_FIT   goto state 187
+    PARAMETRO_PATH  goto state 185
+    PARAMETRO_SIZE  goto state 184
+    PARAMETRO_UNIT  goto state 186
 
 state 8 // rmdisk
 
@@ -156,23 +156,23 @@ state 8 // rmdisk
 
     guion  shift, and goto state 48
 
-    PARAMETRO_PATH  goto state 178
+    PARAMETRO_PATH  goto state 182
 
 state 9 // fdisk
 
     9 INSTRUCCION: fdisk . LST_FDISK
 
-    guion  shift, and goto state 144
+    guion  shift, and goto state 148
 
-    LST_FDISK         goto state 135
-    PARAMETRO_ADD     goto state 143
-    PARAMETRO_DELETE  goto state 141
-    PARAMETRO_FIT     goto state 140
-    PARAMETRO_NAME    goto state 142
-    PARAMETRO_PATH    goto state 138
-    PARAMETRO_SIZE    goto state 136
-    PARAMETRO_TYPE    goto state 139
-    PARAMETRO_UNIT    goto state 137
+    LST_FDISK         goto state 139
+    PARAMETRO_ADD     goto state 147
+    PARAMETRO_DELETE  goto state 145
+    PARAMETRO_FIT     goto state 144
+    PARAMETRO_NAME    goto state 146
+    PARAMETRO_PATH    goto state 142
+    PARAMETRO_SIZE    goto state 140
+    PARAMETRO_TYPE    goto state 143
+    PARAMETRO_UNIT    goto state 141
 
 state 10 // mount
 
@@ -180,59 +180,59 @@ state 10 // mount
 
     guion  shift, and goto state 25
 
-    LST_MOUNT       goto state 130
-    PARAMETRO_NAME  goto state 132
-    PARAMETRO_PATH  goto state 131
+    LST_MOUNT       goto state 134
+    PARAMETRO_NAME  goto state 136
+    PARAMETRO_PATH  goto state 135
 
 state 11 // unmount
 
    11 INSTRUCCION: unmount . PARAMETRO_ID
 
-    guion  shift, and goto state 129
+    guion  shift, and goto state 133
 
-    PARAMETRO_ID  goto state 128
+    PARAMETRO_ID  goto state 132
 
 state 12 // rep
 
    12 INSTRUCCION: rep . LST_REP
 
-    guion  shift, and goto state 120
+    guion  shift, and goto state 124
 
-    LST_REP         goto state 115
-    PARAMETRO_ID    goto state 118
-    PARAMETRO_NAME  goto state 116
-    PARAMETRO_PATH  goto state 117
-    PARAMETRO_RUTA  goto state 119
+    LST_REP         goto state 119
+    PARAMETRO_ID    goto state 122
+    PARAMETRO_NAME  goto state 120
+    PARAMETRO_PATH  goto state 121
+    PARAMETRO_RUTA  goto state 123
 
 state 13 // mkfs
 
    13 INSTRUCCION: mkfs . LST_MKFS
 
-    guion  shift, and goto state 107
+    guion  shift, and goto state 111
 
-    LST_MKFS           goto state 104
-    PARAMETRO_ID       goto state 105
-    PARAMETRO_TYPE_FS  goto state 106
+    LST_MKFS           goto state 108
+    PARAMETRO_ID       goto state 109
+    PARAMETRO_TYPE_FS  goto state 110
 
 state 14 // login
 
    14 INSTRUCCION: login . LST_LOGIN
 
-    guion  shift, and goto state 72
+    guion  shift, and goto state 97
 
-    LST_LOGIN      goto state 97
-    PARAMETRO_ID   goto state 100
-    PARAMETRO_PWD  goto state 99
-    PARAMETRO_USR  goto state 98
+    LST_LOGIN      goto state 93
+    PARAMETRO_ID   goto state 96
+    PARAMETRO_PWD  goto state 95
+    PARAMETRO_USR  goto state 94
 
 state 15 // mkgrp
 
    15 INSTRUCCION: mkgrp . LST_MKGRP
 
-    guion  shift, and goto state 92
+    guion  shift, and goto state 91
 
-    LST_MKGRP      goto state 90
-    PARAMETRO_GRP  goto state 91
+    LST_MKGRP      goto state 89
+    PARAMETRO_GRP  goto state 90
 
 state 16 // mkusr
 
@@ -241,7 +241,7 @@ state 16 // mkusr
     guion  shift, and goto state 72
 
     LST_MKUSR      goto state 68
-    PARAMETRO_ID   goto state 71
+    PARAMETRO_GRP  goto state 71
     PARAMETRO_PWD  goto state 70
     PARAMETRO_USR  goto state 69
 
@@ -378,27 +378,27 @@ state 24 // ren guion name asignacion archivo [$end]
 
 state 25 // ren guion
 
-   96 PARAMETRO_PATH: guion . path asignacion VALOR_PATH
-  101 PARAMETRO_NAME: guion . name asignacion VALOR_NAME
+   97 PARAMETRO_PATH: guion . path asignacion VALOR_PATH
+  102 PARAMETRO_NAME: guion . name asignacion VALOR_NAME
 
     name  shift, and goto state 27
     path  shift, and goto state 26
 
 state 26 // ren guion path
 
-   96 PARAMETRO_PATH: guion path . asignacion VALOR_PATH
+   97 PARAMETRO_PATH: guion path . asignacion VALOR_PATH
 
     asignacion  shift, and goto state 33
 
 state 27 // ren guion name
 
-  101 PARAMETRO_NAME: guion name . asignacion VALOR_NAME
+  102 PARAMETRO_NAME: guion name . asignacion VALOR_NAME
 
     asignacion  shift, and goto state 28
 
 state 28 // ren guion name asignacion
 
-  101 PARAMETRO_NAME: guion name asignacion . VALOR_NAME
+  102 PARAMETRO_NAME: guion name asignacion . VALOR_NAME
 
     archivo       shift, and goto state 30
     id            shift, and goto state 31
@@ -408,57 +408,32 @@ state 28 // ren guion name asignacion
 
 state 29 // ren guion name asignacion archivo [$end]
 
-  101 PARAMETRO_NAME: guion name asignacion VALOR_NAME .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
+  102 PARAMETRO_NAME: guion name asignacion VALOR_NAME .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
-    $end     reduce using rule 101 (PARAMETRO_NAME)
-    cat      reduce using rule 101 (PARAMETRO_NAME)
-    exec     reduce using rule 101 (PARAMETRO_NAME)
-    fdisk    reduce using rule 101 (PARAMETRO_NAME)
-    guion    reduce using rule 101 (PARAMETRO_NAME)
-    login    reduce using rule 101 (PARAMETRO_NAME)
-    logout   reduce using rule 101 (PARAMETRO_NAME)
-    mkdir    reduce using rule 101 (PARAMETRO_NAME)
-    mkdisk   reduce using rule 101 (PARAMETRO_NAME)
-    mkfile   reduce using rule 101 (PARAMETRO_NAME)
-    mkfs     reduce using rule 101 (PARAMETRO_NAME)
-    mkgrp    reduce using rule 101 (PARAMETRO_NAME)
-    mkusr    reduce using rule 101 (PARAMETRO_NAME)
-    mount    reduce using rule 101 (PARAMETRO_NAME)
-    pause    reduce using rule 101 (PARAMETRO_NAME)
-    rem      reduce using rule 101 (PARAMETRO_NAME)
-    ren      reduce using rule 101 (PARAMETRO_NAME)
-    rep      reduce using rule 101 (PARAMETRO_NAME)
-    rmdisk   reduce using rule 101 (PARAMETRO_NAME)
-    unmount  reduce using rule 101 (PARAMETRO_NAME)
+    $end     reduce using rule 102 (PARAMETRO_NAME)
+    cat      reduce using rule 102 (PARAMETRO_NAME)
+    exec     reduce using rule 102 (PARAMETRO_NAME)
+    fdisk    reduce using rule 102 (PARAMETRO_NAME)
+    guion    reduce using rule 102 (PARAMETRO_NAME)
+    login    reduce using rule 102 (PARAMETRO_NAME)
+    logout   reduce using rule 102 (PARAMETRO_NAME)
+    mkdir    reduce using rule 102 (PARAMETRO_NAME)
+    mkdisk   reduce using rule 102 (PARAMETRO_NAME)
+    mkfile   reduce using rule 102 (PARAMETRO_NAME)
+    mkfs     reduce using rule 102 (PARAMETRO_NAME)
+    mkgrp    reduce using rule 102 (PARAMETRO_NAME)
+    mkusr    reduce using rule 102 (PARAMETRO_NAME)
+    mount    reduce using rule 102 (PARAMETRO_NAME)
+    pause    reduce using rule 102 (PARAMETRO_NAME)
+    rem      reduce using rule 102 (PARAMETRO_NAME)
+    ren      reduce using rule 102 (PARAMETRO_NAME)
+    rep      reduce using rule 102 (PARAMETRO_NAME)
+    rmdisk   reduce using rule 102 (PARAMETRO_NAME)
+    unmount  reduce using rule 102 (PARAMETRO_NAME)
 
 state 30 // ren guion name asignacion archivo
 
-  102 VALOR_NAME: archivo .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
-
-    $end     reduce using rule 102 (VALOR_NAME)
-    cat      reduce using rule 102 (VALOR_NAME)
-    exec     reduce using rule 102 (VALOR_NAME)
-    fdisk    reduce using rule 102 (VALOR_NAME)
-    guion    reduce using rule 102 (VALOR_NAME)
-    login    reduce using rule 102 (VALOR_NAME)
-    logout   reduce using rule 102 (VALOR_NAME)
-    mkdir    reduce using rule 102 (VALOR_NAME)
-    mkdisk   reduce using rule 102 (VALOR_NAME)
-    mkfile   reduce using rule 102 (VALOR_NAME)
-    mkfs     reduce using rule 102 (VALOR_NAME)
-    mkgrp    reduce using rule 102 (VALOR_NAME)
-    mkusr    reduce using rule 102 (VALOR_NAME)
-    mount    reduce using rule 102 (VALOR_NAME)
-    pause    reduce using rule 102 (VALOR_NAME)
-    rem      reduce using rule 102 (VALOR_NAME)
-    ren      reduce using rule 102 (VALOR_NAME)
-    rep      reduce using rule 102 (VALOR_NAME)
-    rmdisk   reduce using rule 102 (VALOR_NAME)
-    unmount  reduce using rule 102 (VALOR_NAME)
-
-state 31 // ren guion name asignacion id
-
-  103 VALOR_NAME: id .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
+  103 VALOR_NAME: archivo .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
     $end     reduce using rule 103 (VALOR_NAME)
     cat      reduce using rule 103 (VALOR_NAME)
@@ -481,9 +456,9 @@ state 31 // ren guion name asignacion id
     rmdisk   reduce using rule 103 (VALOR_NAME)
     unmount  reduce using rule 103 (VALOR_NAME)
 
-state 32 // ren guion name asignacion rutaCompleja
+state 31 // ren guion name asignacion id
 
-  104 VALOR_NAME: rutaCompleja .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
+  104 VALOR_NAME: id .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
     $end     reduce using rule 104 (VALOR_NAME)
     cat      reduce using rule 104 (VALOR_NAME)
@@ -506,9 +481,34 @@ state 32 // ren guion name asignacion rutaCompleja
     rmdisk   reduce using rule 104 (VALOR_NAME)
     unmount  reduce using rule 104 (VALOR_NAME)
 
+state 32 // ren guion name asignacion rutaCompleja
+
+  105 VALOR_NAME: rutaCompleja .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
+
+    $end     reduce using rule 105 (VALOR_NAME)
+    cat      reduce using rule 105 (VALOR_NAME)
+    exec     reduce using rule 105 (VALOR_NAME)
+    fdisk    reduce using rule 105 (VALOR_NAME)
+    guion    reduce using rule 105 (VALOR_NAME)
+    login    reduce using rule 105 (VALOR_NAME)
+    logout   reduce using rule 105 (VALOR_NAME)
+    mkdir    reduce using rule 105 (VALOR_NAME)
+    mkdisk   reduce using rule 105 (VALOR_NAME)
+    mkfile   reduce using rule 105 (VALOR_NAME)
+    mkfs     reduce using rule 105 (VALOR_NAME)
+    mkgrp    reduce using rule 105 (VALOR_NAME)
+    mkusr    reduce using rule 105 (VALOR_NAME)
+    mount    reduce using rule 105 (VALOR_NAME)
+    pause    reduce using rule 105 (VALOR_NAME)
+    rem      reduce using rule 105 (VALOR_NAME)
+    ren      reduce using rule 105 (VALOR_NAME)
+    rep      reduce using rule 105 (VALOR_NAME)
+    rmdisk   reduce using rule 105 (VALOR_NAME)
+    unmount  reduce using rule 105 (VALOR_NAME)
+
 state 33 // ren guion path asignacion
 
-   96 PARAMETRO_PATH: guion path asignacion . VALOR_PATH
+   97 PARAMETRO_PATH: guion path asignacion . VALOR_PATH
 
     rutaCompleja  shift, and goto state 36
     rutaSimple    shift, and goto state 35
@@ -517,57 +517,32 @@ state 33 // ren guion path asignacion
 
 state 34 // ren guion path asignacion rutaCompleja [$end]
 
-   96 PARAMETRO_PATH: guion path asignacion VALOR_PATH .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
+   97 PARAMETRO_PATH: guion path asignacion VALOR_PATH .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
-    $end     reduce using rule 96 (PARAMETRO_PATH)
-    cat      reduce using rule 96 (PARAMETRO_PATH)
-    exec     reduce using rule 96 (PARAMETRO_PATH)
-    fdisk    reduce using rule 96 (PARAMETRO_PATH)
-    guion    reduce using rule 96 (PARAMETRO_PATH)
-    login    reduce using rule 96 (PARAMETRO_PATH)
-    logout   reduce using rule 96 (PARAMETRO_PATH)
-    mkdir    reduce using rule 96 (PARAMETRO_PATH)
-    mkdisk   reduce using rule 96 (PARAMETRO_PATH)
-    mkfile   reduce using rule 96 (PARAMETRO_PATH)
-    mkfs     reduce using rule 96 (PARAMETRO_PATH)
-    mkgrp    reduce using rule 96 (PARAMETRO_PATH)
-    mkusr    reduce using rule 96 (PARAMETRO_PATH)
-    mount    reduce using rule 96 (PARAMETRO_PATH)
-    pause    reduce using rule 96 (PARAMETRO_PATH)
-    rem      reduce using rule 96 (PARAMETRO_PATH)
-    ren      reduce using rule 96 (PARAMETRO_PATH)
-    rep      reduce using rule 96 (PARAMETRO_PATH)
-    rmdisk   reduce using rule 96 (PARAMETRO_PATH)
-    unmount  reduce using rule 96 (PARAMETRO_PATH)
+    $end     reduce using rule 97 (PARAMETRO_PATH)
+    cat      reduce using rule 97 (PARAMETRO_PATH)
+    exec     reduce using rule 97 (PARAMETRO_PATH)
+    fdisk    reduce using rule 97 (PARAMETRO_PATH)
+    guion    reduce using rule 97 (PARAMETRO_PATH)
+    login    reduce using rule 97 (PARAMETRO_PATH)
+    logout   reduce using rule 97 (PARAMETRO_PATH)
+    mkdir    reduce using rule 97 (PARAMETRO_PATH)
+    mkdisk   reduce using rule 97 (PARAMETRO_PATH)
+    mkfile   reduce using rule 97 (PARAMETRO_PATH)
+    mkfs     reduce using rule 97 (PARAMETRO_PATH)
+    mkgrp    reduce using rule 97 (PARAMETRO_PATH)
+    mkusr    reduce using rule 97 (PARAMETRO_PATH)
+    mount    reduce using rule 97 (PARAMETRO_PATH)
+    pause    reduce using rule 97 (PARAMETRO_PATH)
+    rem      reduce using rule 97 (PARAMETRO_PATH)
+    ren      reduce using rule 97 (PARAMETRO_PATH)
+    rep      reduce using rule 97 (PARAMETRO_PATH)
+    rmdisk   reduce using rule 97 (PARAMETRO_PATH)
+    unmount  reduce using rule 97 (PARAMETRO_PATH)
 
 state 35 // ren guion path asignacion rutaSimple
 
-   98 VALOR_PATH: rutaSimple .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
-
-    $end     reduce using rule 98 (VALOR_PATH)
-    cat      reduce using rule 98 (VALOR_PATH)
-    exec     reduce using rule 98 (VALOR_PATH)
-    fdisk    reduce using rule 98 (VALOR_PATH)
-    guion    reduce using rule 98 (VALOR_PATH)
-    login    reduce using rule 98 (VALOR_PATH)
-    logout   reduce using rule 98 (VALOR_PATH)
-    mkdir    reduce using rule 98 (VALOR_PATH)
-    mkdisk   reduce using rule 98 (VALOR_PATH)
-    mkfile   reduce using rule 98 (VALOR_PATH)
-    mkfs     reduce using rule 98 (VALOR_PATH)
-    mkgrp    reduce using rule 98 (VALOR_PATH)
-    mkusr    reduce using rule 98 (VALOR_PATH)
-    mount    reduce using rule 98 (VALOR_PATH)
-    pause    reduce using rule 98 (VALOR_PATH)
-    rem      reduce using rule 98 (VALOR_PATH)
-    ren      reduce using rule 98 (VALOR_PATH)
-    rep      reduce using rule 98 (VALOR_PATH)
-    rmdisk   reduce using rule 98 (VALOR_PATH)
-    unmount  reduce using rule 98 (VALOR_PATH)
-
-state 36 // ren guion path asignacion rutaCompleja
-
-   99 VALOR_PATH: rutaCompleja .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
+   99 VALOR_PATH: rutaSimple .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
     $end     reduce using rule 99 (VALOR_PATH)
     cat      reduce using rule 99 (VALOR_PATH)
@@ -589,6 +564,31 @@ state 36 // ren guion path asignacion rutaCompleja
     rep      reduce using rule 99 (VALOR_PATH)
     rmdisk   reduce using rule 99 (VALOR_PATH)
     unmount  reduce using rule 99 (VALOR_PATH)
+
+state 36 // ren guion path asignacion rutaCompleja
+
+  100 VALOR_PATH: rutaCompleja .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
+
+    $end     reduce using rule 100 (VALOR_PATH)
+    cat      reduce using rule 100 (VALOR_PATH)
+    exec     reduce using rule 100 (VALOR_PATH)
+    fdisk    reduce using rule 100 (VALOR_PATH)
+    guion    reduce using rule 100 (VALOR_PATH)
+    login    reduce using rule 100 (VALOR_PATH)
+    logout   reduce using rule 100 (VALOR_PATH)
+    mkdir    reduce using rule 100 (VALOR_PATH)
+    mkdisk   reduce using rule 100 (VALOR_PATH)
+    mkfile   reduce using rule 100 (VALOR_PATH)
+    mkfs     reduce using rule 100 (VALOR_PATH)
+    mkgrp    reduce using rule 100 (VALOR_PATH)
+    mkusr    reduce using rule 100 (VALOR_PATH)
+    mount    reduce using rule 100 (VALOR_PATH)
+    pause    reduce using rule 100 (VALOR_PATH)
+    rem      reduce using rule 100 (VALOR_PATH)
+    ren      reduce using rule 100 (VALOR_PATH)
+    rep      reduce using rule 100 (VALOR_PATH)
+    rmdisk   reduce using rule 100 (VALOR_PATH)
+    unmount  reduce using rule 100 (VALOR_PATH)
 
 state 37 // ren guion name asignacion archivo guion path asignacion rutaCompleja [$end]
 
@@ -695,19 +695,19 @@ state 40 // cat guion filen asignacion rutaCompleja [$end]
 
 state 41 // cat guion
 
-   95 PARAMETRO_FILEN: guion . filen asignacion VALOR_PATH
+   96 PARAMETRO_FILEN: guion . filen asignacion VALOR_PATH
 
     filen  shift, and goto state 42
 
 state 42 // cat guion filen
 
-   95 PARAMETRO_FILEN: guion filen . asignacion VALOR_PATH
+   96 PARAMETRO_FILEN: guion filen . asignacion VALOR_PATH
 
     asignacion  shift, and goto state 43
 
 state 43 // cat guion filen asignacion
 
-   95 PARAMETRO_FILEN: guion filen asignacion . VALOR_PATH
+   96 PARAMETRO_FILEN: guion filen asignacion . VALOR_PATH
 
     rutaCompleja  shift, and goto state 36
     rutaSimple    shift, and goto state 35
@@ -716,28 +716,28 @@ state 43 // cat guion filen asignacion
 
 state 44 // cat guion filen asignacion rutaCompleja [$end]
 
-   95 PARAMETRO_FILEN: guion filen asignacion VALOR_PATH .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
+   96 PARAMETRO_FILEN: guion filen asignacion VALOR_PATH .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
-    $end     reduce using rule 95 (PARAMETRO_FILEN)
-    cat      reduce using rule 95 (PARAMETRO_FILEN)
-    exec     reduce using rule 95 (PARAMETRO_FILEN)
-    fdisk    reduce using rule 95 (PARAMETRO_FILEN)
-    guion    reduce using rule 95 (PARAMETRO_FILEN)
-    login    reduce using rule 95 (PARAMETRO_FILEN)
-    logout   reduce using rule 95 (PARAMETRO_FILEN)
-    mkdir    reduce using rule 95 (PARAMETRO_FILEN)
-    mkdisk   reduce using rule 95 (PARAMETRO_FILEN)
-    mkfile   reduce using rule 95 (PARAMETRO_FILEN)
-    mkfs     reduce using rule 95 (PARAMETRO_FILEN)
-    mkgrp    reduce using rule 95 (PARAMETRO_FILEN)
-    mkusr    reduce using rule 95 (PARAMETRO_FILEN)
-    mount    reduce using rule 95 (PARAMETRO_FILEN)
-    pause    reduce using rule 95 (PARAMETRO_FILEN)
-    rem      reduce using rule 95 (PARAMETRO_FILEN)
-    ren      reduce using rule 95 (PARAMETRO_FILEN)
-    rep      reduce using rule 95 (PARAMETRO_FILEN)
-    rmdisk   reduce using rule 95 (PARAMETRO_FILEN)
-    unmount  reduce using rule 95 (PARAMETRO_FILEN)
+    $end     reduce using rule 96 (PARAMETRO_FILEN)
+    cat      reduce using rule 96 (PARAMETRO_FILEN)
+    exec     reduce using rule 96 (PARAMETRO_FILEN)
+    fdisk    reduce using rule 96 (PARAMETRO_FILEN)
+    guion    reduce using rule 96 (PARAMETRO_FILEN)
+    login    reduce using rule 96 (PARAMETRO_FILEN)
+    logout   reduce using rule 96 (PARAMETRO_FILEN)
+    mkdir    reduce using rule 96 (PARAMETRO_FILEN)
+    mkdisk   reduce using rule 96 (PARAMETRO_FILEN)
+    mkfile   reduce using rule 96 (PARAMETRO_FILEN)
+    mkfs     reduce using rule 96 (PARAMETRO_FILEN)
+    mkgrp    reduce using rule 96 (PARAMETRO_FILEN)
+    mkusr    reduce using rule 96 (PARAMETRO_FILEN)
+    mount    reduce using rule 96 (PARAMETRO_FILEN)
+    pause    reduce using rule 96 (PARAMETRO_FILEN)
+    rem      reduce using rule 96 (PARAMETRO_FILEN)
+    ren      reduce using rule 96 (PARAMETRO_FILEN)
+    rep      reduce using rule 96 (PARAMETRO_FILEN)
+    rmdisk   reduce using rule 96 (PARAMETRO_FILEN)
+    unmount  reduce using rule 96 (PARAMETRO_FILEN)
 
 state 45 // cat guion filen asignacion rutaCompleja guion filen asignacion rutaCompleja [$end]
 
@@ -819,7 +819,7 @@ state 47 // rem guion path asignacion rutaCompleja [$end]
 
 state 48 // rmdisk guion
 
-   96 PARAMETRO_PATH: guion . path asignacion VALOR_PATH
+   97 PARAMETRO_PATH: guion . path asignacion VALOR_PATH
 
     path  shift, and goto state 26
 
@@ -965,9 +965,9 @@ state 54 // mkfile guion size asignacion numero [$end]
 
 state 55 // mkfile guion
 
-   96 PARAMETRO_PATH: guion . path asignacion VALOR_PATH
-  100 PARAMETRO_SIZE: guion . size asignacion numero
-  117 PARAMETRO_P: guion . p
+   97 PARAMETRO_PATH: guion . path asignacion VALOR_PATH
+  101 PARAMETRO_SIZE: guion . size asignacion numero
+  118 PARAMETRO_P: guion . p
 
     p     shift, and goto state 57
     path  shift, and goto state 26
@@ -975,65 +975,65 @@ state 55 // mkfile guion
 
 state 56 // mkfile guion size
 
-  100 PARAMETRO_SIZE: guion size . asignacion numero
+  101 PARAMETRO_SIZE: guion size . asignacion numero
 
     asignacion  shift, and goto state 58
 
 state 57 // mkfile guion p
 
-  117 PARAMETRO_P: guion p .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
+  118 PARAMETRO_P: guion p .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
-    $end     reduce using rule 117 (PARAMETRO_P)
-    cat      reduce using rule 117 (PARAMETRO_P)
-    exec     reduce using rule 117 (PARAMETRO_P)
-    fdisk    reduce using rule 117 (PARAMETRO_P)
-    guion    reduce using rule 117 (PARAMETRO_P)
-    login    reduce using rule 117 (PARAMETRO_P)
-    logout   reduce using rule 117 (PARAMETRO_P)
-    mkdir    reduce using rule 117 (PARAMETRO_P)
-    mkdisk   reduce using rule 117 (PARAMETRO_P)
-    mkfile   reduce using rule 117 (PARAMETRO_P)
-    mkfs     reduce using rule 117 (PARAMETRO_P)
-    mkgrp    reduce using rule 117 (PARAMETRO_P)
-    mkusr    reduce using rule 117 (PARAMETRO_P)
-    mount    reduce using rule 117 (PARAMETRO_P)
-    pause    reduce using rule 117 (PARAMETRO_P)
-    rem      reduce using rule 117 (PARAMETRO_P)
-    ren      reduce using rule 117 (PARAMETRO_P)
-    rep      reduce using rule 117 (PARAMETRO_P)
-    rmdisk   reduce using rule 117 (PARAMETRO_P)
-    unmount  reduce using rule 117 (PARAMETRO_P)
+    $end     reduce using rule 118 (PARAMETRO_P)
+    cat      reduce using rule 118 (PARAMETRO_P)
+    exec     reduce using rule 118 (PARAMETRO_P)
+    fdisk    reduce using rule 118 (PARAMETRO_P)
+    guion    reduce using rule 118 (PARAMETRO_P)
+    login    reduce using rule 118 (PARAMETRO_P)
+    logout   reduce using rule 118 (PARAMETRO_P)
+    mkdir    reduce using rule 118 (PARAMETRO_P)
+    mkdisk   reduce using rule 118 (PARAMETRO_P)
+    mkfile   reduce using rule 118 (PARAMETRO_P)
+    mkfs     reduce using rule 118 (PARAMETRO_P)
+    mkgrp    reduce using rule 118 (PARAMETRO_P)
+    mkusr    reduce using rule 118 (PARAMETRO_P)
+    mount    reduce using rule 118 (PARAMETRO_P)
+    pause    reduce using rule 118 (PARAMETRO_P)
+    rem      reduce using rule 118 (PARAMETRO_P)
+    ren      reduce using rule 118 (PARAMETRO_P)
+    rep      reduce using rule 118 (PARAMETRO_P)
+    rmdisk   reduce using rule 118 (PARAMETRO_P)
+    unmount  reduce using rule 118 (PARAMETRO_P)
 
 state 58 // mkfile guion size asignacion
 
-  100 PARAMETRO_SIZE: guion size asignacion . numero
+  101 PARAMETRO_SIZE: guion size asignacion . numero
 
     numero  shift, and goto state 59
 
 state 59 // mkfile guion size asignacion numero
 
-  100 PARAMETRO_SIZE: guion size asignacion numero .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
+  101 PARAMETRO_SIZE: guion size asignacion numero .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
-    $end     reduce using rule 100 (PARAMETRO_SIZE)
-    cat      reduce using rule 100 (PARAMETRO_SIZE)
-    exec     reduce using rule 100 (PARAMETRO_SIZE)
-    fdisk    reduce using rule 100 (PARAMETRO_SIZE)
-    guion    reduce using rule 100 (PARAMETRO_SIZE)
-    login    reduce using rule 100 (PARAMETRO_SIZE)
-    logout   reduce using rule 100 (PARAMETRO_SIZE)
-    mkdir    reduce using rule 100 (PARAMETRO_SIZE)
-    mkdisk   reduce using rule 100 (PARAMETRO_SIZE)
-    mkfile   reduce using rule 100 (PARAMETRO_SIZE)
-    mkfs     reduce using rule 100 (PARAMETRO_SIZE)
-    mkgrp    reduce using rule 100 (PARAMETRO_SIZE)
-    mkusr    reduce using rule 100 (PARAMETRO_SIZE)
-    mount    reduce using rule 100 (PARAMETRO_SIZE)
-    pause    reduce using rule 100 (PARAMETRO_SIZE)
-    rem      reduce using rule 100 (PARAMETRO_SIZE)
-    ren      reduce using rule 100 (PARAMETRO_SIZE)
-    rep      reduce using rule 100 (PARAMETRO_SIZE)
-    rmdisk   reduce using rule 100 (PARAMETRO_SIZE)
-    unmount  reduce using rule 100 (PARAMETRO_SIZE)
+    $end     reduce using rule 101 (PARAMETRO_SIZE)
+    cat      reduce using rule 101 (PARAMETRO_SIZE)
+    exec     reduce using rule 101 (PARAMETRO_SIZE)
+    fdisk    reduce using rule 101 (PARAMETRO_SIZE)
+    guion    reduce using rule 101 (PARAMETRO_SIZE)
+    login    reduce using rule 101 (PARAMETRO_SIZE)
+    logout   reduce using rule 101 (PARAMETRO_SIZE)
+    mkdir    reduce using rule 101 (PARAMETRO_SIZE)
+    mkdisk   reduce using rule 101 (PARAMETRO_SIZE)
+    mkfile   reduce using rule 101 (PARAMETRO_SIZE)
+    mkfs     reduce using rule 101 (PARAMETRO_SIZE)
+    mkgrp    reduce using rule 101 (PARAMETRO_SIZE)
+    mkusr    reduce using rule 101 (PARAMETRO_SIZE)
+    mount    reduce using rule 101 (PARAMETRO_SIZE)
+    pause    reduce using rule 101 (PARAMETRO_SIZE)
+    rem      reduce using rule 101 (PARAMETRO_SIZE)
+    ren      reduce using rule 101 (PARAMETRO_SIZE)
+    rep      reduce using rule 101 (PARAMETRO_SIZE)
+    rmdisk   reduce using rule 101 (PARAMETRO_SIZE)
+    unmount  reduce using rule 101 (PARAMETRO_SIZE)
 
 state 60 // mkdir guion p guion path asignacion rutaCompleja [$end]
 
@@ -1244,12 +1244,12 @@ state 67 // mkfile guion p guion p [$end]
     rmdisk   reduce using rule 36 (LST_MKFILE)
     unmount  reduce using rule 36 (LST_MKFILE)
 
-state 68 // mkusr guion pwd asignacion id [$end]
+state 68 // mkusr guion grp asignacion id [$end]
 
    16 INSTRUCCION: mkusr LST_MKUSR .  [$end, cat, exec, fdisk, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
    40 LST_MKUSR: LST_MKUSR . PARAMETRO_USR
    41 LST_MKUSR: LST_MKUSR . PARAMETRO_PWD
-   42 LST_MKUSR: LST_MKUSR . PARAMETRO_ID
+   42 LST_MKUSR: LST_MKUSR . PARAMETRO_GRP
 
     $end     reduce using rule 16 (INSTRUCCION)
     cat      reduce using rule 16 (INSTRUCCION)
@@ -1272,9 +1272,9 @@ state 68 // mkusr guion pwd asignacion id [$end]
     rmdisk   reduce using rule 16 (INSTRUCCION)
     unmount  reduce using rule 16 (INSTRUCCION)
 
-    PARAMETRO_ID   goto state 89
-    PARAMETRO_PWD  goto state 88
-    PARAMETRO_USR  goto state 87
+    PARAMETRO_GRP  goto state 88
+    PARAMETRO_PWD  goto state 87
+    PARAMETRO_USR  goto state 86
 
 state 69 // mkusr guion usr asignacion id [$end]
 
@@ -1326,16 +1326,15 @@ state 70 // mkusr guion pwd asignacion id [$end]
     rmdisk   reduce using rule 44 (LST_MKUSR)
     unmount  reduce using rule 44 (LST_MKUSR)
 
-state 71 // mkusr guion rid asignacion id [$end]
+state 71 // mkusr guion grp asignacion id [$end]
 
-   45 LST_MKUSR: PARAMETRO_ID .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
-  129 PARAMETRO_ID: PARAMETRO_ID . guion rid asignacion id
+   45 LST_MKUSR: PARAMETRO_GRP .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
     $end     reduce using rule 45 (LST_MKUSR)
     cat      reduce using rule 45 (LST_MKUSR)
     exec     reduce using rule 45 (LST_MKUSR)
     fdisk    reduce using rule 45 (LST_MKUSR)
-    guion    shift, and goto state 83
+    guion    reduce using rule 45 (LST_MKUSR)
     login    reduce using rule 45 (LST_MKUSR)
     logout   reduce using rule 45 (LST_MKUSR)
     mkdir    reduce using rule 45 (LST_MKUSR)
@@ -1351,107 +1350,58 @@ state 71 // mkusr guion rid asignacion id [$end]
     rep      reduce using rule 45 (LST_MKUSR)
     rmdisk   reduce using rule 45 (LST_MKUSR)
     unmount  reduce using rule 45 (LST_MKUSR)
-    conflict on guion, shift, and goto state 83, reduce using rule 45
 
-state 72 // login guion
+state 72 // mkusr guion
 
-  105 PARAMETRO_USR: guion . usr asignacion id
-  106 PARAMETRO_PWD: guion . pwd asignacion id
-  107 PARAMETRO_PWD: guion . pwd asignacion numero
-  108 PARAMETRO_USR: guion . usr asignacion id
-  130 PARAMETRO_ID: guion . rid asignacion id
+   94 PARAMETRO_GRP: guion . name asignacion rutaCompleja
+   95 PARAMETRO_GRP: guion . grp asignacion id
+  106 PARAMETRO_USR: guion . usr asignacion id
+  107 PARAMETRO_PWD: guion . pwd asignacion id
+  108 PARAMETRO_PWD: guion . pwd asignacion numero
+  109 PARAMETRO_USR: guion . usr asignacion id
 
-    pwd  shift, and goto state 74
-    rid  shift, and goto state 75
-    usr  shift, and goto state 73
+    grp   shift, and goto state 74
+    name  shift, and goto state 73
+    pwd   shift, and goto state 76
+    usr   shift, and goto state 75
 
-state 73 // login guion usr
+state 73 // mkusr guion name
 
-  105 PARAMETRO_USR: guion usr . asignacion id
-  108 PARAMETRO_USR: guion usr . asignacion id
+   94 PARAMETRO_GRP: guion name . asignacion rutaCompleja
 
-    asignacion  shift, and goto state 81
+    asignacion  shift, and goto state 84
 
-state 74 // login guion pwd
+state 74 // mkusr guion grp
 
-  106 PARAMETRO_PWD: guion pwd . asignacion id
-  107 PARAMETRO_PWD: guion pwd . asignacion numero
+   95 PARAMETRO_GRP: guion grp . asignacion id
 
-    asignacion  shift, and goto state 78
+    asignacion  shift, and goto state 82
 
-state 75 // login guion rid
+state 75 // mkusr guion usr
 
-  130 PARAMETRO_ID: guion rid . asignacion id
+  106 PARAMETRO_USR: guion usr . asignacion id
+  109 PARAMETRO_USR: guion usr . asignacion id
 
-    asignacion  shift, and goto state 76
+    asignacion  shift, and goto state 80
 
-state 76 // login guion rid asignacion
+state 76 // mkusr guion pwd
 
-  130 PARAMETRO_ID: guion rid asignacion . id
+  107 PARAMETRO_PWD: guion pwd . asignacion id
+  108 PARAMETRO_PWD: guion pwd . asignacion numero
 
-    id  shift, and goto state 77
+    asignacion  shift, and goto state 77
 
-state 77 // login guion rid asignacion id
+state 77 // mkusr guion pwd asignacion
 
-  130 PARAMETRO_ID: guion rid asignacion id .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
+  107 PARAMETRO_PWD: guion pwd asignacion . id
+  108 PARAMETRO_PWD: guion pwd asignacion . numero
 
-    $end     reduce using rule 130 (PARAMETRO_ID)
-    cat      reduce using rule 130 (PARAMETRO_ID)
-    exec     reduce using rule 130 (PARAMETRO_ID)
-    fdisk    reduce using rule 130 (PARAMETRO_ID)
-    guion    reduce using rule 130 (PARAMETRO_ID)
-    login    reduce using rule 130 (PARAMETRO_ID)
-    logout   reduce using rule 130 (PARAMETRO_ID)
-    mkdir    reduce using rule 130 (PARAMETRO_ID)
-    mkdisk   reduce using rule 130 (PARAMETRO_ID)
-    mkfile   reduce using rule 130 (PARAMETRO_ID)
-    mkfs     reduce using rule 130 (PARAMETRO_ID)
-    mkgrp    reduce using rule 130 (PARAMETRO_ID)
-    mkusr    reduce using rule 130 (PARAMETRO_ID)
-    mount    reduce using rule 130 (PARAMETRO_ID)
-    pause    reduce using rule 130 (PARAMETRO_ID)
-    rem      reduce using rule 130 (PARAMETRO_ID)
-    ren      reduce using rule 130 (PARAMETRO_ID)
-    rep      reduce using rule 130 (PARAMETRO_ID)
-    rmdisk   reduce using rule 130 (PARAMETRO_ID)
-    unmount  reduce using rule 130 (PARAMETRO_ID)
+    id      shift, and goto state 78
+    numero  shift, and goto state 79
 
-state 78 // login guion pwd asignacion
+state 78 // mkusr guion pwd asignacion id
 
-  106 PARAMETRO_PWD: guion pwd asignacion . id
-  107 PARAMETRO_PWD: guion pwd asignacion . numero
-
-    id      shift, and goto state 79
-    numero  shift, and goto state 80
-
-state 79 // login guion pwd asignacion id
-
-  106 PARAMETRO_PWD: guion pwd asignacion id .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
-
-    $end     reduce using rule 106 (PARAMETRO_PWD)
-    cat      reduce using rule 106 (PARAMETRO_PWD)
-    exec     reduce using rule 106 (PARAMETRO_PWD)
-    fdisk    reduce using rule 106 (PARAMETRO_PWD)
-    guion    reduce using rule 106 (PARAMETRO_PWD)
-    login    reduce using rule 106 (PARAMETRO_PWD)
-    logout   reduce using rule 106 (PARAMETRO_PWD)
-    mkdir    reduce using rule 106 (PARAMETRO_PWD)
-    mkdisk   reduce using rule 106 (PARAMETRO_PWD)
-    mkfile   reduce using rule 106 (PARAMETRO_PWD)
-    mkfs     reduce using rule 106 (PARAMETRO_PWD)
-    mkgrp    reduce using rule 106 (PARAMETRO_PWD)
-    mkusr    reduce using rule 106 (PARAMETRO_PWD)
-    mount    reduce using rule 106 (PARAMETRO_PWD)
-    pause    reduce using rule 106 (PARAMETRO_PWD)
-    rem      reduce using rule 106 (PARAMETRO_PWD)
-    ren      reduce using rule 106 (PARAMETRO_PWD)
-    rep      reduce using rule 106 (PARAMETRO_PWD)
-    rmdisk   reduce using rule 106 (PARAMETRO_PWD)
-    unmount  reduce using rule 106 (PARAMETRO_PWD)
-
-state 80 // login guion pwd asignacion numero
-
-  107 PARAMETRO_PWD: guion pwd asignacion numero .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
+  107 PARAMETRO_PWD: guion pwd asignacion id .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
     $end     reduce using rule 107 (PARAMETRO_PWD)
     cat      reduce using rule 107 (PARAMETRO_PWD)
@@ -1474,251 +1424,122 @@ state 80 // login guion pwd asignacion numero
     rmdisk   reduce using rule 107 (PARAMETRO_PWD)
     unmount  reduce using rule 107 (PARAMETRO_PWD)
 
-state 81 // login guion usr asignacion
+state 79 // mkusr guion pwd asignacion numero
 
-  105 PARAMETRO_USR: guion usr asignacion . id
-  108 PARAMETRO_USR: guion usr asignacion . id
+  108 PARAMETRO_PWD: guion pwd asignacion numero .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
-    id  shift, and goto state 82
+    $end     reduce using rule 108 (PARAMETRO_PWD)
+    cat      reduce using rule 108 (PARAMETRO_PWD)
+    exec     reduce using rule 108 (PARAMETRO_PWD)
+    fdisk    reduce using rule 108 (PARAMETRO_PWD)
+    guion    reduce using rule 108 (PARAMETRO_PWD)
+    login    reduce using rule 108 (PARAMETRO_PWD)
+    logout   reduce using rule 108 (PARAMETRO_PWD)
+    mkdir    reduce using rule 108 (PARAMETRO_PWD)
+    mkdisk   reduce using rule 108 (PARAMETRO_PWD)
+    mkfile   reduce using rule 108 (PARAMETRO_PWD)
+    mkfs     reduce using rule 108 (PARAMETRO_PWD)
+    mkgrp    reduce using rule 108 (PARAMETRO_PWD)
+    mkusr    reduce using rule 108 (PARAMETRO_PWD)
+    mount    reduce using rule 108 (PARAMETRO_PWD)
+    pause    reduce using rule 108 (PARAMETRO_PWD)
+    rem      reduce using rule 108 (PARAMETRO_PWD)
+    ren      reduce using rule 108 (PARAMETRO_PWD)
+    rep      reduce using rule 108 (PARAMETRO_PWD)
+    rmdisk   reduce using rule 108 (PARAMETRO_PWD)
+    unmount  reduce using rule 108 (PARAMETRO_PWD)
 
-state 82 // login guion usr asignacion id
+state 80 // mkusr guion usr asignacion
 
-  105 PARAMETRO_USR: guion usr asignacion id .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
-  108 PARAMETRO_USR: guion usr asignacion id .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
+  106 PARAMETRO_USR: guion usr asignacion . id
+  109 PARAMETRO_USR: guion usr asignacion . id
 
-    $end     reduce using rule 105 (PARAMETRO_USR)
-    cat      reduce using rule 105 (PARAMETRO_USR)
-    exec     reduce using rule 105 (PARAMETRO_USR)
-    fdisk    reduce using rule 105 (PARAMETRO_USR)
-    guion    reduce using rule 105 (PARAMETRO_USR)
-    login    reduce using rule 105 (PARAMETRO_USR)
-    logout   reduce using rule 105 (PARAMETRO_USR)
-    mkdir    reduce using rule 105 (PARAMETRO_USR)
-    mkdisk   reduce using rule 105 (PARAMETRO_USR)
-    mkfile   reduce using rule 105 (PARAMETRO_USR)
-    mkfs     reduce using rule 105 (PARAMETRO_USR)
-    mkgrp    reduce using rule 105 (PARAMETRO_USR)
-    mkusr    reduce using rule 105 (PARAMETRO_USR)
-    mount    reduce using rule 105 (PARAMETRO_USR)
-    pause    reduce using rule 105 (PARAMETRO_USR)
-    rem      reduce using rule 105 (PARAMETRO_USR)
-    ren      reduce using rule 105 (PARAMETRO_USR)
-    rep      reduce using rule 105 (PARAMETRO_USR)
-    rmdisk   reduce using rule 105 (PARAMETRO_USR)
-    unmount  reduce using rule 105 (PARAMETRO_USR)
-    conflict on $end, reduce using rule 105, reduce using rule 108
-    conflict on cat, reduce using rule 105, reduce using rule 108
-    conflict on exec, reduce using rule 105, reduce using rule 108
-    conflict on fdisk, reduce using rule 105, reduce using rule 108
-    conflict on guion, reduce using rule 105, reduce using rule 108
-    conflict on login, reduce using rule 105, reduce using rule 108
-    conflict on logout, reduce using rule 105, reduce using rule 108
-    conflict on mkdir, reduce using rule 105, reduce using rule 108
-    conflict on mkdisk, reduce using rule 105, reduce using rule 108
-    conflict on mkfile, reduce using rule 105, reduce using rule 108
-    conflict on mkfs, reduce using rule 105, reduce using rule 108
-    conflict on mkgrp, reduce using rule 105, reduce using rule 108
-    conflict on mkusr, reduce using rule 105, reduce using rule 108
-    conflict on mount, reduce using rule 105, reduce using rule 108
-    conflict on pause, reduce using rule 105, reduce using rule 108
-    conflict on rem, reduce using rule 105, reduce using rule 108
-    conflict on ren, reduce using rule 105, reduce using rule 108
-    conflict on rep, reduce using rule 105, reduce using rule 108
-    conflict on rmdisk, reduce using rule 105, reduce using rule 108
-    conflict on unmount, reduce using rule 105, reduce using rule 108
+    id  shift, and goto state 81
 
-state 83 // mkusr guion rid asignacion id guion
+state 81 // mkusr guion usr asignacion id
 
-  129 PARAMETRO_ID: PARAMETRO_ID guion . rid asignacion id
+  106 PARAMETRO_USR: guion usr asignacion id .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
+  109 PARAMETRO_USR: guion usr asignacion id .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
-    rid  shift, and goto state 84
+    $end     reduce using rule 106 (PARAMETRO_USR)
+    cat      reduce using rule 106 (PARAMETRO_USR)
+    exec     reduce using rule 106 (PARAMETRO_USR)
+    fdisk    reduce using rule 106 (PARAMETRO_USR)
+    guion    reduce using rule 106 (PARAMETRO_USR)
+    login    reduce using rule 106 (PARAMETRO_USR)
+    logout   reduce using rule 106 (PARAMETRO_USR)
+    mkdir    reduce using rule 106 (PARAMETRO_USR)
+    mkdisk   reduce using rule 106 (PARAMETRO_USR)
+    mkfile   reduce using rule 106 (PARAMETRO_USR)
+    mkfs     reduce using rule 106 (PARAMETRO_USR)
+    mkgrp    reduce using rule 106 (PARAMETRO_USR)
+    mkusr    reduce using rule 106 (PARAMETRO_USR)
+    mount    reduce using rule 106 (PARAMETRO_USR)
+    pause    reduce using rule 106 (PARAMETRO_USR)
+    rem      reduce using rule 106 (PARAMETRO_USR)
+    ren      reduce using rule 106 (PARAMETRO_USR)
+    rep      reduce using rule 106 (PARAMETRO_USR)
+    rmdisk   reduce using rule 106 (PARAMETRO_USR)
+    unmount  reduce using rule 106 (PARAMETRO_USR)
+    conflict on $end, reduce using rule 106, reduce using rule 109
+    conflict on cat, reduce using rule 106, reduce using rule 109
+    conflict on exec, reduce using rule 106, reduce using rule 109
+    conflict on fdisk, reduce using rule 106, reduce using rule 109
+    conflict on guion, reduce using rule 106, reduce using rule 109
+    conflict on login, reduce using rule 106, reduce using rule 109
+    conflict on logout, reduce using rule 106, reduce using rule 109
+    conflict on mkdir, reduce using rule 106, reduce using rule 109
+    conflict on mkdisk, reduce using rule 106, reduce using rule 109
+    conflict on mkfile, reduce using rule 106, reduce using rule 109
+    conflict on mkfs, reduce using rule 106, reduce using rule 109
+    conflict on mkgrp, reduce using rule 106, reduce using rule 109
+    conflict on mkusr, reduce using rule 106, reduce using rule 109
+    conflict on mount, reduce using rule 106, reduce using rule 109
+    conflict on pause, reduce using rule 106, reduce using rule 109
+    conflict on rem, reduce using rule 106, reduce using rule 109
+    conflict on ren, reduce using rule 106, reduce using rule 109
+    conflict on rep, reduce using rule 106, reduce using rule 109
+    conflict on rmdisk, reduce using rule 106, reduce using rule 109
+    conflict on unmount, reduce using rule 106, reduce using rule 109
 
-state 84 // mkusr guion rid asignacion id guion rid
+state 82 // mkusr guion grp asignacion
 
-  129 PARAMETRO_ID: PARAMETRO_ID guion rid . asignacion id
+   95 PARAMETRO_GRP: guion grp asignacion . id
 
-    asignacion  shift, and goto state 85
+    id  shift, and goto state 83
 
-state 85 // mkusr guion rid asignacion id guion rid asignacion
+state 83 // mkusr guion grp asignacion id
 
-  129 PARAMETRO_ID: PARAMETRO_ID guion rid asignacion . id
+   95 PARAMETRO_GRP: guion grp asignacion id .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
-    id  shift, and goto state 86
+    $end     reduce using rule 95 (PARAMETRO_GRP)
+    cat      reduce using rule 95 (PARAMETRO_GRP)
+    exec     reduce using rule 95 (PARAMETRO_GRP)
+    fdisk    reduce using rule 95 (PARAMETRO_GRP)
+    guion    reduce using rule 95 (PARAMETRO_GRP)
+    login    reduce using rule 95 (PARAMETRO_GRP)
+    logout   reduce using rule 95 (PARAMETRO_GRP)
+    mkdir    reduce using rule 95 (PARAMETRO_GRP)
+    mkdisk   reduce using rule 95 (PARAMETRO_GRP)
+    mkfile   reduce using rule 95 (PARAMETRO_GRP)
+    mkfs     reduce using rule 95 (PARAMETRO_GRP)
+    mkgrp    reduce using rule 95 (PARAMETRO_GRP)
+    mkusr    reduce using rule 95 (PARAMETRO_GRP)
+    mount    reduce using rule 95 (PARAMETRO_GRP)
+    pause    reduce using rule 95 (PARAMETRO_GRP)
+    rem      reduce using rule 95 (PARAMETRO_GRP)
+    ren      reduce using rule 95 (PARAMETRO_GRP)
+    rep      reduce using rule 95 (PARAMETRO_GRP)
+    rmdisk   reduce using rule 95 (PARAMETRO_GRP)
+    unmount  reduce using rule 95 (PARAMETRO_GRP)
 
-state 86 // mkusr guion rid asignacion id guion rid asignacion id
-
-  129 PARAMETRO_ID: PARAMETRO_ID guion rid asignacion id .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
-
-    $end     reduce using rule 129 (PARAMETRO_ID)
-    cat      reduce using rule 129 (PARAMETRO_ID)
-    exec     reduce using rule 129 (PARAMETRO_ID)
-    fdisk    reduce using rule 129 (PARAMETRO_ID)
-    guion    reduce using rule 129 (PARAMETRO_ID)
-    login    reduce using rule 129 (PARAMETRO_ID)
-    logout   reduce using rule 129 (PARAMETRO_ID)
-    mkdir    reduce using rule 129 (PARAMETRO_ID)
-    mkdisk   reduce using rule 129 (PARAMETRO_ID)
-    mkfile   reduce using rule 129 (PARAMETRO_ID)
-    mkfs     reduce using rule 129 (PARAMETRO_ID)
-    mkgrp    reduce using rule 129 (PARAMETRO_ID)
-    mkusr    reduce using rule 129 (PARAMETRO_ID)
-    mount    reduce using rule 129 (PARAMETRO_ID)
-    pause    reduce using rule 129 (PARAMETRO_ID)
-    rem      reduce using rule 129 (PARAMETRO_ID)
-    ren      reduce using rule 129 (PARAMETRO_ID)
-    rep      reduce using rule 129 (PARAMETRO_ID)
-    rmdisk   reduce using rule 129 (PARAMETRO_ID)
-    unmount  reduce using rule 129 (PARAMETRO_ID)
-
-state 87 // mkusr guion pwd asignacion id guion usr asignacion id [$end]
-
-   40 LST_MKUSR: LST_MKUSR PARAMETRO_USR .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
-
-    $end     reduce using rule 40 (LST_MKUSR)
-    cat      reduce using rule 40 (LST_MKUSR)
-    exec     reduce using rule 40 (LST_MKUSR)
-    fdisk    reduce using rule 40 (LST_MKUSR)
-    guion    reduce using rule 40 (LST_MKUSR)
-    login    reduce using rule 40 (LST_MKUSR)
-    logout   reduce using rule 40 (LST_MKUSR)
-    mkdir    reduce using rule 40 (LST_MKUSR)
-    mkdisk   reduce using rule 40 (LST_MKUSR)
-    mkfile   reduce using rule 40 (LST_MKUSR)
-    mkfs     reduce using rule 40 (LST_MKUSR)
-    mkgrp    reduce using rule 40 (LST_MKUSR)
-    mkusr    reduce using rule 40 (LST_MKUSR)
-    mount    reduce using rule 40 (LST_MKUSR)
-    pause    reduce using rule 40 (LST_MKUSR)
-    rem      reduce using rule 40 (LST_MKUSR)
-    ren      reduce using rule 40 (LST_MKUSR)
-    rep      reduce using rule 40 (LST_MKUSR)
-    rmdisk   reduce using rule 40 (LST_MKUSR)
-    unmount  reduce using rule 40 (LST_MKUSR)
-
-state 88 // mkusr guion pwd asignacion id guion pwd asignacion id [$end]
-
-   41 LST_MKUSR: LST_MKUSR PARAMETRO_PWD .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
-
-    $end     reduce using rule 41 (LST_MKUSR)
-    cat      reduce using rule 41 (LST_MKUSR)
-    exec     reduce using rule 41 (LST_MKUSR)
-    fdisk    reduce using rule 41 (LST_MKUSR)
-    guion    reduce using rule 41 (LST_MKUSR)
-    login    reduce using rule 41 (LST_MKUSR)
-    logout   reduce using rule 41 (LST_MKUSR)
-    mkdir    reduce using rule 41 (LST_MKUSR)
-    mkdisk   reduce using rule 41 (LST_MKUSR)
-    mkfile   reduce using rule 41 (LST_MKUSR)
-    mkfs     reduce using rule 41 (LST_MKUSR)
-    mkgrp    reduce using rule 41 (LST_MKUSR)
-    mkusr    reduce using rule 41 (LST_MKUSR)
-    mount    reduce using rule 41 (LST_MKUSR)
-    pause    reduce using rule 41 (LST_MKUSR)
-    rem      reduce using rule 41 (LST_MKUSR)
-    ren      reduce using rule 41 (LST_MKUSR)
-    rep      reduce using rule 41 (LST_MKUSR)
-    rmdisk   reduce using rule 41 (LST_MKUSR)
-    unmount  reduce using rule 41 (LST_MKUSR)
-
-state 89 // mkusr guion pwd asignacion id guion rid asignacion id [$end]
-
-   42 LST_MKUSR: LST_MKUSR PARAMETRO_ID .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
-  129 PARAMETRO_ID: PARAMETRO_ID . guion rid asignacion id
-
-    $end     reduce using rule 42 (LST_MKUSR)
-    cat      reduce using rule 42 (LST_MKUSR)
-    exec     reduce using rule 42 (LST_MKUSR)
-    fdisk    reduce using rule 42 (LST_MKUSR)
-    guion    shift, and goto state 83
-    login    reduce using rule 42 (LST_MKUSR)
-    logout   reduce using rule 42 (LST_MKUSR)
-    mkdir    reduce using rule 42 (LST_MKUSR)
-    mkdisk   reduce using rule 42 (LST_MKUSR)
-    mkfile   reduce using rule 42 (LST_MKUSR)
-    mkfs     reduce using rule 42 (LST_MKUSR)
-    mkgrp    reduce using rule 42 (LST_MKUSR)
-    mkusr    reduce using rule 42 (LST_MKUSR)
-    mount    reduce using rule 42 (LST_MKUSR)
-    pause    reduce using rule 42 (LST_MKUSR)
-    rem      reduce using rule 42 (LST_MKUSR)
-    ren      reduce using rule 42 (LST_MKUSR)
-    rep      reduce using rule 42 (LST_MKUSR)
-    rmdisk   reduce using rule 42 (LST_MKUSR)
-    unmount  reduce using rule 42 (LST_MKUSR)
-    conflict on guion, shift, and goto state 83, reduce using rule 42
-
-state 90 // mkgrp guion name asignacion rutaCompleja [$end]
-
-   15 INSTRUCCION: mkgrp LST_MKGRP .  [$end, cat, exec, fdisk, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
-   46 LST_MKGRP: LST_MKGRP . PARAMETRO_GRP
-
-    $end     reduce using rule 15 (INSTRUCCION)
-    cat      reduce using rule 15 (INSTRUCCION)
-    exec     reduce using rule 15 (INSTRUCCION)
-    fdisk    reduce using rule 15 (INSTRUCCION)
-    guion    shift, and goto state 92
-    login    reduce using rule 15 (INSTRUCCION)
-    logout   reduce using rule 15 (INSTRUCCION)
-    mkdir    reduce using rule 15 (INSTRUCCION)
-    mkdisk   reduce using rule 15 (INSTRUCCION)
-    mkfile   reduce using rule 15 (INSTRUCCION)
-    mkfs     reduce using rule 15 (INSTRUCCION)
-    mkgrp    reduce using rule 15 (INSTRUCCION)
-    mkusr    reduce using rule 15 (INSTRUCCION)
-    mount    reduce using rule 15 (INSTRUCCION)
-    pause    reduce using rule 15 (INSTRUCCION)
-    rem      reduce using rule 15 (INSTRUCCION)
-    ren      reduce using rule 15 (INSTRUCCION)
-    rep      reduce using rule 15 (INSTRUCCION)
-    rmdisk   reduce using rule 15 (INSTRUCCION)
-    unmount  reduce using rule 15 (INSTRUCCION)
-
-    PARAMETRO_GRP  goto state 96
-
-state 91 // mkgrp guion name asignacion rutaCompleja [$end]
-
-   47 LST_MKGRP: PARAMETRO_GRP .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
-
-    $end     reduce using rule 47 (LST_MKGRP)
-    cat      reduce using rule 47 (LST_MKGRP)
-    exec     reduce using rule 47 (LST_MKGRP)
-    fdisk    reduce using rule 47 (LST_MKGRP)
-    guion    reduce using rule 47 (LST_MKGRP)
-    login    reduce using rule 47 (LST_MKGRP)
-    logout   reduce using rule 47 (LST_MKGRP)
-    mkdir    reduce using rule 47 (LST_MKGRP)
-    mkdisk   reduce using rule 47 (LST_MKGRP)
-    mkfile   reduce using rule 47 (LST_MKGRP)
-    mkfs     reduce using rule 47 (LST_MKGRP)
-    mkgrp    reduce using rule 47 (LST_MKGRP)
-    mkusr    reduce using rule 47 (LST_MKGRP)
-    mount    reduce using rule 47 (LST_MKGRP)
-    pause    reduce using rule 47 (LST_MKGRP)
-    rem      reduce using rule 47 (LST_MKGRP)
-    ren      reduce using rule 47 (LST_MKGRP)
-    rep      reduce using rule 47 (LST_MKGRP)
-    rmdisk   reduce using rule 47 (LST_MKGRP)
-    unmount  reduce using rule 47 (LST_MKGRP)
-
-state 92 // mkgrp guion
-
-   94 PARAMETRO_GRP: guion . name asignacion rutaCompleja
-
-    name  shift, and goto state 93
-
-state 93 // mkgrp guion name
-
-   94 PARAMETRO_GRP: guion name . asignacion rutaCompleja
-
-    asignacion  shift, and goto state 94
-
-state 94 // mkgrp guion name asignacion
+state 84 // mkusr guion name asignacion
 
    94 PARAMETRO_GRP: guion name asignacion . rutaCompleja
 
-    rutaCompleja  shift, and goto state 95
+    rutaCompleja  shift, and goto state 85
 
-state 95 // mkgrp guion name asignacion rutaCompleja
+state 85 // mkusr guion name asignacion rutaCompleja
 
    94 PARAMETRO_GRP: guion name asignacion rutaCompleja .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
@@ -1743,7 +1564,143 @@ state 95 // mkgrp guion name asignacion rutaCompleja
     rmdisk   reduce using rule 94 (PARAMETRO_GRP)
     unmount  reduce using rule 94 (PARAMETRO_GRP)
 
-state 96 // mkgrp guion name asignacion rutaCompleja guion name asignacion rutaCompleja [$end]
+state 86 // mkusr guion grp asignacion id guion usr asignacion id [$end]
+
+   40 LST_MKUSR: LST_MKUSR PARAMETRO_USR .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
+
+    $end     reduce using rule 40 (LST_MKUSR)
+    cat      reduce using rule 40 (LST_MKUSR)
+    exec     reduce using rule 40 (LST_MKUSR)
+    fdisk    reduce using rule 40 (LST_MKUSR)
+    guion    reduce using rule 40 (LST_MKUSR)
+    login    reduce using rule 40 (LST_MKUSR)
+    logout   reduce using rule 40 (LST_MKUSR)
+    mkdir    reduce using rule 40 (LST_MKUSR)
+    mkdisk   reduce using rule 40 (LST_MKUSR)
+    mkfile   reduce using rule 40 (LST_MKUSR)
+    mkfs     reduce using rule 40 (LST_MKUSR)
+    mkgrp    reduce using rule 40 (LST_MKUSR)
+    mkusr    reduce using rule 40 (LST_MKUSR)
+    mount    reduce using rule 40 (LST_MKUSR)
+    pause    reduce using rule 40 (LST_MKUSR)
+    rem      reduce using rule 40 (LST_MKUSR)
+    ren      reduce using rule 40 (LST_MKUSR)
+    rep      reduce using rule 40 (LST_MKUSR)
+    rmdisk   reduce using rule 40 (LST_MKUSR)
+    unmount  reduce using rule 40 (LST_MKUSR)
+
+state 87 // mkusr guion grp asignacion id guion pwd asignacion id [$end]
+
+   41 LST_MKUSR: LST_MKUSR PARAMETRO_PWD .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
+
+    $end     reduce using rule 41 (LST_MKUSR)
+    cat      reduce using rule 41 (LST_MKUSR)
+    exec     reduce using rule 41 (LST_MKUSR)
+    fdisk    reduce using rule 41 (LST_MKUSR)
+    guion    reduce using rule 41 (LST_MKUSR)
+    login    reduce using rule 41 (LST_MKUSR)
+    logout   reduce using rule 41 (LST_MKUSR)
+    mkdir    reduce using rule 41 (LST_MKUSR)
+    mkdisk   reduce using rule 41 (LST_MKUSR)
+    mkfile   reduce using rule 41 (LST_MKUSR)
+    mkfs     reduce using rule 41 (LST_MKUSR)
+    mkgrp    reduce using rule 41 (LST_MKUSR)
+    mkusr    reduce using rule 41 (LST_MKUSR)
+    mount    reduce using rule 41 (LST_MKUSR)
+    pause    reduce using rule 41 (LST_MKUSR)
+    rem      reduce using rule 41 (LST_MKUSR)
+    ren      reduce using rule 41 (LST_MKUSR)
+    rep      reduce using rule 41 (LST_MKUSR)
+    rmdisk   reduce using rule 41 (LST_MKUSR)
+    unmount  reduce using rule 41 (LST_MKUSR)
+
+state 88 // mkusr guion grp asignacion id guion grp asignacion id [$end]
+
+   42 LST_MKUSR: LST_MKUSR PARAMETRO_GRP .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
+
+    $end     reduce using rule 42 (LST_MKUSR)
+    cat      reduce using rule 42 (LST_MKUSR)
+    exec     reduce using rule 42 (LST_MKUSR)
+    fdisk    reduce using rule 42 (LST_MKUSR)
+    guion    reduce using rule 42 (LST_MKUSR)
+    login    reduce using rule 42 (LST_MKUSR)
+    logout   reduce using rule 42 (LST_MKUSR)
+    mkdir    reduce using rule 42 (LST_MKUSR)
+    mkdisk   reduce using rule 42 (LST_MKUSR)
+    mkfile   reduce using rule 42 (LST_MKUSR)
+    mkfs     reduce using rule 42 (LST_MKUSR)
+    mkgrp    reduce using rule 42 (LST_MKUSR)
+    mkusr    reduce using rule 42 (LST_MKUSR)
+    mount    reduce using rule 42 (LST_MKUSR)
+    pause    reduce using rule 42 (LST_MKUSR)
+    rem      reduce using rule 42 (LST_MKUSR)
+    ren      reduce using rule 42 (LST_MKUSR)
+    rep      reduce using rule 42 (LST_MKUSR)
+    rmdisk   reduce using rule 42 (LST_MKUSR)
+    unmount  reduce using rule 42 (LST_MKUSR)
+
+state 89 // mkgrp guion grp asignacion id [$end]
+
+   15 INSTRUCCION: mkgrp LST_MKGRP .  [$end, cat, exec, fdisk, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
+   46 LST_MKGRP: LST_MKGRP . PARAMETRO_GRP
+
+    $end     reduce using rule 15 (INSTRUCCION)
+    cat      reduce using rule 15 (INSTRUCCION)
+    exec     reduce using rule 15 (INSTRUCCION)
+    fdisk    reduce using rule 15 (INSTRUCCION)
+    guion    shift, and goto state 91
+    login    reduce using rule 15 (INSTRUCCION)
+    logout   reduce using rule 15 (INSTRUCCION)
+    mkdir    reduce using rule 15 (INSTRUCCION)
+    mkdisk   reduce using rule 15 (INSTRUCCION)
+    mkfile   reduce using rule 15 (INSTRUCCION)
+    mkfs     reduce using rule 15 (INSTRUCCION)
+    mkgrp    reduce using rule 15 (INSTRUCCION)
+    mkusr    reduce using rule 15 (INSTRUCCION)
+    mount    reduce using rule 15 (INSTRUCCION)
+    pause    reduce using rule 15 (INSTRUCCION)
+    rem      reduce using rule 15 (INSTRUCCION)
+    ren      reduce using rule 15 (INSTRUCCION)
+    rep      reduce using rule 15 (INSTRUCCION)
+    rmdisk   reduce using rule 15 (INSTRUCCION)
+    unmount  reduce using rule 15 (INSTRUCCION)
+
+    PARAMETRO_GRP  goto state 92
+
+state 90 // mkgrp guion grp asignacion id [$end]
+
+   47 LST_MKGRP: PARAMETRO_GRP .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
+
+    $end     reduce using rule 47 (LST_MKGRP)
+    cat      reduce using rule 47 (LST_MKGRP)
+    exec     reduce using rule 47 (LST_MKGRP)
+    fdisk    reduce using rule 47 (LST_MKGRP)
+    guion    reduce using rule 47 (LST_MKGRP)
+    login    reduce using rule 47 (LST_MKGRP)
+    logout   reduce using rule 47 (LST_MKGRP)
+    mkdir    reduce using rule 47 (LST_MKGRP)
+    mkdisk   reduce using rule 47 (LST_MKGRP)
+    mkfile   reduce using rule 47 (LST_MKGRP)
+    mkfs     reduce using rule 47 (LST_MKGRP)
+    mkgrp    reduce using rule 47 (LST_MKGRP)
+    mkusr    reduce using rule 47 (LST_MKGRP)
+    mount    reduce using rule 47 (LST_MKGRP)
+    pause    reduce using rule 47 (LST_MKGRP)
+    rem      reduce using rule 47 (LST_MKGRP)
+    ren      reduce using rule 47 (LST_MKGRP)
+    rep      reduce using rule 47 (LST_MKGRP)
+    rmdisk   reduce using rule 47 (LST_MKGRP)
+    unmount  reduce using rule 47 (LST_MKGRP)
+
+state 91 // mkgrp guion
+
+   94 PARAMETRO_GRP: guion . name asignacion rutaCompleja
+   95 PARAMETRO_GRP: guion . grp asignacion id
+
+    grp   shift, and goto state 74
+    name  shift, and goto state 73
+
+state 92 // mkgrp guion grp asignacion id guion grp asignacion id [$end]
 
    46 LST_MKGRP: LST_MKGRP PARAMETRO_GRP .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
@@ -1768,7 +1725,7 @@ state 96 // mkgrp guion name asignacion rutaCompleja guion name asignacion rutaC
     rmdisk   reduce using rule 46 (LST_MKGRP)
     unmount  reduce using rule 46 (LST_MKGRP)
 
-state 97 // login guion pwd asignacion id [$end]
+state 93 // login guion pwd asignacion id [$end]
 
    14 INSTRUCCION: login LST_LOGIN .  [$end, cat, exec, fdisk, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
    48 LST_LOGIN: LST_LOGIN . PARAMETRO_USR
@@ -1779,7 +1736,7 @@ state 97 // login guion pwd asignacion id [$end]
     cat      reduce using rule 14 (INSTRUCCION)
     exec     reduce using rule 14 (INSTRUCCION)
     fdisk    reduce using rule 14 (INSTRUCCION)
-    guion    shift, and goto state 72
+    guion    shift, and goto state 97
     login    reduce using rule 14 (INSTRUCCION)
     logout   reduce using rule 14 (INSTRUCCION)
     mkdir    reduce using rule 14 (INSTRUCCION)
@@ -1796,11 +1753,11 @@ state 97 // login guion pwd asignacion id [$end]
     rmdisk   reduce using rule 14 (INSTRUCCION)
     unmount  reduce using rule 14 (INSTRUCCION)
 
-    PARAMETRO_ID   goto state 103
-    PARAMETRO_PWD  goto state 102
-    PARAMETRO_USR  goto state 101
+    PARAMETRO_ID   goto state 107
+    PARAMETRO_PWD  goto state 106
+    PARAMETRO_USR  goto state 105
 
-state 98 // login guion usr asignacion id [$end]
+state 94 // login guion usr asignacion id [$end]
 
    51 LST_LOGIN: PARAMETRO_USR .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
@@ -1825,7 +1782,7 @@ state 98 // login guion usr asignacion id [$end]
     rmdisk   reduce using rule 51 (LST_LOGIN)
     unmount  reduce using rule 51 (LST_LOGIN)
 
-state 99 // login guion pwd asignacion id [$end]
+state 95 // login guion pwd asignacion id [$end]
 
    52 LST_LOGIN: PARAMETRO_PWD .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
@@ -1850,16 +1807,16 @@ state 99 // login guion pwd asignacion id [$end]
     rmdisk   reduce using rule 52 (LST_LOGIN)
     unmount  reduce using rule 52 (LST_LOGIN)
 
-state 100 // login guion rid asignacion id [$end]
+state 96 // login guion rid asignacion id [$end]
 
    53 LST_LOGIN: PARAMETRO_ID .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
-  129 PARAMETRO_ID: PARAMETRO_ID . guion rid asignacion id
+  130 PARAMETRO_ID: PARAMETRO_ID . guion rid asignacion id
 
     $end     reduce using rule 53 (LST_LOGIN)
     cat      reduce using rule 53 (LST_LOGIN)
     exec     reduce using rule 53 (LST_LOGIN)
     fdisk    reduce using rule 53 (LST_LOGIN)
-    guion    shift, and goto state 83
+    guion    shift, and goto state 101
     login    reduce using rule 53 (LST_LOGIN)
     logout   reduce using rule 53 (LST_LOGIN)
     mkdir    reduce using rule 53 (LST_LOGIN)
@@ -1875,9 +1832,101 @@ state 100 // login guion rid asignacion id [$end]
     rep      reduce using rule 53 (LST_LOGIN)
     rmdisk   reduce using rule 53 (LST_LOGIN)
     unmount  reduce using rule 53 (LST_LOGIN)
-    conflict on guion, shift, and goto state 83, reduce using rule 53
+    conflict on guion, shift, and goto state 101, reduce using rule 53
 
-state 101 // login guion pwd asignacion id guion usr asignacion id [$end]
+state 97 // login guion
+
+  106 PARAMETRO_USR: guion . usr asignacion id
+  107 PARAMETRO_PWD: guion . pwd asignacion id
+  108 PARAMETRO_PWD: guion . pwd asignacion numero
+  109 PARAMETRO_USR: guion . usr asignacion id
+  131 PARAMETRO_ID: guion . rid asignacion id
+
+    pwd  shift, and goto state 76
+    rid  shift, and goto state 98
+    usr  shift, and goto state 75
+
+state 98 // login guion rid
+
+  131 PARAMETRO_ID: guion rid . asignacion id
+
+    asignacion  shift, and goto state 99
+
+state 99 // login guion rid asignacion
+
+  131 PARAMETRO_ID: guion rid asignacion . id
+
+    id  shift, and goto state 100
+
+state 100 // login guion rid asignacion id
+
+  131 PARAMETRO_ID: guion rid asignacion id .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
+
+    $end     reduce using rule 131 (PARAMETRO_ID)
+    cat      reduce using rule 131 (PARAMETRO_ID)
+    exec     reduce using rule 131 (PARAMETRO_ID)
+    fdisk    reduce using rule 131 (PARAMETRO_ID)
+    guion    reduce using rule 131 (PARAMETRO_ID)
+    login    reduce using rule 131 (PARAMETRO_ID)
+    logout   reduce using rule 131 (PARAMETRO_ID)
+    mkdir    reduce using rule 131 (PARAMETRO_ID)
+    mkdisk   reduce using rule 131 (PARAMETRO_ID)
+    mkfile   reduce using rule 131 (PARAMETRO_ID)
+    mkfs     reduce using rule 131 (PARAMETRO_ID)
+    mkgrp    reduce using rule 131 (PARAMETRO_ID)
+    mkusr    reduce using rule 131 (PARAMETRO_ID)
+    mount    reduce using rule 131 (PARAMETRO_ID)
+    pause    reduce using rule 131 (PARAMETRO_ID)
+    rem      reduce using rule 131 (PARAMETRO_ID)
+    ren      reduce using rule 131 (PARAMETRO_ID)
+    rep      reduce using rule 131 (PARAMETRO_ID)
+    rmdisk   reduce using rule 131 (PARAMETRO_ID)
+    unmount  reduce using rule 131 (PARAMETRO_ID)
+
+state 101 // login guion rid asignacion id guion
+
+  130 PARAMETRO_ID: PARAMETRO_ID guion . rid asignacion id
+
+    rid  shift, and goto state 102
+
+state 102 // login guion rid asignacion id guion rid
+
+  130 PARAMETRO_ID: PARAMETRO_ID guion rid . asignacion id
+
+    asignacion  shift, and goto state 103
+
+state 103 // login guion rid asignacion id guion rid asignacion
+
+  130 PARAMETRO_ID: PARAMETRO_ID guion rid asignacion . id
+
+    id  shift, and goto state 104
+
+state 104 // login guion rid asignacion id guion rid asignacion id
+
+  130 PARAMETRO_ID: PARAMETRO_ID guion rid asignacion id .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
+
+    $end     reduce using rule 130 (PARAMETRO_ID)
+    cat      reduce using rule 130 (PARAMETRO_ID)
+    exec     reduce using rule 130 (PARAMETRO_ID)
+    fdisk    reduce using rule 130 (PARAMETRO_ID)
+    guion    reduce using rule 130 (PARAMETRO_ID)
+    login    reduce using rule 130 (PARAMETRO_ID)
+    logout   reduce using rule 130 (PARAMETRO_ID)
+    mkdir    reduce using rule 130 (PARAMETRO_ID)
+    mkdisk   reduce using rule 130 (PARAMETRO_ID)
+    mkfile   reduce using rule 130 (PARAMETRO_ID)
+    mkfs     reduce using rule 130 (PARAMETRO_ID)
+    mkgrp    reduce using rule 130 (PARAMETRO_ID)
+    mkusr    reduce using rule 130 (PARAMETRO_ID)
+    mount    reduce using rule 130 (PARAMETRO_ID)
+    pause    reduce using rule 130 (PARAMETRO_ID)
+    rem      reduce using rule 130 (PARAMETRO_ID)
+    ren      reduce using rule 130 (PARAMETRO_ID)
+    rep      reduce using rule 130 (PARAMETRO_ID)
+    rmdisk   reduce using rule 130 (PARAMETRO_ID)
+    unmount  reduce using rule 130 (PARAMETRO_ID)
+
+state 105 // login guion pwd asignacion id guion usr asignacion id [$end]
 
    48 LST_LOGIN: LST_LOGIN PARAMETRO_USR .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
@@ -1902,7 +1951,7 @@ state 101 // login guion pwd asignacion id guion usr asignacion id [$end]
     rmdisk   reduce using rule 48 (LST_LOGIN)
     unmount  reduce using rule 48 (LST_LOGIN)
 
-state 102 // login guion pwd asignacion id guion pwd asignacion id [$end]
+state 106 // login guion pwd asignacion id guion pwd asignacion id [$end]
 
    49 LST_LOGIN: LST_LOGIN PARAMETRO_PWD .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
@@ -1927,16 +1976,16 @@ state 102 // login guion pwd asignacion id guion pwd asignacion id [$end]
     rmdisk   reduce using rule 49 (LST_LOGIN)
     unmount  reduce using rule 49 (LST_LOGIN)
 
-state 103 // login guion pwd asignacion id guion rid asignacion id [$end]
+state 107 // login guion pwd asignacion id guion rid asignacion id [$end]
 
    50 LST_LOGIN: LST_LOGIN PARAMETRO_ID .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
-  129 PARAMETRO_ID: PARAMETRO_ID . guion rid asignacion id
+  130 PARAMETRO_ID: PARAMETRO_ID . guion rid asignacion id
 
     $end     reduce using rule 50 (LST_LOGIN)
     cat      reduce using rule 50 (LST_LOGIN)
     exec     reduce using rule 50 (LST_LOGIN)
     fdisk    reduce using rule 50 (LST_LOGIN)
-    guion    shift, and goto state 83
+    guion    shift, and goto state 101
     login    reduce using rule 50 (LST_LOGIN)
     logout   reduce using rule 50 (LST_LOGIN)
     mkdir    reduce using rule 50 (LST_LOGIN)
@@ -1952,9 +2001,9 @@ state 103 // login guion pwd asignacion id guion rid asignacion id [$end]
     rep      reduce using rule 50 (LST_LOGIN)
     rmdisk   reduce using rule 50 (LST_LOGIN)
     unmount  reduce using rule 50 (LST_LOGIN)
-    conflict on guion, shift, and goto state 83, reduce using rule 50
+    conflict on guion, shift, and goto state 101, reduce using rule 50
 
-state 104 // mkfs guion rid asignacion id [$end]
+state 108 // mkfs guion rid asignacion id [$end]
 
    13 INSTRUCCION: mkfs LST_MKFS .  [$end, cat, exec, fdisk, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
    54 LST_MKFS: LST_MKFS . PARAMETRO_ID
@@ -1964,7 +2013,7 @@ state 104 // mkfs guion rid asignacion id [$end]
     cat      reduce using rule 13 (INSTRUCCION)
     exec     reduce using rule 13 (INSTRUCCION)
     fdisk    reduce using rule 13 (INSTRUCCION)
-    guion    shift, and goto state 107
+    guion    shift, and goto state 111
     login    reduce using rule 13 (INSTRUCCION)
     logout   reduce using rule 13 (INSTRUCCION)
     mkdir    reduce using rule 13 (INSTRUCCION)
@@ -1981,19 +2030,19 @@ state 104 // mkfs guion rid asignacion id [$end]
     rmdisk   reduce using rule 13 (INSTRUCCION)
     unmount  reduce using rule 13 (INSTRUCCION)
 
-    PARAMETRO_ID       goto state 113
-    PARAMETRO_TYPE_FS  goto state 114
+    PARAMETRO_ID       goto state 117
+    PARAMETRO_TYPE_FS  goto state 118
 
-state 105 // mkfs guion rid asignacion id [$end]
+state 109 // mkfs guion rid asignacion id [$end]
 
    56 LST_MKFS: PARAMETRO_ID .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
-  129 PARAMETRO_ID: PARAMETRO_ID . guion rid asignacion id
+  130 PARAMETRO_ID: PARAMETRO_ID . guion rid asignacion id
 
     $end     reduce using rule 56 (LST_MKFS)
     cat      reduce using rule 56 (LST_MKFS)
     exec     reduce using rule 56 (LST_MKFS)
     fdisk    reduce using rule 56 (LST_MKFS)
-    guion    shift, and goto state 83
+    guion    shift, and goto state 101
     login    reduce using rule 56 (LST_MKFS)
     logout   reduce using rule 56 (LST_MKFS)
     mkdir    reduce using rule 56 (LST_MKFS)
@@ -2009,9 +2058,9 @@ state 105 // mkfs guion rid asignacion id [$end]
     rep      reduce using rule 56 (LST_MKFS)
     rmdisk   reduce using rule 56 (LST_MKFS)
     unmount  reduce using rule 56 (LST_MKFS)
-    conflict on guion, shift, and goto state 83, reduce using rule 56
+    conflict on guion, shift, and goto state 101, reduce using rule 56
 
-state 106 // mkfs guion rtype asignacion fast [$end]
+state 110 // mkfs guion rtype asignacion fast [$end]
 
    57 LST_MKFS: PARAMETRO_TYPE_FS .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
@@ -2036,82 +2085,57 @@ state 106 // mkfs guion rtype asignacion fast [$end]
     rmdisk   reduce using rule 57 (LST_MKFS)
     unmount  reduce using rule 57 (LST_MKFS)
 
-state 107 // mkfs guion
+state 111 // mkfs guion
 
-  122 PARAMETRO_TYPE_FS: guion . rtype asignacion VALOR_DELETE
-  130 PARAMETRO_ID: guion . rid asignacion id
+  123 PARAMETRO_TYPE_FS: guion . rtype asignacion VALOR_DELETE
+  131 PARAMETRO_ID: guion . rid asignacion id
 
-    rid    shift, and goto state 75
-    rtype  shift, and goto state 108
+    rid    shift, and goto state 98
+    rtype  shift, and goto state 112
 
-state 108 // mkfs guion rtype
+state 112 // mkfs guion rtype
 
-  122 PARAMETRO_TYPE_FS: guion rtype . asignacion VALOR_DELETE
+  123 PARAMETRO_TYPE_FS: guion rtype . asignacion VALOR_DELETE
 
-    asignacion  shift, and goto state 109
+    asignacion  shift, and goto state 113
 
-state 109 // mkfs guion rtype asignacion
+state 113 // mkfs guion rtype asignacion
 
-  122 PARAMETRO_TYPE_FS: guion rtype asignacion . VALOR_DELETE
+  123 PARAMETRO_TYPE_FS: guion rtype asignacion . VALOR_DELETE
 
-    fast  shift, and goto state 112
-    full  shift, and goto state 111
+    fast  shift, and goto state 116
+    full  shift, and goto state 115
 
-    VALOR_DELETE  goto state 110
+    VALOR_DELETE  goto state 114
 
-state 110 // mkfs guion rtype asignacion fast [$end]
+state 114 // mkfs guion rtype asignacion fast [$end]
 
-  122 PARAMETRO_TYPE_FS: guion rtype asignacion VALOR_DELETE .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
+  123 PARAMETRO_TYPE_FS: guion rtype asignacion VALOR_DELETE .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
-    $end     reduce using rule 122 (PARAMETRO_TYPE_FS)
-    cat      reduce using rule 122 (PARAMETRO_TYPE_FS)
-    exec     reduce using rule 122 (PARAMETRO_TYPE_FS)
-    fdisk    reduce using rule 122 (PARAMETRO_TYPE_FS)
-    guion    reduce using rule 122 (PARAMETRO_TYPE_FS)
-    login    reduce using rule 122 (PARAMETRO_TYPE_FS)
-    logout   reduce using rule 122 (PARAMETRO_TYPE_FS)
-    mkdir    reduce using rule 122 (PARAMETRO_TYPE_FS)
-    mkdisk   reduce using rule 122 (PARAMETRO_TYPE_FS)
-    mkfile   reduce using rule 122 (PARAMETRO_TYPE_FS)
-    mkfs     reduce using rule 122 (PARAMETRO_TYPE_FS)
-    mkgrp    reduce using rule 122 (PARAMETRO_TYPE_FS)
-    mkusr    reduce using rule 122 (PARAMETRO_TYPE_FS)
-    mount    reduce using rule 122 (PARAMETRO_TYPE_FS)
-    pause    reduce using rule 122 (PARAMETRO_TYPE_FS)
-    rem      reduce using rule 122 (PARAMETRO_TYPE_FS)
-    ren      reduce using rule 122 (PARAMETRO_TYPE_FS)
-    rep      reduce using rule 122 (PARAMETRO_TYPE_FS)
-    rmdisk   reduce using rule 122 (PARAMETRO_TYPE_FS)
-    unmount  reduce using rule 122 (PARAMETRO_TYPE_FS)
+    $end     reduce using rule 123 (PARAMETRO_TYPE_FS)
+    cat      reduce using rule 123 (PARAMETRO_TYPE_FS)
+    exec     reduce using rule 123 (PARAMETRO_TYPE_FS)
+    fdisk    reduce using rule 123 (PARAMETRO_TYPE_FS)
+    guion    reduce using rule 123 (PARAMETRO_TYPE_FS)
+    login    reduce using rule 123 (PARAMETRO_TYPE_FS)
+    logout   reduce using rule 123 (PARAMETRO_TYPE_FS)
+    mkdir    reduce using rule 123 (PARAMETRO_TYPE_FS)
+    mkdisk   reduce using rule 123 (PARAMETRO_TYPE_FS)
+    mkfile   reduce using rule 123 (PARAMETRO_TYPE_FS)
+    mkfs     reduce using rule 123 (PARAMETRO_TYPE_FS)
+    mkgrp    reduce using rule 123 (PARAMETRO_TYPE_FS)
+    mkusr    reduce using rule 123 (PARAMETRO_TYPE_FS)
+    mount    reduce using rule 123 (PARAMETRO_TYPE_FS)
+    pause    reduce using rule 123 (PARAMETRO_TYPE_FS)
+    rem      reduce using rule 123 (PARAMETRO_TYPE_FS)
+    ren      reduce using rule 123 (PARAMETRO_TYPE_FS)
+    rep      reduce using rule 123 (PARAMETRO_TYPE_FS)
+    rmdisk   reduce using rule 123 (PARAMETRO_TYPE_FS)
+    unmount  reduce using rule 123 (PARAMETRO_TYPE_FS)
 
-state 111 // mkfs guion rtype asignacion full
+state 115 // mkfs guion rtype asignacion full
 
-  123 VALOR_DELETE: full .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
-
-    $end     reduce using rule 123 (VALOR_DELETE)
-    cat      reduce using rule 123 (VALOR_DELETE)
-    exec     reduce using rule 123 (VALOR_DELETE)
-    fdisk    reduce using rule 123 (VALOR_DELETE)
-    guion    reduce using rule 123 (VALOR_DELETE)
-    login    reduce using rule 123 (VALOR_DELETE)
-    logout   reduce using rule 123 (VALOR_DELETE)
-    mkdir    reduce using rule 123 (VALOR_DELETE)
-    mkdisk   reduce using rule 123 (VALOR_DELETE)
-    mkfile   reduce using rule 123 (VALOR_DELETE)
-    mkfs     reduce using rule 123 (VALOR_DELETE)
-    mkgrp    reduce using rule 123 (VALOR_DELETE)
-    mkusr    reduce using rule 123 (VALOR_DELETE)
-    mount    reduce using rule 123 (VALOR_DELETE)
-    pause    reduce using rule 123 (VALOR_DELETE)
-    rem      reduce using rule 123 (VALOR_DELETE)
-    ren      reduce using rule 123 (VALOR_DELETE)
-    rep      reduce using rule 123 (VALOR_DELETE)
-    rmdisk   reduce using rule 123 (VALOR_DELETE)
-    unmount  reduce using rule 123 (VALOR_DELETE)
-
-state 112 // mkfs guion rtype asignacion fast
-
-  124 VALOR_DELETE: fast .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
+  124 VALOR_DELETE: full .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
     $end     reduce using rule 124 (VALOR_DELETE)
     cat      reduce using rule 124 (VALOR_DELETE)
@@ -2134,16 +2158,41 @@ state 112 // mkfs guion rtype asignacion fast
     rmdisk   reduce using rule 124 (VALOR_DELETE)
     unmount  reduce using rule 124 (VALOR_DELETE)
 
-state 113 // mkfs guion rid asignacion id guion rid asignacion id
+state 116 // mkfs guion rtype asignacion fast
+
+  125 VALOR_DELETE: fast .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
+
+    $end     reduce using rule 125 (VALOR_DELETE)
+    cat      reduce using rule 125 (VALOR_DELETE)
+    exec     reduce using rule 125 (VALOR_DELETE)
+    fdisk    reduce using rule 125 (VALOR_DELETE)
+    guion    reduce using rule 125 (VALOR_DELETE)
+    login    reduce using rule 125 (VALOR_DELETE)
+    logout   reduce using rule 125 (VALOR_DELETE)
+    mkdir    reduce using rule 125 (VALOR_DELETE)
+    mkdisk   reduce using rule 125 (VALOR_DELETE)
+    mkfile   reduce using rule 125 (VALOR_DELETE)
+    mkfs     reduce using rule 125 (VALOR_DELETE)
+    mkgrp    reduce using rule 125 (VALOR_DELETE)
+    mkusr    reduce using rule 125 (VALOR_DELETE)
+    mount    reduce using rule 125 (VALOR_DELETE)
+    pause    reduce using rule 125 (VALOR_DELETE)
+    rem      reduce using rule 125 (VALOR_DELETE)
+    ren      reduce using rule 125 (VALOR_DELETE)
+    rep      reduce using rule 125 (VALOR_DELETE)
+    rmdisk   reduce using rule 125 (VALOR_DELETE)
+    unmount  reduce using rule 125 (VALOR_DELETE)
+
+state 117 // mkfs guion rid asignacion id guion rid asignacion id
 
    54 LST_MKFS: LST_MKFS PARAMETRO_ID .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
-  129 PARAMETRO_ID: PARAMETRO_ID . guion rid asignacion id
+  130 PARAMETRO_ID: PARAMETRO_ID . guion rid asignacion id
 
     $end     reduce using rule 54 (LST_MKFS)
     cat      reduce using rule 54 (LST_MKFS)
     exec     reduce using rule 54 (LST_MKFS)
     fdisk    reduce using rule 54 (LST_MKFS)
-    guion    shift, and goto state 83
+    guion    shift, and goto state 101
     login    reduce using rule 54 (LST_MKFS)
     logout   reduce using rule 54 (LST_MKFS)
     mkdir    reduce using rule 54 (LST_MKFS)
@@ -2159,9 +2208,9 @@ state 113 // mkfs guion rid asignacion id guion rid asignacion id
     rep      reduce using rule 54 (LST_MKFS)
     rmdisk   reduce using rule 54 (LST_MKFS)
     unmount  reduce using rule 54 (LST_MKFS)
-    conflict on guion, shift, and goto state 83, reduce using rule 54
+    conflict on guion, shift, and goto state 101, reduce using rule 54
 
-state 114 // mkfs guion rid asignacion id guion rtype asignacion fast
+state 118 // mkfs guion rid asignacion id guion rtype asignacion fast
 
    55 LST_MKFS: LST_MKFS PARAMETRO_TYPE_FS .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
@@ -2186,7 +2235,7 @@ state 114 // mkfs guion rid asignacion id guion rtype asignacion fast
     rmdisk   reduce using rule 55 (LST_MKFS)
     unmount  reduce using rule 55 (LST_MKFS)
 
-state 115 // rep guion name asignacion archivo [$end]
+state 119 // rep guion name asignacion archivo [$end]
 
    12 INSTRUCCION: rep LST_REP .  [$end, cat, exec, fdisk, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
    58 LST_REP: LST_REP . PARAMETRO_NAME
@@ -2198,7 +2247,7 @@ state 115 // rep guion name asignacion archivo [$end]
     cat      reduce using rule 12 (INSTRUCCION)
     exec     reduce using rule 12 (INSTRUCCION)
     fdisk    reduce using rule 12 (INSTRUCCION)
-    guion    shift, and goto state 120
+    guion    shift, and goto state 124
     login    reduce using rule 12 (INSTRUCCION)
     logout   reduce using rule 12 (INSTRUCCION)
     mkdir    reduce using rule 12 (INSTRUCCION)
@@ -2215,12 +2264,12 @@ state 115 // rep guion name asignacion archivo [$end]
     rmdisk   reduce using rule 12 (INSTRUCCION)
     unmount  reduce using rule 12 (INSTRUCCION)
 
-    PARAMETRO_ID    goto state 126
-    PARAMETRO_NAME  goto state 124
-    PARAMETRO_PATH  goto state 125
-    PARAMETRO_RUTA  goto state 127
+    PARAMETRO_ID    goto state 130
+    PARAMETRO_NAME  goto state 128
+    PARAMETRO_PATH  goto state 129
+    PARAMETRO_RUTA  goto state 131
 
-state 116 // rep guion name asignacion archivo [$end]
+state 120 // rep guion name asignacion archivo [$end]
 
    62 LST_REP: PARAMETRO_NAME .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
@@ -2245,7 +2294,7 @@ state 116 // rep guion name asignacion archivo [$end]
     rmdisk   reduce using rule 62 (LST_REP)
     unmount  reduce using rule 62 (LST_REP)
 
-state 117 // rep guion path asignacion rutaCompleja [$end]
+state 121 // rep guion path asignacion rutaCompleja [$end]
 
    63 LST_REP: PARAMETRO_PATH .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
@@ -2270,16 +2319,16 @@ state 117 // rep guion path asignacion rutaCompleja [$end]
     rmdisk   reduce using rule 63 (LST_REP)
     unmount  reduce using rule 63 (LST_REP)
 
-state 118 // rep guion rid asignacion id [$end]
+state 122 // rep guion rid asignacion id [$end]
 
    64 LST_REP: PARAMETRO_ID .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
-  129 PARAMETRO_ID: PARAMETRO_ID . guion rid asignacion id
+  130 PARAMETRO_ID: PARAMETRO_ID . guion rid asignacion id
 
     $end     reduce using rule 64 (LST_REP)
     cat      reduce using rule 64 (LST_REP)
     exec     reduce using rule 64 (LST_REP)
     fdisk    reduce using rule 64 (LST_REP)
-    guion    shift, and goto state 83
+    guion    shift, and goto state 101
     login    reduce using rule 64 (LST_REP)
     logout   reduce using rule 64 (LST_REP)
     mkdir    reduce using rule 64 (LST_REP)
@@ -2295,9 +2344,9 @@ state 118 // rep guion rid asignacion id [$end]
     rep      reduce using rule 64 (LST_REP)
     rmdisk   reduce using rule 64 (LST_REP)
     unmount  reduce using rule 64 (LST_REP)
-    conflict on guion, shift, and goto state 83, reduce using rule 64
+    conflict on guion, shift, and goto state 101, reduce using rule 64
 
-state 119 // rep guion rruta asignacion rutaCompleja [$end]
+state 123 // rep guion rruta asignacion rutaCompleja [$end]
 
    65 LST_REP: PARAMETRO_RUTA .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
@@ -2322,59 +2371,59 @@ state 119 // rep guion rruta asignacion rutaCompleja [$end]
     rmdisk   reduce using rule 65 (LST_REP)
     unmount  reduce using rule 65 (LST_REP)
 
-state 120 // rep guion
+state 124 // rep guion
 
-   96 PARAMETRO_PATH: guion . path asignacion VALOR_PATH
-   97 PARAMETRO_RUTA: guion . rruta asignacion VALOR_PATH
-  101 PARAMETRO_NAME: guion . name asignacion VALOR_NAME
-  130 PARAMETRO_ID: guion . rid asignacion id
+   97 PARAMETRO_PATH: guion . path asignacion VALOR_PATH
+   98 PARAMETRO_RUTA: guion . rruta asignacion VALOR_PATH
+  102 PARAMETRO_NAME: guion . name asignacion VALOR_NAME
+  131 PARAMETRO_ID: guion . rid asignacion id
 
     name   shift, and goto state 27
     path   shift, and goto state 26
-    rid    shift, and goto state 75
-    rruta  shift, and goto state 121
+    rid    shift, and goto state 98
+    rruta  shift, and goto state 125
 
-state 121 // rep guion rruta
+state 125 // rep guion rruta
 
-   97 PARAMETRO_RUTA: guion rruta . asignacion VALOR_PATH
+   98 PARAMETRO_RUTA: guion rruta . asignacion VALOR_PATH
 
-    asignacion  shift, and goto state 122
+    asignacion  shift, and goto state 126
 
-state 122 // rep guion rruta asignacion
+state 126 // rep guion rruta asignacion
 
-   97 PARAMETRO_RUTA: guion rruta asignacion . VALOR_PATH
+   98 PARAMETRO_RUTA: guion rruta asignacion . VALOR_PATH
 
     rutaCompleja  shift, and goto state 36
     rutaSimple    shift, and goto state 35
 
-    VALOR_PATH  goto state 123
+    VALOR_PATH  goto state 127
 
-state 123 // rep guion rruta asignacion rutaCompleja [$end]
+state 127 // rep guion rruta asignacion rutaCompleja [$end]
 
-   97 PARAMETRO_RUTA: guion rruta asignacion VALOR_PATH .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
+   98 PARAMETRO_RUTA: guion rruta asignacion VALOR_PATH .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
-    $end     reduce using rule 97 (PARAMETRO_RUTA)
-    cat      reduce using rule 97 (PARAMETRO_RUTA)
-    exec     reduce using rule 97 (PARAMETRO_RUTA)
-    fdisk    reduce using rule 97 (PARAMETRO_RUTA)
-    guion    reduce using rule 97 (PARAMETRO_RUTA)
-    login    reduce using rule 97 (PARAMETRO_RUTA)
-    logout   reduce using rule 97 (PARAMETRO_RUTA)
-    mkdir    reduce using rule 97 (PARAMETRO_RUTA)
-    mkdisk   reduce using rule 97 (PARAMETRO_RUTA)
-    mkfile   reduce using rule 97 (PARAMETRO_RUTA)
-    mkfs     reduce using rule 97 (PARAMETRO_RUTA)
-    mkgrp    reduce using rule 97 (PARAMETRO_RUTA)
-    mkusr    reduce using rule 97 (PARAMETRO_RUTA)
-    mount    reduce using rule 97 (PARAMETRO_RUTA)
-    pause    reduce using rule 97 (PARAMETRO_RUTA)
-    rem      reduce using rule 97 (PARAMETRO_RUTA)
-    ren      reduce using rule 97 (PARAMETRO_RUTA)
-    rep      reduce using rule 97 (PARAMETRO_RUTA)
-    rmdisk   reduce using rule 97 (PARAMETRO_RUTA)
-    unmount  reduce using rule 97 (PARAMETRO_RUTA)
+    $end     reduce using rule 98 (PARAMETRO_RUTA)
+    cat      reduce using rule 98 (PARAMETRO_RUTA)
+    exec     reduce using rule 98 (PARAMETRO_RUTA)
+    fdisk    reduce using rule 98 (PARAMETRO_RUTA)
+    guion    reduce using rule 98 (PARAMETRO_RUTA)
+    login    reduce using rule 98 (PARAMETRO_RUTA)
+    logout   reduce using rule 98 (PARAMETRO_RUTA)
+    mkdir    reduce using rule 98 (PARAMETRO_RUTA)
+    mkdisk   reduce using rule 98 (PARAMETRO_RUTA)
+    mkfile   reduce using rule 98 (PARAMETRO_RUTA)
+    mkfs     reduce using rule 98 (PARAMETRO_RUTA)
+    mkgrp    reduce using rule 98 (PARAMETRO_RUTA)
+    mkusr    reduce using rule 98 (PARAMETRO_RUTA)
+    mount    reduce using rule 98 (PARAMETRO_RUTA)
+    pause    reduce using rule 98 (PARAMETRO_RUTA)
+    rem      reduce using rule 98 (PARAMETRO_RUTA)
+    ren      reduce using rule 98 (PARAMETRO_RUTA)
+    rep      reduce using rule 98 (PARAMETRO_RUTA)
+    rmdisk   reduce using rule 98 (PARAMETRO_RUTA)
+    unmount  reduce using rule 98 (PARAMETRO_RUTA)
 
-state 124 // rep guion name asignacion archivo guion name asignacion archivo [$end]
+state 128 // rep guion name asignacion archivo guion name asignacion archivo [$end]
 
    58 LST_REP: LST_REP PARAMETRO_NAME .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
@@ -2399,7 +2448,7 @@ state 124 // rep guion name asignacion archivo guion name asignacion archivo [$e
     rmdisk   reduce using rule 58 (LST_REP)
     unmount  reduce using rule 58 (LST_REP)
 
-state 125 // rep guion name asignacion archivo guion path asignacion rutaCompleja [$end]
+state 129 // rep guion name asignacion archivo guion path asignacion rutaCompleja [$end]
 
    59 LST_REP: LST_REP PARAMETRO_PATH .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
@@ -2424,16 +2473,16 @@ state 125 // rep guion name asignacion archivo guion path asignacion rutaComplej
     rmdisk   reduce using rule 59 (LST_REP)
     unmount  reduce using rule 59 (LST_REP)
 
-state 126 // rep guion name asignacion archivo guion rid asignacion id [$end]
+state 130 // rep guion name asignacion archivo guion rid asignacion id [$end]
 
    60 LST_REP: LST_REP PARAMETRO_ID .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
-  129 PARAMETRO_ID: PARAMETRO_ID . guion rid asignacion id
+  130 PARAMETRO_ID: PARAMETRO_ID . guion rid asignacion id
 
     $end     reduce using rule 60 (LST_REP)
     cat      reduce using rule 60 (LST_REP)
     exec     reduce using rule 60 (LST_REP)
     fdisk    reduce using rule 60 (LST_REP)
-    guion    shift, and goto state 83
+    guion    shift, and goto state 101
     login    reduce using rule 60 (LST_REP)
     logout   reduce using rule 60 (LST_REP)
     mkdir    reduce using rule 60 (LST_REP)
@@ -2449,9 +2498,9 @@ state 126 // rep guion name asignacion archivo guion rid asignacion id [$end]
     rep      reduce using rule 60 (LST_REP)
     rmdisk   reduce using rule 60 (LST_REP)
     unmount  reduce using rule 60 (LST_REP)
-    conflict on guion, shift, and goto state 83, reduce using rule 60
+    conflict on guion, shift, and goto state 101, reduce using rule 60
 
-state 127 // rep guion name asignacion archivo guion rruta asignacion rutaCompleja [$end]
+state 131 // rep guion name asignacion archivo guion rruta asignacion rutaCompleja [$end]
 
    61 LST_REP: LST_REP PARAMETRO_RUTA .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
@@ -2476,16 +2525,16 @@ state 127 // rep guion name asignacion archivo guion rruta asignacion rutaComple
     rmdisk   reduce using rule 61 (LST_REP)
     unmount  reduce using rule 61 (LST_REP)
 
-state 128 // unmount guion rid asignacion id [$end]
+state 132 // unmount guion rid asignacion id [$end]
 
    11 INSTRUCCION: unmount PARAMETRO_ID .  [$end, cat, exec, fdisk, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
-  129 PARAMETRO_ID: PARAMETRO_ID . guion rid asignacion id
+  130 PARAMETRO_ID: PARAMETRO_ID . guion rid asignacion id
 
     $end     reduce using rule 11 (INSTRUCCION)
     cat      reduce using rule 11 (INSTRUCCION)
     exec     reduce using rule 11 (INSTRUCCION)
     fdisk    reduce using rule 11 (INSTRUCCION)
-    guion    shift, and goto state 83
+    guion    shift, and goto state 101
     login    reduce using rule 11 (INSTRUCCION)
     logout   reduce using rule 11 (INSTRUCCION)
     mkdir    reduce using rule 11 (INSTRUCCION)
@@ -2502,13 +2551,13 @@ state 128 // unmount guion rid asignacion id [$end]
     rmdisk   reduce using rule 11 (INSTRUCCION)
     unmount  reduce using rule 11 (INSTRUCCION)
 
-state 129 // unmount guion
+state 133 // unmount guion
 
-  130 PARAMETRO_ID: guion . rid asignacion id
+  131 PARAMETRO_ID: guion . rid asignacion id
 
-    rid  shift, and goto state 75
+    rid  shift, and goto state 98
 
-state 130 // mount guion name asignacion archivo [$end]
+state 134 // mount guion name asignacion archivo [$end]
 
    10 INSTRUCCION: mount LST_MOUNT .  [$end, cat, exec, fdisk, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
    66 LST_MOUNT: LST_MOUNT . PARAMETRO_PATH
@@ -2535,10 +2584,10 @@ state 130 // mount guion name asignacion archivo [$end]
     rmdisk   reduce using rule 10 (INSTRUCCION)
     unmount  reduce using rule 10 (INSTRUCCION)
 
-    PARAMETRO_NAME  goto state 134
-    PARAMETRO_PATH  goto state 133
+    PARAMETRO_NAME  goto state 138
+    PARAMETRO_PATH  goto state 137
 
-state 131 // mount guion path asignacion rutaCompleja [$end]
+state 135 // mount guion path asignacion rutaCompleja [$end]
 
    68 LST_MOUNT: PARAMETRO_PATH .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
@@ -2563,7 +2612,7 @@ state 131 // mount guion path asignacion rutaCompleja [$end]
     rmdisk   reduce using rule 68 (LST_MOUNT)
     unmount  reduce using rule 68 (LST_MOUNT)
 
-state 132 // mount guion name asignacion archivo [$end]
+state 136 // mount guion name asignacion archivo [$end]
 
    69 LST_MOUNT: PARAMETRO_NAME .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
@@ -2588,7 +2637,7 @@ state 132 // mount guion name asignacion archivo [$end]
     rmdisk   reduce using rule 69 (LST_MOUNT)
     unmount  reduce using rule 69 (LST_MOUNT)
 
-state 133 // mount guion name asignacion archivo guion path asignacion rutaCompleja [$end]
+state 137 // mount guion name asignacion archivo guion path asignacion rutaCompleja [$end]
 
    66 LST_MOUNT: LST_MOUNT PARAMETRO_PATH .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
@@ -2613,7 +2662,7 @@ state 133 // mount guion name asignacion archivo guion path asignacion rutaCompl
     rmdisk   reduce using rule 66 (LST_MOUNT)
     unmount  reduce using rule 66 (LST_MOUNT)
 
-state 134 // mount guion name asignacion archivo guion name asignacion archivo [$end]
+state 138 // mount guion name asignacion archivo guion name asignacion archivo [$end]
 
    67 LST_MOUNT: LST_MOUNT PARAMETRO_NAME .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
@@ -2638,7 +2687,7 @@ state 134 // mount guion name asignacion archivo guion name asignacion archivo [
     rmdisk   reduce using rule 67 (LST_MOUNT)
     unmount  reduce using rule 67 (LST_MOUNT)
 
-state 135 // fdisk guion add asignacion numero [$end]
+state 139 // fdisk guion add asignacion numero [$end]
 
     9 INSTRUCCION: fdisk LST_FDISK .  [$end, cat, exec, fdisk, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
    70 LST_FDISK: LST_FDISK . PARAMETRO_SIZE
@@ -2654,7 +2703,7 @@ state 135 // fdisk guion add asignacion numero [$end]
     cat      reduce using rule 9 (INSTRUCCION)
     exec     reduce using rule 9 (INSTRUCCION)
     fdisk    reduce using rule 9 (INSTRUCCION)
-    guion    shift, and goto state 144
+    guion    shift, and goto state 148
     login    reduce using rule 9 (INSTRUCCION)
     logout   reduce using rule 9 (INSTRUCCION)
     mkdir    reduce using rule 9 (INSTRUCCION)
@@ -2671,16 +2720,16 @@ state 135 // fdisk guion add asignacion numero [$end]
     rmdisk   reduce using rule 9 (INSTRUCCION)
     unmount  reduce using rule 9 (INSTRUCCION)
 
-    PARAMETRO_ADD     goto state 177
-    PARAMETRO_DELETE  goto state 175
-    PARAMETRO_FIT     goto state 174
-    PARAMETRO_NAME    goto state 176
-    PARAMETRO_PATH    goto state 172
-    PARAMETRO_SIZE    goto state 170
-    PARAMETRO_TYPE    goto state 173
-    PARAMETRO_UNIT    goto state 171
+    PARAMETRO_ADD     goto state 181
+    PARAMETRO_DELETE  goto state 179
+    PARAMETRO_FIT     goto state 178
+    PARAMETRO_NAME    goto state 180
+    PARAMETRO_PATH    goto state 176
+    PARAMETRO_SIZE    goto state 174
+    PARAMETRO_TYPE    goto state 177
+    PARAMETRO_UNIT    goto state 175
 
-state 136 // fdisk guion size asignacion numero [$end]
+state 140 // fdisk guion size asignacion numero [$end]
 
    78 LST_FDISK: PARAMETRO_SIZE .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
@@ -2705,7 +2754,7 @@ state 136 // fdisk guion size asignacion numero [$end]
     rmdisk   reduce using rule 78 (LST_FDISK)
     unmount  reduce using rule 78 (LST_FDISK)
 
-state 137 // fdisk guion unit asignacion k [$end]
+state 141 // fdisk guion unit asignacion k [$end]
 
    79 LST_FDISK: PARAMETRO_UNIT .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
@@ -2730,7 +2779,7 @@ state 137 // fdisk guion unit asignacion k [$end]
     rmdisk   reduce using rule 79 (LST_FDISK)
     unmount  reduce using rule 79 (LST_FDISK)
 
-state 138 // fdisk guion path asignacion rutaCompleja [$end]
+state 142 // fdisk guion path asignacion rutaCompleja [$end]
 
    80 LST_FDISK: PARAMETRO_PATH .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
@@ -2755,7 +2804,7 @@ state 138 // fdisk guion path asignacion rutaCompleja [$end]
     rmdisk   reduce using rule 80 (LST_FDISK)
     unmount  reduce using rule 80 (LST_FDISK)
 
-state 139 // fdisk guion rtype asignacion e [$end]
+state 143 // fdisk guion rtype asignacion e [$end]
 
    81 LST_FDISK: PARAMETRO_TYPE .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
@@ -2780,7 +2829,7 @@ state 139 // fdisk guion rtype asignacion e [$end]
     rmdisk   reduce using rule 81 (LST_FDISK)
     unmount  reduce using rule 81 (LST_FDISK)
 
-state 140 // fdisk guion fit asignacion bf [$end]
+state 144 // fdisk guion fit asignacion bf [$end]
 
    82 LST_FDISK: PARAMETRO_FIT .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
@@ -2805,7 +2854,7 @@ state 140 // fdisk guion fit asignacion bf [$end]
     rmdisk   reduce using rule 82 (LST_FDISK)
     unmount  reduce using rule 82 (LST_FDISK)
 
-state 141 // fdisk guion delete asignacion fast [$end]
+state 145 // fdisk guion delete asignacion fast [$end]
 
    83 LST_FDISK: PARAMETRO_DELETE .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
@@ -2830,7 +2879,7 @@ state 141 // fdisk guion delete asignacion fast [$end]
     rmdisk   reduce using rule 83 (LST_FDISK)
     unmount  reduce using rule 83 (LST_FDISK)
 
-state 142 // fdisk guion name asignacion archivo [$end]
+state 146 // fdisk guion name asignacion archivo [$end]
 
    84 LST_FDISK: PARAMETRO_NAME .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
@@ -2855,7 +2904,7 @@ state 142 // fdisk guion name asignacion archivo [$end]
     rmdisk   reduce using rule 84 (LST_FDISK)
     unmount  reduce using rule 84 (LST_FDISK)
 
-state 143 // fdisk guion add asignacion numero [$end]
+state 147 // fdisk guion add asignacion numero [$end]
 
    85 LST_FDISK: PARAMETRO_ADD .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
@@ -2880,100 +2929,69 @@ state 143 // fdisk guion add asignacion numero [$end]
     rmdisk   reduce using rule 85 (LST_FDISK)
     unmount  reduce using rule 85 (LST_FDISK)
 
-state 144 // fdisk guion
+state 148 // fdisk guion
 
-   96 PARAMETRO_PATH: guion . path asignacion VALOR_PATH
-  100 PARAMETRO_SIZE: guion . size asignacion numero
-  101 PARAMETRO_NAME: guion . name asignacion VALOR_NAME
-  109 PARAMETRO_UNIT: guion . unit asignacion VALOR_UNIT
-  112 PARAMETRO_TYPE: guion . rtype asignacion VALOR_TYPE
-  116 PARAMETRO_FIT: guion . fit asignacion VALOR_FIT
-  121 PARAMETRO_DELETE: guion . delete asignacion VALOR_DELETE
-  125 PARAMETRO_ADD: guion . add asignacion numero
-  126 PARAMETRO_ADD: guion . add asignacion guion numero
+   97 PARAMETRO_PATH: guion . path asignacion VALOR_PATH
+  101 PARAMETRO_SIZE: guion . size asignacion numero
+  102 PARAMETRO_NAME: guion . name asignacion VALOR_NAME
+  110 PARAMETRO_UNIT: guion . unit asignacion VALOR_UNIT
+  113 PARAMETRO_TYPE: guion . rtype asignacion VALOR_TYPE
+  117 PARAMETRO_FIT: guion . fit asignacion VALOR_FIT
+  122 PARAMETRO_DELETE: guion . delete asignacion VALOR_DELETE
+  126 PARAMETRO_ADD: guion . add asignacion numero
+  127 PARAMETRO_ADD: guion . add asignacion guion numero
 
-    add     shift, and goto state 149
-    delete  shift, and goto state 148
-    fit     shift, and goto state 147
+    add     shift, and goto state 153
+    delete  shift, and goto state 152
+    fit     shift, and goto state 151
     name    shift, and goto state 27
     path    shift, and goto state 26
-    rtype   shift, and goto state 146
+    rtype   shift, and goto state 150
     size    shift, and goto state 56
-    unit    shift, and goto state 145
+    unit    shift, and goto state 149
 
-state 145 // fdisk guion unit
+state 149 // fdisk guion unit
 
-  109 PARAMETRO_UNIT: guion unit . asignacion VALOR_UNIT
+  110 PARAMETRO_UNIT: guion unit . asignacion VALOR_UNIT
 
-    asignacion  shift, and goto state 166
+    asignacion  shift, and goto state 170
 
-state 146 // fdisk guion rtype
+state 150 // fdisk guion rtype
 
-  112 PARAMETRO_TYPE: guion rtype . asignacion VALOR_TYPE
+  113 PARAMETRO_TYPE: guion rtype . asignacion VALOR_TYPE
 
-    asignacion  shift, and goto state 161
+    asignacion  shift, and goto state 165
 
-state 147 // fdisk guion fit
+state 151 // fdisk guion fit
 
-  116 PARAMETRO_FIT: guion fit . asignacion VALOR_FIT
+  117 PARAMETRO_FIT: guion fit . asignacion VALOR_FIT
 
-    asignacion  shift, and goto state 156
+    asignacion  shift, and goto state 160
 
-state 148 // fdisk guion delete
+state 152 // fdisk guion delete
 
-  121 PARAMETRO_DELETE: guion delete . asignacion VALOR_DELETE
+  122 PARAMETRO_DELETE: guion delete . asignacion VALOR_DELETE
+
+    asignacion  shift, and goto state 158
+
+state 153 // fdisk guion add
+
+  126 PARAMETRO_ADD: guion add . asignacion numero
+  127 PARAMETRO_ADD: guion add . asignacion guion numero
 
     asignacion  shift, and goto state 154
 
-state 149 // fdisk guion add
+state 154 // fdisk guion add asignacion
 
-  125 PARAMETRO_ADD: guion add . asignacion numero
-  126 PARAMETRO_ADD: guion add . asignacion guion numero
+  126 PARAMETRO_ADD: guion add asignacion . numero
+  127 PARAMETRO_ADD: guion add asignacion . guion numero
 
-    asignacion  shift, and goto state 150
+    guion   shift, and goto state 156
+    numero  shift, and goto state 155
 
-state 150 // fdisk guion add asignacion
+state 155 // fdisk guion add asignacion numero
 
-  125 PARAMETRO_ADD: guion add asignacion . numero
-  126 PARAMETRO_ADD: guion add asignacion . guion numero
-
-    guion   shift, and goto state 152
-    numero  shift, and goto state 151
-
-state 151 // fdisk guion add asignacion numero
-
-  125 PARAMETRO_ADD: guion add asignacion numero .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
-
-    $end     reduce using rule 125 (PARAMETRO_ADD)
-    cat      reduce using rule 125 (PARAMETRO_ADD)
-    exec     reduce using rule 125 (PARAMETRO_ADD)
-    fdisk    reduce using rule 125 (PARAMETRO_ADD)
-    guion    reduce using rule 125 (PARAMETRO_ADD)
-    login    reduce using rule 125 (PARAMETRO_ADD)
-    logout   reduce using rule 125 (PARAMETRO_ADD)
-    mkdir    reduce using rule 125 (PARAMETRO_ADD)
-    mkdisk   reduce using rule 125 (PARAMETRO_ADD)
-    mkfile   reduce using rule 125 (PARAMETRO_ADD)
-    mkfs     reduce using rule 125 (PARAMETRO_ADD)
-    mkgrp    reduce using rule 125 (PARAMETRO_ADD)
-    mkusr    reduce using rule 125 (PARAMETRO_ADD)
-    mount    reduce using rule 125 (PARAMETRO_ADD)
-    pause    reduce using rule 125 (PARAMETRO_ADD)
-    rem      reduce using rule 125 (PARAMETRO_ADD)
-    ren      reduce using rule 125 (PARAMETRO_ADD)
-    rep      reduce using rule 125 (PARAMETRO_ADD)
-    rmdisk   reduce using rule 125 (PARAMETRO_ADD)
-    unmount  reduce using rule 125 (PARAMETRO_ADD)
-
-state 152 // fdisk guion add asignacion guion
-
-  126 PARAMETRO_ADD: guion add asignacion guion . numero
-
-    numero  shift, and goto state 153
-
-state 153 // fdisk guion add asignacion guion numero
-
-  126 PARAMETRO_ADD: guion add asignacion guion numero .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
+  126 PARAMETRO_ADD: guion add asignacion numero .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
     $end     reduce using rule 126 (PARAMETRO_ADD)
     cat      reduce using rule 126 (PARAMETRO_ADD)
@@ -2996,103 +3014,109 @@ state 153 // fdisk guion add asignacion guion numero
     rmdisk   reduce using rule 126 (PARAMETRO_ADD)
     unmount  reduce using rule 126 (PARAMETRO_ADD)
 
-state 154 // fdisk guion delete asignacion
+state 156 // fdisk guion add asignacion guion
 
-  121 PARAMETRO_DELETE: guion delete asignacion . VALOR_DELETE
+  127 PARAMETRO_ADD: guion add asignacion guion . numero
 
-    fast  shift, and goto state 112
-    full  shift, and goto state 111
+    numero  shift, and goto state 157
 
-    VALOR_DELETE  goto state 155
+state 157 // fdisk guion add asignacion guion numero
 
-state 155 // fdisk guion delete asignacion fast [$end]
+  127 PARAMETRO_ADD: guion add asignacion guion numero .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
-  121 PARAMETRO_DELETE: guion delete asignacion VALOR_DELETE .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
+    $end     reduce using rule 127 (PARAMETRO_ADD)
+    cat      reduce using rule 127 (PARAMETRO_ADD)
+    exec     reduce using rule 127 (PARAMETRO_ADD)
+    fdisk    reduce using rule 127 (PARAMETRO_ADD)
+    guion    reduce using rule 127 (PARAMETRO_ADD)
+    login    reduce using rule 127 (PARAMETRO_ADD)
+    logout   reduce using rule 127 (PARAMETRO_ADD)
+    mkdir    reduce using rule 127 (PARAMETRO_ADD)
+    mkdisk   reduce using rule 127 (PARAMETRO_ADD)
+    mkfile   reduce using rule 127 (PARAMETRO_ADD)
+    mkfs     reduce using rule 127 (PARAMETRO_ADD)
+    mkgrp    reduce using rule 127 (PARAMETRO_ADD)
+    mkusr    reduce using rule 127 (PARAMETRO_ADD)
+    mount    reduce using rule 127 (PARAMETRO_ADD)
+    pause    reduce using rule 127 (PARAMETRO_ADD)
+    rem      reduce using rule 127 (PARAMETRO_ADD)
+    ren      reduce using rule 127 (PARAMETRO_ADD)
+    rep      reduce using rule 127 (PARAMETRO_ADD)
+    rmdisk   reduce using rule 127 (PARAMETRO_ADD)
+    unmount  reduce using rule 127 (PARAMETRO_ADD)
 
-    $end     reduce using rule 121 (PARAMETRO_DELETE)
-    cat      reduce using rule 121 (PARAMETRO_DELETE)
-    exec     reduce using rule 121 (PARAMETRO_DELETE)
-    fdisk    reduce using rule 121 (PARAMETRO_DELETE)
-    guion    reduce using rule 121 (PARAMETRO_DELETE)
-    login    reduce using rule 121 (PARAMETRO_DELETE)
-    logout   reduce using rule 121 (PARAMETRO_DELETE)
-    mkdir    reduce using rule 121 (PARAMETRO_DELETE)
-    mkdisk   reduce using rule 121 (PARAMETRO_DELETE)
-    mkfile   reduce using rule 121 (PARAMETRO_DELETE)
-    mkfs     reduce using rule 121 (PARAMETRO_DELETE)
-    mkgrp    reduce using rule 121 (PARAMETRO_DELETE)
-    mkusr    reduce using rule 121 (PARAMETRO_DELETE)
-    mount    reduce using rule 121 (PARAMETRO_DELETE)
-    pause    reduce using rule 121 (PARAMETRO_DELETE)
-    rem      reduce using rule 121 (PARAMETRO_DELETE)
-    ren      reduce using rule 121 (PARAMETRO_DELETE)
-    rep      reduce using rule 121 (PARAMETRO_DELETE)
-    rmdisk   reduce using rule 121 (PARAMETRO_DELETE)
-    unmount  reduce using rule 121 (PARAMETRO_DELETE)
+state 158 // fdisk guion delete asignacion
 
-state 156 // fdisk guion fit asignacion
+  122 PARAMETRO_DELETE: guion delete asignacion . VALOR_DELETE
 
-  116 PARAMETRO_FIT: guion fit asignacion . VALOR_FIT
+    fast  shift, and goto state 116
+    full  shift, and goto state 115
 
-    bf  shift, and goto state 158
-    ff  shift, and goto state 159
-    wf  shift, and goto state 160
+    VALOR_DELETE  goto state 159
 
-    VALOR_FIT  goto state 157
+state 159 // fdisk guion delete asignacion fast [$end]
 
-state 157 // fdisk guion fit asignacion bf [$end]
+  122 PARAMETRO_DELETE: guion delete asignacion VALOR_DELETE .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
-  116 PARAMETRO_FIT: guion fit asignacion VALOR_FIT .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
+    $end     reduce using rule 122 (PARAMETRO_DELETE)
+    cat      reduce using rule 122 (PARAMETRO_DELETE)
+    exec     reduce using rule 122 (PARAMETRO_DELETE)
+    fdisk    reduce using rule 122 (PARAMETRO_DELETE)
+    guion    reduce using rule 122 (PARAMETRO_DELETE)
+    login    reduce using rule 122 (PARAMETRO_DELETE)
+    logout   reduce using rule 122 (PARAMETRO_DELETE)
+    mkdir    reduce using rule 122 (PARAMETRO_DELETE)
+    mkdisk   reduce using rule 122 (PARAMETRO_DELETE)
+    mkfile   reduce using rule 122 (PARAMETRO_DELETE)
+    mkfs     reduce using rule 122 (PARAMETRO_DELETE)
+    mkgrp    reduce using rule 122 (PARAMETRO_DELETE)
+    mkusr    reduce using rule 122 (PARAMETRO_DELETE)
+    mount    reduce using rule 122 (PARAMETRO_DELETE)
+    pause    reduce using rule 122 (PARAMETRO_DELETE)
+    rem      reduce using rule 122 (PARAMETRO_DELETE)
+    ren      reduce using rule 122 (PARAMETRO_DELETE)
+    rep      reduce using rule 122 (PARAMETRO_DELETE)
+    rmdisk   reduce using rule 122 (PARAMETRO_DELETE)
+    unmount  reduce using rule 122 (PARAMETRO_DELETE)
 
-    $end     reduce using rule 116 (PARAMETRO_FIT)
-    cat      reduce using rule 116 (PARAMETRO_FIT)
-    exec     reduce using rule 116 (PARAMETRO_FIT)
-    fdisk    reduce using rule 116 (PARAMETRO_FIT)
-    guion    reduce using rule 116 (PARAMETRO_FIT)
-    login    reduce using rule 116 (PARAMETRO_FIT)
-    logout   reduce using rule 116 (PARAMETRO_FIT)
-    mkdir    reduce using rule 116 (PARAMETRO_FIT)
-    mkdisk   reduce using rule 116 (PARAMETRO_FIT)
-    mkfile   reduce using rule 116 (PARAMETRO_FIT)
-    mkfs     reduce using rule 116 (PARAMETRO_FIT)
-    mkgrp    reduce using rule 116 (PARAMETRO_FIT)
-    mkusr    reduce using rule 116 (PARAMETRO_FIT)
-    mount    reduce using rule 116 (PARAMETRO_FIT)
-    pause    reduce using rule 116 (PARAMETRO_FIT)
-    rem      reduce using rule 116 (PARAMETRO_FIT)
-    ren      reduce using rule 116 (PARAMETRO_FIT)
-    rep      reduce using rule 116 (PARAMETRO_FIT)
-    rmdisk   reduce using rule 116 (PARAMETRO_FIT)
-    unmount  reduce using rule 116 (PARAMETRO_FIT)
+state 160 // fdisk guion fit asignacion
 
-state 158 // fdisk guion fit asignacion bf
+  117 PARAMETRO_FIT: guion fit asignacion . VALOR_FIT
 
-  118 VALOR_FIT: bf .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
+    bf  shift, and goto state 162
+    ff  shift, and goto state 163
+    wf  shift, and goto state 164
 
-    $end     reduce using rule 118 (VALOR_FIT)
-    cat      reduce using rule 118 (VALOR_FIT)
-    exec     reduce using rule 118 (VALOR_FIT)
-    fdisk    reduce using rule 118 (VALOR_FIT)
-    guion    reduce using rule 118 (VALOR_FIT)
-    login    reduce using rule 118 (VALOR_FIT)
-    logout   reduce using rule 118 (VALOR_FIT)
-    mkdir    reduce using rule 118 (VALOR_FIT)
-    mkdisk   reduce using rule 118 (VALOR_FIT)
-    mkfile   reduce using rule 118 (VALOR_FIT)
-    mkfs     reduce using rule 118 (VALOR_FIT)
-    mkgrp    reduce using rule 118 (VALOR_FIT)
-    mkusr    reduce using rule 118 (VALOR_FIT)
-    mount    reduce using rule 118 (VALOR_FIT)
-    pause    reduce using rule 118 (VALOR_FIT)
-    rem      reduce using rule 118 (VALOR_FIT)
-    ren      reduce using rule 118 (VALOR_FIT)
-    rep      reduce using rule 118 (VALOR_FIT)
-    rmdisk   reduce using rule 118 (VALOR_FIT)
-    unmount  reduce using rule 118 (VALOR_FIT)
+    VALOR_FIT  goto state 161
 
-state 159 // fdisk guion fit asignacion ff
+state 161 // fdisk guion fit asignacion bf [$end]
 
-  119 VALOR_FIT: ff .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
+  117 PARAMETRO_FIT: guion fit asignacion VALOR_FIT .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
+
+    $end     reduce using rule 117 (PARAMETRO_FIT)
+    cat      reduce using rule 117 (PARAMETRO_FIT)
+    exec     reduce using rule 117 (PARAMETRO_FIT)
+    fdisk    reduce using rule 117 (PARAMETRO_FIT)
+    guion    reduce using rule 117 (PARAMETRO_FIT)
+    login    reduce using rule 117 (PARAMETRO_FIT)
+    logout   reduce using rule 117 (PARAMETRO_FIT)
+    mkdir    reduce using rule 117 (PARAMETRO_FIT)
+    mkdisk   reduce using rule 117 (PARAMETRO_FIT)
+    mkfile   reduce using rule 117 (PARAMETRO_FIT)
+    mkfs     reduce using rule 117 (PARAMETRO_FIT)
+    mkgrp    reduce using rule 117 (PARAMETRO_FIT)
+    mkusr    reduce using rule 117 (PARAMETRO_FIT)
+    mount    reduce using rule 117 (PARAMETRO_FIT)
+    pause    reduce using rule 117 (PARAMETRO_FIT)
+    rem      reduce using rule 117 (PARAMETRO_FIT)
+    ren      reduce using rule 117 (PARAMETRO_FIT)
+    rep      reduce using rule 117 (PARAMETRO_FIT)
+    rmdisk   reduce using rule 117 (PARAMETRO_FIT)
+    unmount  reduce using rule 117 (PARAMETRO_FIT)
+
+state 162 // fdisk guion fit asignacion bf
+
+  119 VALOR_FIT: bf .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
     $end     reduce using rule 119 (VALOR_FIT)
     cat      reduce using rule 119 (VALOR_FIT)
@@ -3115,9 +3139,9 @@ state 159 // fdisk guion fit asignacion ff
     rmdisk   reduce using rule 119 (VALOR_FIT)
     unmount  reduce using rule 119 (VALOR_FIT)
 
-state 160 // fdisk guion fit asignacion wf
+state 163 // fdisk guion fit asignacion ff
 
-  120 VALOR_FIT: wf .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
+  120 VALOR_FIT: ff .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
     $end     reduce using rule 120 (VALOR_FIT)
     cat      reduce using rule 120 (VALOR_FIT)
@@ -3140,69 +3164,69 @@ state 160 // fdisk guion fit asignacion wf
     rmdisk   reduce using rule 120 (VALOR_FIT)
     unmount  reduce using rule 120 (VALOR_FIT)
 
-state 161 // fdisk guion rtype asignacion
+state 164 // fdisk guion fit asignacion wf
 
-  112 PARAMETRO_TYPE: guion rtype asignacion . VALOR_TYPE
+  121 VALOR_FIT: wf .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
-    e  shift, and goto state 164
-    l  shift, and goto state 165
-    p  shift, and goto state 163
+    $end     reduce using rule 121 (VALOR_FIT)
+    cat      reduce using rule 121 (VALOR_FIT)
+    exec     reduce using rule 121 (VALOR_FIT)
+    fdisk    reduce using rule 121 (VALOR_FIT)
+    guion    reduce using rule 121 (VALOR_FIT)
+    login    reduce using rule 121 (VALOR_FIT)
+    logout   reduce using rule 121 (VALOR_FIT)
+    mkdir    reduce using rule 121 (VALOR_FIT)
+    mkdisk   reduce using rule 121 (VALOR_FIT)
+    mkfile   reduce using rule 121 (VALOR_FIT)
+    mkfs     reduce using rule 121 (VALOR_FIT)
+    mkgrp    reduce using rule 121 (VALOR_FIT)
+    mkusr    reduce using rule 121 (VALOR_FIT)
+    mount    reduce using rule 121 (VALOR_FIT)
+    pause    reduce using rule 121 (VALOR_FIT)
+    rem      reduce using rule 121 (VALOR_FIT)
+    ren      reduce using rule 121 (VALOR_FIT)
+    rep      reduce using rule 121 (VALOR_FIT)
+    rmdisk   reduce using rule 121 (VALOR_FIT)
+    unmount  reduce using rule 121 (VALOR_FIT)
 
-    VALOR_TYPE  goto state 162
+state 165 // fdisk guion rtype asignacion
 
-state 162 // fdisk guion rtype asignacion e [$end]
+  113 PARAMETRO_TYPE: guion rtype asignacion . VALOR_TYPE
 
-  112 PARAMETRO_TYPE: guion rtype asignacion VALOR_TYPE .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
+    e  shift, and goto state 168
+    l  shift, and goto state 169
+    p  shift, and goto state 167
 
-    $end     reduce using rule 112 (PARAMETRO_TYPE)
-    cat      reduce using rule 112 (PARAMETRO_TYPE)
-    exec     reduce using rule 112 (PARAMETRO_TYPE)
-    fdisk    reduce using rule 112 (PARAMETRO_TYPE)
-    guion    reduce using rule 112 (PARAMETRO_TYPE)
-    login    reduce using rule 112 (PARAMETRO_TYPE)
-    logout   reduce using rule 112 (PARAMETRO_TYPE)
-    mkdir    reduce using rule 112 (PARAMETRO_TYPE)
-    mkdisk   reduce using rule 112 (PARAMETRO_TYPE)
-    mkfile   reduce using rule 112 (PARAMETRO_TYPE)
-    mkfs     reduce using rule 112 (PARAMETRO_TYPE)
-    mkgrp    reduce using rule 112 (PARAMETRO_TYPE)
-    mkusr    reduce using rule 112 (PARAMETRO_TYPE)
-    mount    reduce using rule 112 (PARAMETRO_TYPE)
-    pause    reduce using rule 112 (PARAMETRO_TYPE)
-    rem      reduce using rule 112 (PARAMETRO_TYPE)
-    ren      reduce using rule 112 (PARAMETRO_TYPE)
-    rep      reduce using rule 112 (PARAMETRO_TYPE)
-    rmdisk   reduce using rule 112 (PARAMETRO_TYPE)
-    unmount  reduce using rule 112 (PARAMETRO_TYPE)
+    VALOR_TYPE  goto state 166
 
-state 163 // fdisk guion rtype asignacion p
+state 166 // fdisk guion rtype asignacion e [$end]
 
-  113 VALOR_TYPE: p .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
+  113 PARAMETRO_TYPE: guion rtype asignacion VALOR_TYPE .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
-    $end     reduce using rule 113 (VALOR_TYPE)
-    cat      reduce using rule 113 (VALOR_TYPE)
-    exec     reduce using rule 113 (VALOR_TYPE)
-    fdisk    reduce using rule 113 (VALOR_TYPE)
-    guion    reduce using rule 113 (VALOR_TYPE)
-    login    reduce using rule 113 (VALOR_TYPE)
-    logout   reduce using rule 113 (VALOR_TYPE)
-    mkdir    reduce using rule 113 (VALOR_TYPE)
-    mkdisk   reduce using rule 113 (VALOR_TYPE)
-    mkfile   reduce using rule 113 (VALOR_TYPE)
-    mkfs     reduce using rule 113 (VALOR_TYPE)
-    mkgrp    reduce using rule 113 (VALOR_TYPE)
-    mkusr    reduce using rule 113 (VALOR_TYPE)
-    mount    reduce using rule 113 (VALOR_TYPE)
-    pause    reduce using rule 113 (VALOR_TYPE)
-    rem      reduce using rule 113 (VALOR_TYPE)
-    ren      reduce using rule 113 (VALOR_TYPE)
-    rep      reduce using rule 113 (VALOR_TYPE)
-    rmdisk   reduce using rule 113 (VALOR_TYPE)
-    unmount  reduce using rule 113 (VALOR_TYPE)
+    $end     reduce using rule 113 (PARAMETRO_TYPE)
+    cat      reduce using rule 113 (PARAMETRO_TYPE)
+    exec     reduce using rule 113 (PARAMETRO_TYPE)
+    fdisk    reduce using rule 113 (PARAMETRO_TYPE)
+    guion    reduce using rule 113 (PARAMETRO_TYPE)
+    login    reduce using rule 113 (PARAMETRO_TYPE)
+    logout   reduce using rule 113 (PARAMETRO_TYPE)
+    mkdir    reduce using rule 113 (PARAMETRO_TYPE)
+    mkdisk   reduce using rule 113 (PARAMETRO_TYPE)
+    mkfile   reduce using rule 113 (PARAMETRO_TYPE)
+    mkfs     reduce using rule 113 (PARAMETRO_TYPE)
+    mkgrp    reduce using rule 113 (PARAMETRO_TYPE)
+    mkusr    reduce using rule 113 (PARAMETRO_TYPE)
+    mount    reduce using rule 113 (PARAMETRO_TYPE)
+    pause    reduce using rule 113 (PARAMETRO_TYPE)
+    rem      reduce using rule 113 (PARAMETRO_TYPE)
+    ren      reduce using rule 113 (PARAMETRO_TYPE)
+    rep      reduce using rule 113 (PARAMETRO_TYPE)
+    rmdisk   reduce using rule 113 (PARAMETRO_TYPE)
+    unmount  reduce using rule 113 (PARAMETRO_TYPE)
 
-state 164 // fdisk guion rtype asignacion e
+state 167 // fdisk guion rtype asignacion p
 
-  114 VALOR_TYPE: e .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
+  114 VALOR_TYPE: p .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
     $end     reduce using rule 114 (VALOR_TYPE)
     cat      reduce using rule 114 (VALOR_TYPE)
@@ -3225,9 +3249,9 @@ state 164 // fdisk guion rtype asignacion e
     rmdisk   reduce using rule 114 (VALOR_TYPE)
     unmount  reduce using rule 114 (VALOR_TYPE)
 
-state 165 // fdisk guion rtype asignacion l
+state 168 // fdisk guion rtype asignacion e
 
-  115 VALOR_TYPE: l .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
+  115 VALOR_TYPE: e .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
     $end     reduce using rule 115 (VALOR_TYPE)
     cat      reduce using rule 115 (VALOR_TYPE)
@@ -3250,68 +3274,68 @@ state 165 // fdisk guion rtype asignacion l
     rmdisk   reduce using rule 115 (VALOR_TYPE)
     unmount  reduce using rule 115 (VALOR_TYPE)
 
-state 166 // fdisk guion unit asignacion
+state 169 // fdisk guion rtype asignacion l
 
-  109 PARAMETRO_UNIT: guion unit asignacion . VALOR_UNIT
+  116 VALOR_TYPE: l .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
-    k  shift, and goto state 168
-    m  shift, and goto state 169
+    $end     reduce using rule 116 (VALOR_TYPE)
+    cat      reduce using rule 116 (VALOR_TYPE)
+    exec     reduce using rule 116 (VALOR_TYPE)
+    fdisk    reduce using rule 116 (VALOR_TYPE)
+    guion    reduce using rule 116 (VALOR_TYPE)
+    login    reduce using rule 116 (VALOR_TYPE)
+    logout   reduce using rule 116 (VALOR_TYPE)
+    mkdir    reduce using rule 116 (VALOR_TYPE)
+    mkdisk   reduce using rule 116 (VALOR_TYPE)
+    mkfile   reduce using rule 116 (VALOR_TYPE)
+    mkfs     reduce using rule 116 (VALOR_TYPE)
+    mkgrp    reduce using rule 116 (VALOR_TYPE)
+    mkusr    reduce using rule 116 (VALOR_TYPE)
+    mount    reduce using rule 116 (VALOR_TYPE)
+    pause    reduce using rule 116 (VALOR_TYPE)
+    rem      reduce using rule 116 (VALOR_TYPE)
+    ren      reduce using rule 116 (VALOR_TYPE)
+    rep      reduce using rule 116 (VALOR_TYPE)
+    rmdisk   reduce using rule 116 (VALOR_TYPE)
+    unmount  reduce using rule 116 (VALOR_TYPE)
 
-    VALOR_UNIT  goto state 167
+state 170 // fdisk guion unit asignacion
 
-state 167 // fdisk guion unit asignacion k [$end]
+  110 PARAMETRO_UNIT: guion unit asignacion . VALOR_UNIT
 
-  109 PARAMETRO_UNIT: guion unit asignacion VALOR_UNIT .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
+    k  shift, and goto state 172
+    m  shift, and goto state 173
 
-    $end     reduce using rule 109 (PARAMETRO_UNIT)
-    cat      reduce using rule 109 (PARAMETRO_UNIT)
-    exec     reduce using rule 109 (PARAMETRO_UNIT)
-    fdisk    reduce using rule 109 (PARAMETRO_UNIT)
-    guion    reduce using rule 109 (PARAMETRO_UNIT)
-    login    reduce using rule 109 (PARAMETRO_UNIT)
-    logout   reduce using rule 109 (PARAMETRO_UNIT)
-    mkdir    reduce using rule 109 (PARAMETRO_UNIT)
-    mkdisk   reduce using rule 109 (PARAMETRO_UNIT)
-    mkfile   reduce using rule 109 (PARAMETRO_UNIT)
-    mkfs     reduce using rule 109 (PARAMETRO_UNIT)
-    mkgrp    reduce using rule 109 (PARAMETRO_UNIT)
-    mkusr    reduce using rule 109 (PARAMETRO_UNIT)
-    mount    reduce using rule 109 (PARAMETRO_UNIT)
-    pause    reduce using rule 109 (PARAMETRO_UNIT)
-    rem      reduce using rule 109 (PARAMETRO_UNIT)
-    ren      reduce using rule 109 (PARAMETRO_UNIT)
-    rep      reduce using rule 109 (PARAMETRO_UNIT)
-    rmdisk   reduce using rule 109 (PARAMETRO_UNIT)
-    unmount  reduce using rule 109 (PARAMETRO_UNIT)
+    VALOR_UNIT  goto state 171
 
-state 168 // fdisk guion unit asignacion k
+state 171 // fdisk guion unit asignacion k [$end]
 
-  110 VALOR_UNIT: k .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
+  110 PARAMETRO_UNIT: guion unit asignacion VALOR_UNIT .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
-    $end     reduce using rule 110 (VALOR_UNIT)
-    cat      reduce using rule 110 (VALOR_UNIT)
-    exec     reduce using rule 110 (VALOR_UNIT)
-    fdisk    reduce using rule 110 (VALOR_UNIT)
-    guion    reduce using rule 110 (VALOR_UNIT)
-    login    reduce using rule 110 (VALOR_UNIT)
-    logout   reduce using rule 110 (VALOR_UNIT)
-    mkdir    reduce using rule 110 (VALOR_UNIT)
-    mkdisk   reduce using rule 110 (VALOR_UNIT)
-    mkfile   reduce using rule 110 (VALOR_UNIT)
-    mkfs     reduce using rule 110 (VALOR_UNIT)
-    mkgrp    reduce using rule 110 (VALOR_UNIT)
-    mkusr    reduce using rule 110 (VALOR_UNIT)
-    mount    reduce using rule 110 (VALOR_UNIT)
-    pause    reduce using rule 110 (VALOR_UNIT)
-    rem      reduce using rule 110 (VALOR_UNIT)
-    ren      reduce using rule 110 (VALOR_UNIT)
-    rep      reduce using rule 110 (VALOR_UNIT)
-    rmdisk   reduce using rule 110 (VALOR_UNIT)
-    unmount  reduce using rule 110 (VALOR_UNIT)
+    $end     reduce using rule 110 (PARAMETRO_UNIT)
+    cat      reduce using rule 110 (PARAMETRO_UNIT)
+    exec     reduce using rule 110 (PARAMETRO_UNIT)
+    fdisk    reduce using rule 110 (PARAMETRO_UNIT)
+    guion    reduce using rule 110 (PARAMETRO_UNIT)
+    login    reduce using rule 110 (PARAMETRO_UNIT)
+    logout   reduce using rule 110 (PARAMETRO_UNIT)
+    mkdir    reduce using rule 110 (PARAMETRO_UNIT)
+    mkdisk   reduce using rule 110 (PARAMETRO_UNIT)
+    mkfile   reduce using rule 110 (PARAMETRO_UNIT)
+    mkfs     reduce using rule 110 (PARAMETRO_UNIT)
+    mkgrp    reduce using rule 110 (PARAMETRO_UNIT)
+    mkusr    reduce using rule 110 (PARAMETRO_UNIT)
+    mount    reduce using rule 110 (PARAMETRO_UNIT)
+    pause    reduce using rule 110 (PARAMETRO_UNIT)
+    rem      reduce using rule 110 (PARAMETRO_UNIT)
+    ren      reduce using rule 110 (PARAMETRO_UNIT)
+    rep      reduce using rule 110 (PARAMETRO_UNIT)
+    rmdisk   reduce using rule 110 (PARAMETRO_UNIT)
+    unmount  reduce using rule 110 (PARAMETRO_UNIT)
 
-state 169 // fdisk guion unit asignacion m
+state 172 // fdisk guion unit asignacion k
 
-  111 VALOR_UNIT: m .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
+  111 VALOR_UNIT: k .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
     $end     reduce using rule 111 (VALOR_UNIT)
     cat      reduce using rule 111 (VALOR_UNIT)
@@ -3334,7 +3358,32 @@ state 169 // fdisk guion unit asignacion m
     rmdisk   reduce using rule 111 (VALOR_UNIT)
     unmount  reduce using rule 111 (VALOR_UNIT)
 
-state 170 // fdisk guion add asignacion numero guion size asignacion numero [$end]
+state 173 // fdisk guion unit asignacion m
+
+  112 VALOR_UNIT: m .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
+
+    $end     reduce using rule 112 (VALOR_UNIT)
+    cat      reduce using rule 112 (VALOR_UNIT)
+    exec     reduce using rule 112 (VALOR_UNIT)
+    fdisk    reduce using rule 112 (VALOR_UNIT)
+    guion    reduce using rule 112 (VALOR_UNIT)
+    login    reduce using rule 112 (VALOR_UNIT)
+    logout   reduce using rule 112 (VALOR_UNIT)
+    mkdir    reduce using rule 112 (VALOR_UNIT)
+    mkdisk   reduce using rule 112 (VALOR_UNIT)
+    mkfile   reduce using rule 112 (VALOR_UNIT)
+    mkfs     reduce using rule 112 (VALOR_UNIT)
+    mkgrp    reduce using rule 112 (VALOR_UNIT)
+    mkusr    reduce using rule 112 (VALOR_UNIT)
+    mount    reduce using rule 112 (VALOR_UNIT)
+    pause    reduce using rule 112 (VALOR_UNIT)
+    rem      reduce using rule 112 (VALOR_UNIT)
+    ren      reduce using rule 112 (VALOR_UNIT)
+    rep      reduce using rule 112 (VALOR_UNIT)
+    rmdisk   reduce using rule 112 (VALOR_UNIT)
+    unmount  reduce using rule 112 (VALOR_UNIT)
+
+state 174 // fdisk guion add asignacion numero guion size asignacion numero [$end]
 
    70 LST_FDISK: LST_FDISK PARAMETRO_SIZE .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
@@ -3359,7 +3408,7 @@ state 170 // fdisk guion add asignacion numero guion size asignacion numero [$en
     rmdisk   reduce using rule 70 (LST_FDISK)
     unmount  reduce using rule 70 (LST_FDISK)
 
-state 171 // fdisk guion add asignacion numero guion unit asignacion k [$end]
+state 175 // fdisk guion add asignacion numero guion unit asignacion k [$end]
 
    71 LST_FDISK: LST_FDISK PARAMETRO_UNIT .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
@@ -3384,7 +3433,7 @@ state 171 // fdisk guion add asignacion numero guion unit asignacion k [$end]
     rmdisk   reduce using rule 71 (LST_FDISK)
     unmount  reduce using rule 71 (LST_FDISK)
 
-state 172 // fdisk guion add asignacion numero guion path asignacion rutaCompleja [$end]
+state 176 // fdisk guion add asignacion numero guion path asignacion rutaCompleja [$end]
 
    72 LST_FDISK: LST_FDISK PARAMETRO_PATH .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
@@ -3409,7 +3458,7 @@ state 172 // fdisk guion add asignacion numero guion path asignacion rutaComplej
     rmdisk   reduce using rule 72 (LST_FDISK)
     unmount  reduce using rule 72 (LST_FDISK)
 
-state 173 // fdisk guion add asignacion numero guion rtype asignacion e [$end]
+state 177 // fdisk guion add asignacion numero guion rtype asignacion e [$end]
 
    73 LST_FDISK: LST_FDISK PARAMETRO_TYPE .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
@@ -3434,7 +3483,7 @@ state 173 // fdisk guion add asignacion numero guion rtype asignacion e [$end]
     rmdisk   reduce using rule 73 (LST_FDISK)
     unmount  reduce using rule 73 (LST_FDISK)
 
-state 174 // fdisk guion add asignacion numero guion fit asignacion bf [$end]
+state 178 // fdisk guion add asignacion numero guion fit asignacion bf [$end]
 
    74 LST_FDISK: LST_FDISK PARAMETRO_FIT .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
@@ -3459,7 +3508,7 @@ state 174 // fdisk guion add asignacion numero guion fit asignacion bf [$end]
     rmdisk   reduce using rule 74 (LST_FDISK)
     unmount  reduce using rule 74 (LST_FDISK)
 
-state 175 // fdisk guion add asignacion numero guion delete asignacion fast [$end]
+state 179 // fdisk guion add asignacion numero guion delete asignacion fast [$end]
 
    75 LST_FDISK: LST_FDISK PARAMETRO_DELETE .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
@@ -3484,7 +3533,7 @@ state 175 // fdisk guion add asignacion numero guion delete asignacion fast [$en
     rmdisk   reduce using rule 75 (LST_FDISK)
     unmount  reduce using rule 75 (LST_FDISK)
 
-state 176 // fdisk guion add asignacion numero guion name asignacion archivo [$end]
+state 180 // fdisk guion add asignacion numero guion name asignacion archivo [$end]
 
    76 LST_FDISK: LST_FDISK PARAMETRO_NAME .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
@@ -3509,7 +3558,7 @@ state 176 // fdisk guion add asignacion numero guion name asignacion archivo [$e
     rmdisk   reduce using rule 76 (LST_FDISK)
     unmount  reduce using rule 76 (LST_FDISK)
 
-state 177 // fdisk guion add asignacion numero guion add asignacion numero [$end]
+state 181 // fdisk guion add asignacion numero guion add asignacion numero [$end]
 
    77 LST_FDISK: LST_FDISK PARAMETRO_ADD .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
@@ -3534,7 +3583,7 @@ state 177 // fdisk guion add asignacion numero guion add asignacion numero [$end
     rmdisk   reduce using rule 77 (LST_FDISK)
     unmount  reduce using rule 77 (LST_FDISK)
 
-state 178 // rmdisk guion path asignacion rutaCompleja [$end]
+state 182 // rmdisk guion path asignacion rutaCompleja [$end]
 
     8 INSTRUCCION: rmdisk PARAMETRO_PATH .  [$end, cat, exec, fdisk, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
@@ -3558,7 +3607,7 @@ state 178 // rmdisk guion path asignacion rutaCompleja [$end]
     rmdisk   reduce using rule 8 (INSTRUCCION)
     unmount  reduce using rule 8 (INSTRUCCION)
 
-state 179 // mkdisk guion fit asignacion bf [$end]
+state 183 // mkdisk guion fit asignacion bf [$end]
 
     7 INSTRUCCION: mkdisk LST_MKDIS .  [$end, cat, exec, fdisk, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
    86 LST_MKDIS: LST_MKDIS . PARAMETRO_SIZE
@@ -3570,7 +3619,7 @@ state 179 // mkdisk guion fit asignacion bf [$end]
     cat      reduce using rule 7 (INSTRUCCION)
     exec     reduce using rule 7 (INSTRUCCION)
     fdisk    reduce using rule 7 (INSTRUCCION)
-    guion    shift, and goto state 184
+    guion    shift, and goto state 188
     login    reduce using rule 7 (INSTRUCCION)
     logout   reduce using rule 7 (INSTRUCCION)
     mkdir    reduce using rule 7 (INSTRUCCION)
@@ -3587,12 +3636,12 @@ state 179 // mkdisk guion fit asignacion bf [$end]
     rmdisk   reduce using rule 7 (INSTRUCCION)
     unmount  reduce using rule 7 (INSTRUCCION)
 
-    PARAMETRO_FIT   goto state 188
-    PARAMETRO_PATH  goto state 186
-    PARAMETRO_SIZE  goto state 185
-    PARAMETRO_UNIT  goto state 187
+    PARAMETRO_FIT   goto state 192
+    PARAMETRO_PATH  goto state 190
+    PARAMETRO_SIZE  goto state 189
+    PARAMETRO_UNIT  goto state 191
 
-state 180 // mkdisk guion size asignacion numero [$end]
+state 184 // mkdisk guion size asignacion numero [$end]
 
    90 LST_MKDIS: PARAMETRO_SIZE .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
@@ -3617,7 +3666,7 @@ state 180 // mkdisk guion size asignacion numero [$end]
     rmdisk   reduce using rule 90 (LST_MKDIS)
     unmount  reduce using rule 90 (LST_MKDIS)
 
-state 181 // mkdisk guion path asignacion rutaCompleja [$end]
+state 185 // mkdisk guion path asignacion rutaCompleja [$end]
 
    91 LST_MKDIS: PARAMETRO_PATH .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
@@ -3642,7 +3691,7 @@ state 181 // mkdisk guion path asignacion rutaCompleja [$end]
     rmdisk   reduce using rule 91 (LST_MKDIS)
     unmount  reduce using rule 91 (LST_MKDIS)
 
-state 182 // mkdisk guion unit asignacion k [$end]
+state 186 // mkdisk guion unit asignacion k [$end]
 
    92 LST_MKDIS: PARAMETRO_UNIT .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
@@ -3667,7 +3716,7 @@ state 182 // mkdisk guion unit asignacion k [$end]
     rmdisk   reduce using rule 92 (LST_MKDIS)
     unmount  reduce using rule 92 (LST_MKDIS)
 
-state 183 // mkdisk guion fit asignacion bf [$end]
+state 187 // mkdisk guion fit asignacion bf [$end]
 
    93 LST_MKDIS: PARAMETRO_FIT .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
@@ -3692,19 +3741,19 @@ state 183 // mkdisk guion fit asignacion bf [$end]
     rmdisk   reduce using rule 93 (LST_MKDIS)
     unmount  reduce using rule 93 (LST_MKDIS)
 
-state 184 // mkdisk guion
+state 188 // mkdisk guion
 
-   96 PARAMETRO_PATH: guion . path asignacion VALOR_PATH
-  100 PARAMETRO_SIZE: guion . size asignacion numero
-  109 PARAMETRO_UNIT: guion . unit asignacion VALOR_UNIT
-  116 PARAMETRO_FIT: guion . fit asignacion VALOR_FIT
+   97 PARAMETRO_PATH: guion . path asignacion VALOR_PATH
+  101 PARAMETRO_SIZE: guion . size asignacion numero
+  110 PARAMETRO_UNIT: guion . unit asignacion VALOR_UNIT
+  117 PARAMETRO_FIT: guion . fit asignacion VALOR_FIT
 
-    fit   shift, and goto state 147
+    fit   shift, and goto state 151
     path  shift, and goto state 26
     size  shift, and goto state 56
-    unit  shift, and goto state 145
+    unit  shift, and goto state 149
 
-state 185 // mkdisk guion fit asignacion bf guion size asignacion numero [$end]
+state 189 // mkdisk guion fit asignacion bf guion size asignacion numero [$end]
 
    86 LST_MKDIS: LST_MKDIS PARAMETRO_SIZE .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
@@ -3729,7 +3778,7 @@ state 185 // mkdisk guion fit asignacion bf guion size asignacion numero [$end]
     rmdisk   reduce using rule 86 (LST_MKDIS)
     unmount  reduce using rule 86 (LST_MKDIS)
 
-state 186 // mkdisk guion fit asignacion bf guion path asignacion rutaCompleja [$end]
+state 190 // mkdisk guion fit asignacion bf guion path asignacion rutaCompleja [$end]
 
    87 LST_MKDIS: LST_MKDIS PARAMETRO_PATH .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
@@ -3754,7 +3803,7 @@ state 186 // mkdisk guion fit asignacion bf guion path asignacion rutaCompleja [
     rmdisk   reduce using rule 87 (LST_MKDIS)
     unmount  reduce using rule 87 (LST_MKDIS)
 
-state 187 // mkdisk guion fit asignacion bf guion unit asignacion k [$end]
+state 191 // mkdisk guion fit asignacion bf guion unit asignacion k [$end]
 
    88 LST_MKDIS: LST_MKDIS PARAMETRO_UNIT .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
@@ -3779,7 +3828,7 @@ state 187 // mkdisk guion fit asignacion bf guion unit asignacion k [$end]
     rmdisk   reduce using rule 88 (LST_MKDIS)
     unmount  reduce using rule 88 (LST_MKDIS)
 
-state 188 // mkdisk guion fit asignacion bf guion fit asignacion bf [$end]
+state 192 // mkdisk guion fit asignacion bf guion fit asignacion bf [$end]
 
    89 LST_MKDIS: LST_MKDIS PARAMETRO_FIT .  [$end, cat, exec, fdisk, guion, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
@@ -3804,7 +3853,7 @@ state 188 // mkdisk guion fit asignacion bf guion fit asignacion bf [$end]
     rmdisk   reduce using rule 89 (LST_MKDIS)
     unmount  reduce using rule 89 (LST_MKDIS)
 
-state 189 // exec guion path asignacion rutaCompleja [$end]
+state 193 // exec guion path asignacion rutaCompleja [$end]
 
     6 INSTRUCCION: exec PARAMETRO_PATH .  [$end, cat, exec, fdisk, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 
@@ -3828,7 +3877,7 @@ state 189 // exec guion path asignacion rutaCompleja [$end]
     rmdisk   reduce using rule 6 (INSTRUCCION)
     unmount  reduce using rule 6 (INSTRUCCION)
 
-state 190 // logout logout [$end]
+state 194 // logout logout [$end]
 
     2 LISTA_INSTRUCCION: LISTA_INSTRUCCION INSTRUCCION .  [$end, cat, exec, fdisk, login, logout, mkdir, mkdisk, mkfile, mkfs, mkgrp, mkusr, mount, pause, rem, ren, rep, rmdisk, unmount]
 

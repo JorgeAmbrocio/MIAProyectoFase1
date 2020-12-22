@@ -45,6 +45,10 @@ func Ecat(p []Parametro) {
 	i.MatchParametros(p)
 	if i.Validar() {
 		fmt.Println("CAT")
+		if UsuarioActualLogueado.UID == 0 {
+			fmt.Println("\tDebes estar logueado para crear ejecutar CAT")
+			return
+		}
 		var contenidoFinal string = ""
 		for _, path := range i.paths {
 			// recorrer todas las rutas

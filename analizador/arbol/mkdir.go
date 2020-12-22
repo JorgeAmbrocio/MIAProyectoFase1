@@ -47,7 +47,12 @@ func Emkdir(p []Parametro) {
 
 func (i *mkdir) crearCarpeta() {
 	// recuperar el primer inodo
-	_, inodo := recuperarInodo(UsuarioActualLogueado.particion.path, UsuarioActualLogueado.particion.sp.InodeStart)
+	u := UsuarioActualLogueado
+	if UsuarioActualLogueado.UID == 0 {
+		fmt.Println("\tDebes estar logueado para crear directorios")
+		return
+	}
+	_, inodo := recuperarInodo(u.particion.path, u.particion.sp.InodeStart)
 	var indiceInodo = 0
 	// recorrer todas las carpetas
 	pathSplit := strings.Split(i.path, "/")
@@ -62,6 +67,11 @@ func (i *mkdir) crearCarpeta() {
 				// la carpeta no existe
 				if i.p == "p" {
 					// crear carpeta de manera forzada
+					if !tienePermiso(inodo, 'w') {
+						fmt.Println("\tNo tienes permisos de escritura en el directorio " + carpeta)
+						return
+					}
+
 					indiceCarpetaNueva := crearCarpetaEnInodo(int64(indiceInodo), inodo, UsuarioActualLogueado.particion, carpeta)
 					if indiceCarpetaNueva != -1 {
 						_, inodo = recuperarInodo(UsuarioActualLogueado.particion.path, UsuarioActualLogueado.particion.sp.InodeStart+int64(UsuarioActualLogueado.particion.sp.InodeSize)*int64(indiceCarpetaNueva))
