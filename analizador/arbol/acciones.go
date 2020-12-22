@@ -698,6 +698,10 @@ func fusionarEspaciosVacios(espacios EspaciosL) EspaciosL {
 
 /*CONTROL DE ARCHIVOS*/
 func getContenidoArchivo(inodo Inodo, particion ParticionMontada) (contenido string) {
+	if !tienePermiso(inodo, 'r') {
+		fmt.Println("No tienes permisos")
+		return ""
+	}
 	// recorrer los apuntadores del inodo
 	for indice, apuntador := range inodo.Block {
 		switch {
@@ -723,6 +727,11 @@ func escribirContenidoArchivo(contenido string, indiceInodo int64, particion *Pa
 
 	// recueprar el inodo
 	_, inodo := recuperarInodo(particion.path, particion.sp.InodeStart+int64(particion.sp.InodeSize)*indiceInodo)
+
+	if !tienePermiso(inodo, 'w') {
+		fmt.Println("No tienes permisos")
+		return
+	}
 
 	// recorrer todos los apuntadores para empezar a escribir
 	indiceCaracterEscribir := 0
@@ -827,12 +836,19 @@ func getUsuarioYGrupo(particion ParticionMontada) (map[string]UsuarioArchivo, ma
 
 func getContenidoArchivoUsuarios(particion ParticionMontada) string {
 	_, inodo := recuperarInodo(particion.path, particion.sp.InodeStart+1*int64(particion.sp.InodeSize))
+
 	contenidoArchivo := getContenidoArchivo(inodo, particion)
 
 	return contenidoArchivo
 }
 
-func getCarpetaFromInodo(nombreBuscar string, inodo Inodo, particion ParticionMontada) (int, int, int32) {
+func getCarpetaFromInodo(nombreBuscar string, inodo Inodo, particion ParticionMontada) (int32, int, int32) {
+
+	if !tienePermiso(inodo, 'r') {
+		fmt.Println("No tienes permisos")
+		return -1, -1, -1
+	}
+
 	// recorrer todos los apuntadores
 	for i, apuntador := range inodo.Block {
 		switch {
@@ -849,12 +865,13 @@ func getCarpetaFromInodo(nombreBuscar string, inodo Inodo, particion ParticionMo
 					// sì es el nombre de la carpeta
 					// retornar el apuntador y la carpeta
 					// indice apuntador del inodo,
-					return i, j, contenidoCarpeta.PointerInode
+					return apuntador, j, contenidoCarpeta.PointerInode
 				}
 			}
 			break
 		case i == 13:
 			// apuntador indirecto
+
 			break
 		case i == 14:
 			// apuntador indirecto doble
@@ -867,6 +884,11 @@ func getCarpetaFromInodo(nombreBuscar string, inodo Inodo, particion ParticionMo
 
 func crearArchivoEnInodo(indiceInodo int, inodo Inodo, particion *ParticionMontada, cantidadCaracteres int, nombre string) {
 	// buscar un apuntador libre para crear el archivo
+
+	if !tienePermiso(inodo, 'w') {
+		fmt.Println("No tienes permisos")
+		return
+	}
 
 	for indiceParaCarpeta, apuntador := range inodo.Block {
 		if apuntador != -1 {
@@ -911,7 +933,7 @@ func crearArchivoEnInodo(indiceInodo int, inodo Inodo, particion *ParticionMonta
 					}
 
 					escribirContenidoArchivo(contenido, int64(indiceInodoLibre), particion)
-					fmt.Println("Archivo creado con èxito :D, el programador està muy feliz")
+					//fmt.Println("Archivo creado con èxito :D, el programador està muy feliz")
 					return
 				}
 			}
@@ -966,6 +988,13 @@ func crearArchivoEnInodo(indiceInodo int, inodo Inodo, particion *ParticionMonta
 
 func crearCarpetaEnIndiceInodo(indiceInodo int64, inodo Inodo, indiceParaCarpeta int32, particion *ParticionMontada) (int32, BloqueCarpeta) {
 
+	if !tienePermiso(inodo, 'w') {
+		fmt.Println("Lo siento, bruh, tu mamà no te dio permiso")
+		blq := BloqueCarpeta{}
+		blq.iniciarPunteros()
+		return -1, blq
+	}
+
 	// obtener el bit en el que se puede crear la carpeta
 	indiceCarpeta := particion.sp.getNextIndiceBloque(*particion)
 
@@ -985,6 +1014,12 @@ func crearCarpetaEnIndiceInodo(indiceInodo int64, inodo Inodo, indiceParaCarpeta
 }
 
 func crearCarpetaEnInodo(indiceInodo int64, inodo Inodo, particion *ParticionMontada, nombreCarpeta string) (retorno int32) {
+
+	if !tienePermiso(inodo, 'w') {
+		fmt.Println("No tienes permisos")
+		return -1
+	}
+
 	for indiceParaCarpeta, apuntador := range inodo.Block {
 		if apuntador != -1 {
 			// ya existe un bloque de carpeta
@@ -1032,14 +1067,6 @@ func crearCarpetaEnInodo(indiceInodo int64, inodo Inodo, particion *ParticionMon
 					escribirBloqueCarpeta(particion.path, bloqueCarpeta2, particion.sp.BlockStart+int64(particion.sp.BlockSize)*int64(indiceCarpeta2))
 					escribirBloqueCarpeta(particion.path, bloqueCarpeta, particion.sp.BlockStart+int64(particion.sp.BlockSize)*int64(apuntador))
 					escribirInodo(particion.path, inodoNuevo, particion.sp.InodeStart+int64(particion.sp.InodeSize)*int64(indiceInodoLibre))
-
-					// ya se ha creado el inodo
-					// escribir el archivo
-
-					/*contenido := ""
-					for i := 0; i < cantidadCaracteres; i++ {
-						contenido += "1"
-					}*/
 
 					//escribirContenidoArchivo(contenido, int64(indiceInodoLibre), particion)
 					fmt.Println("Carpeta creada con èxito :D, el programador està muy feliz")
@@ -1100,4 +1127,209 @@ func crearCarpetaEnInodo(indiceInodo int64, inodo Inodo, particion *ParticionMon
 	}
 
 	return -1
+}
+
+func tienePermiso(inodo Inodo, accion byte) (retorno bool) {
+	// acciòn; R -> read; W -> write; X -> ejecutar; P -> reName, chmod;
+	retorno = false
+
+	// el usuario logueado es el root ?
+	if UsuarioActualLogueado.UID == 1 {
+		return true
+	}
+
+	// obtener tipo usuario
+	var tipoUsuario int = 2
+	switch {
+	case inodo.UID == UsuarioActualLogueado.UID:
+		tipoUsuario = 0
+		break
+	case inodo.GID == UsuarioActualLogueado.GUID:
+		tipoUsuario = 1
+		break
+	default:
+		tipoUsuario = 2
+	}
+
+	// verificar el permiso
+	switch inodo.Perm[tipoUsuario] {
+	case 7: // 111
+		retorno = true
+		break
+	case 6: // 110
+		retorno = accion == 'r' || accion == 'w'
+		break
+	case 5: // 101
+		retorno = accion == 'r' || accion == 'x'
+		break
+	case 4: // 100
+		retorno = accion == 'r'
+		break
+	case 3: // 011
+		retorno = accion == 'w' || accion == 'x'
+		break
+	case 2: // 010
+		retorno = accion == 'w'
+		break
+	case 1: // 001
+		retorno = accion == 'x'
+		break
+	case 0: // 000
+		retorno = false
+		break
+	}
+
+	return retorno
+}
+
+func removerDeCarpeta(indiceCarpeta int32, carpeta BloqueCarpeta, indiceInodo int32, inodo Inodo, particion *ParticionMontada) {
+	fmt.Println("no sirve")
+}
+
+func remove(iCarpeta int32, carpeta BloqueCarpeta, iEliminar int32, particion *ParticionMontada) {
+
+	if removeRecursivo(carpeta.Content[iEliminar].PointerInode, particion) {
+		// limpiar el bloque carpeta
+		carpeta.Content[iEliminar].Name = [12]byte{}
+		carpeta.Content[iEliminar].PointerInode = -1
+
+		// escribir la carpeta modificada
+		escribirBloqueCarpeta(particion.path, carpeta, particion.sp.BlockStart+int64(particion.sp.BlockSize)*int64(iCarpeta))
+	}
+
+}
+
+func removeRecursivo(punteroInodoEliminar int32, particion *ParticionMontada) (retorno bool) {
+	retorno = false
+	_, inodo := recuperarInodo(particion.path, particion.sp.InodeStart+int64(particion.sp.InodeSize)*int64(punteroInodoEliminar))
+
+	// verificar permisos para eliminar
+	if !tienePermiso(inodo, 'w') {
+		return false
+	}
+
+	if punteroInodoEliminar == 0 {
+		fmt.Println("No se puede eliminar la raìz")
+		return false
+	}
+
+	// identificar tipo de inodo
+	//_, bitMapInodo := recuperarBitMap(particion.path, particion.sp.BitMapInodeStart, int64(particion.sp.InodesCount))
+	//_, bitMapBlock := recuperarBitMap(particion.path, particion.sp.BitMapBlockStart, int64(particion.sp.BlocksCount))
+	switch inodo.Type {
+	case 0:
+		// es un inodo de carpetas
+		// recorrre bloqeu carpeta
+		var auxSiEliminar bool = true
+		for indice, apuntador := range inodo.Block {
+			switch {
+			case indice < 13 && apuntador != -1:
+				// recuperar blqoue carpeta
+				_, bloqueCarpeta := recuperarBloqueCarpeta(particion.path, particion.sp.BlockStart+int64(particion.sp.BlockSize)*int64(apuntador))
+
+				var contadorEliminados int = 0
+				for indice2, apuntadorCarpeta := range bloqueCarpeta.Content {
+					if apuntadorCarpeta.PointerInode != -1 {
+						// recorrer todos los punteros del bloque carpeta
+						if apuntadorCarpeta.Name[0] != '.' { // no es un apuntador a sì mismo ni padre
+							if removeRecursivo(apuntadorCarpeta.PointerInode, particion) {
+								// editar y guardar el bitmap
+								_, bitMapInodo := recuperarBitMap(particion.path, particion.sp.BitMapInodeStart, int64(particion.sp.InodesCount))
+								bitMapInodo[apuntadorCarpeta.PointerInode] = 0
+								// escribir bitmap de bloques
+								escribirBitMap(particion.path, bitMapInodo, particion.sp.BitMapInodeStart)
+
+								// limpiar el bloque carpeta
+								bloqueCarpeta.Content[indice2].PointerInode = -1
+								bloqueCarpeta.Content[indice2].Name = [12]byte{}
+								particion.sp.FreeBlocksCount++
+
+								contadorEliminados++
+							} else {
+								fmt.Println("No se pudo eliminar el archivo ")
+								auxSiEliminar = false
+							}
+						} else {
+							contadorEliminados++
+						}
+					} else {
+						contadorEliminados++
+					}
+				}
+				// escribir blqque carpeta editado
+				escribirBloqueCarpeta(particion.path, bloqueCarpeta, particion.sp.BlockStart+int64(particion.sp.BlockSize)*int64(apuntador))
+
+				if contadorEliminados == 4 {
+					// se eliminaron los 4 punteros
+					// eliminar el bloque carpeta
+
+					// eliminar el puntero del inodo hacia el bloque carpeta
+					inodo.Block[indice] = -1
+
+					// editar y guardar el bitmap
+					_, bitMapBlock := recuperarBitMap(particion.path, particion.sp.BitMapBlockStart, int64(particion.sp.BlocksCount))
+
+					bitMapBlock[apuntador] = 0
+					escribirBitMap(particion.path, bitMapBlock, particion.sp.BitMapBlockStart)
+				}
+				break
+			case indice == 13 && apuntador != -1:
+
+				break
+			case indice == 14 && apuntador != -1:
+
+				break
+			}
+		}
+
+		_, bitMapInodo := recuperarBitMap(particion.path, particion.sp.BitMapInodeStart, int64(particion.sp.InodesCount))
+		_, bitMapBlock := recuperarBitMap(particion.path, particion.sp.BitMapBlockStart, int64(particion.sp.BlocksCount))
+
+		// escribir el inodo de nuevo porque lo modificamos
+		escribirInodo(particion.path, inodo, particion.sp.InodeStart+int64(particion.sp.InodeSize)*int64(punteroInodoEliminar))
+
+		if auxSiEliminar {
+			// eliminar el inodo actual
+			particion.sp.FreeInodesCount++
+			bitMapInodo[punteroInodoEliminar] = 0
+
+			// limpiar en el bitmap de bloques el primer bloque porque nunca se eliminan los punteros Apadre y Actual
+			//bitMapBlock[inodo.Block[0]] = 0
+		}
+
+		// escribir bitmap de bloques
+		escribirBitMap(particion.path, bitMapBlock, particion.sp.BitMapBlockStart)
+		escribirBitMap(particion.path, bitMapInodo, particion.sp.BitMapInodeStart)
+		retorno = true
+		break
+	case 1:
+		// es un inodo de archivo
+
+		_, bitMapInodo := recuperarBitMap(particion.path, particion.sp.BitMapInodeStart, int64(particion.sp.InodesCount))
+		_, bitMapBlock := recuperarBitMap(particion.path, particion.sp.BitMapBlockStart, int64(particion.sp.BlocksCount))
+		for indice, apuntador := range inodo.Block {
+			switch {
+			case indice < 13 && apuntador != -1:
+				// recuperar blqoue archivo
+				bitMapBlock[apuntador] = 0
+				particion.sp.FreeBlocksCount++
+				break
+			case indice == 13 && apuntador != -1:
+
+				break
+			case indice == 14 && apuntador != -1:
+
+				break
+			}
+		}
+		// eliminar el inodo actual
+		bitMapInodo[punteroInodoEliminar] = 0
+
+		escribirBitMap(particion.path, bitMapBlock, particion.sp.BitMapBlockStart)
+		escribirBitMap(particion.path, bitMapInodo, particion.sp.BitMapInodeStart)
+		retorno = true
+		break
+	}
+
+	return retorno
 }

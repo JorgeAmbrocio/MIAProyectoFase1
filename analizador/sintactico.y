@@ -27,7 +27,7 @@ var auxPath string
 %token	asignacion, guion
 %token  exec, pause, mkdisk, rmdisk, fdisk, mount, unmount, mkfs
 %token  login, logout, mkgrp, rmgrp, mkusr, rmusr,chmod
-%token  mkfile, cat,rm, edit, ren, mkdir, cp, mv, find, chown
+%token  mkfile, cat,rem, edit, ren, mkdir, cp, mv, find, chown
 %token  chgrp, rep, path, size, name, unit, rtype, fit, delete
 %token  add, idn, id, tipo, usr, pwd, grp, ugo, r, p, cont
 %token  filen, rf, dest, k, m, e, l, bf,ff, wf, full, fast, rid
@@ -37,7 +37,7 @@ var auxPath string
 %type <value> asignacion, guion
 %type <value> exec, pause, mkdisk, rmdisk, fdisk, mount, unmount, mkfs
 %type <value> login, logout, mkgrp, rmgrp, mkusr, rmusr,chmod
-%type <value> mkfile, cat,rm, edit, ren, mkdir, cp, mv, find, chown
+%type <value> mkfile, cat,rem, edit, ren, mkdir, cp, mv, find, chown
 %type <value> chgrp, rep, path, size, name, unit, rtype, fit, delete
 %type <value> add, idn, id, tipo, usr, pwd, grp, ugo, r, p, cont
 %type <value> filen, rf, dest, k, m, e, l, bf,ff,wf, full, fast, rid
@@ -48,7 +48,7 @@ var auxPath string
 %type <value> PARAMETRO_DELETE, VALOR_DELETE, PARAMETRO_ADD, PARAMETRO_IDN
 %type <value> LST_FDISK, LST_MKDIS, LST_MOUNT,PARAMETRO_ID,LST_REP,PARAMETRO_TYPE_FS
 %type <value> LST_MKFS, LST_LOGIN,PARAMETRO_USR,PARAMETRO_PWD,LST_MKGRP,PARAMETRO_GRP
-%type <value> LST_MKUSR, LST_MKFILE, PARAMETRO_P,LST_MKDIR,PARAMETRO_RUTA
+%type <value> LST_MKUSR, LST_MKFILE, PARAMETRO_P,LST_MKDIR,PARAMETRO_RUTA,LST_REM
 
 
 %start INICIO
@@ -82,6 +82,12 @@ INSTRUCCION:
     |mkusr LST_MKUSR        { AddInstruccion("mkusr")}
     |mkfile LST_MKFILE      { AddInstruccion("mkfile")}
     |mkdir LST_MKDIR        { AddInstruccion("mkdir")}
+    |rem LST_REM            { AddInstruccion("rem")}
+;
+
+LST_REM:    
+    LST_REM PARAMETRO_PATH          { $$=$1+$2; AddParametro(); }
+    |PARAMETRO_PATH                 { $$=$1; AddParametro(); }
 ;
 
 LST_MKDIR:

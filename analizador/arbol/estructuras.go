@@ -66,6 +66,9 @@ func (i Instruccion) Ejecutar() {
 	case "mkdir":
 		Emkdir(i.Parametros)
 		break
+	case "rem":
+		Erem(i.Parametros)
+		break
 	default:
 		fmt.Println("No se reconoce la instrucción -> ", i.Tipo)
 	}
