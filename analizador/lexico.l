@@ -6,7 +6,7 @@ import (
     "bufio"
     "log"
     //"fmt"
-    //"strconv"
+    //"strconv" // contenido extrad
 )
 
 type yylexer struct{

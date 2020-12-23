@@ -104,7 +104,7 @@ func (i *recovery) recuperarSistema() {
 				accion.path = BytesToString(journal.Nombre[:])
 				accion.size = int(journal.Tipo)
 
-				accion.p = ByteToString(byte(journal.Tipo))
+				accion.p = ByteToString(byte(journal.Content[0]))
 				accion.crearArchivo()
 				break
 			case 4:
@@ -134,6 +134,11 @@ func (i *recovery) recuperarSistema() {
 			case 9:
 				break
 			case 10:
+				// chgrp
+				accion := chgrp{}
+				accion.usr = BytesToString(journal.Nombre[:])
+				accion.grupo = BytesToString(journal.Content[:])
+				accion.cambiarGrupo()
 				break
 			default:
 

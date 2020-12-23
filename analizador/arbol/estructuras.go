@@ -81,6 +81,9 @@ func (i Instruccion) Ejecutar() {
 	case "recovery":
 		Erecovery(i.Parametros)
 		break
+	case "chgrp":
+		Echgrp(i.Parametros)
+		break
 	default:
 		fmt.Println("No se reconoce la instrucción -> ", i.Tipo)
 	}

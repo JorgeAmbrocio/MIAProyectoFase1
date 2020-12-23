@@ -122,7 +122,7 @@ func (i *mkfile) crearArchivo() {
 		// crear archivo
 		crearArchivoEnInodo(int(indiceInodo), inodo, UsuarioActualLogueado.particion, i.size, pathSplit[len(pathSplit)-1])
 		// guardar el journal y terminar
-		guardarJournal(3, int32(i.size), i.path, "", [3]int8{}, UsuarioActualLogueado.particion)
+		guardarJournal(3, int32(i.size), i.path, i.p, [3]int8{}, UsuarioActualLogueado.particion)
 		fmt.Println("\tArchivo creado con èxito ")
 	} else {
 		fmt.Println("\tNecesitas estar logueado para crear archivos")

@@ -7,7 +7,7 @@ import (
     "bufio"
     "fmt"
     "log"
-    //"archivos/MIA-Proyecto1_201709454/analizador/arbol"
+    //"archivos/MIA-Proyecto1_201709454/analizador/arbol" // contenido extra
     "proyectos/MIAProyectoFase1/analizador/arbol"
     "os"
 )
@@ -88,6 +88,7 @@ INSTRUCCION:
     |rem LST_REM            { AddInstruccion("rem")}
     |cat LST_CAT            { AddInstruccion("cat")}
     |ren LST_REN            { AddInstruccion("ren")}
+    |chgrp LST_MKUSR        { AddInstruccion("chgrp")}
 ;
 
 LST_REN:
