@@ -19,13 +19,13 @@ func (i *mkusr) MatchParametros(lp []Parametro) {
 	for _, p := range lp {
 		switch strings.ToLower(p.Tipo) {
 		case "usr":
-			i.usr = (p.Valor)
+			i.usr = QuitarComillas(p.Valor)
 			break
 		case "pwd":
 			i.pwd = (p.Valor)
 			break
 		case "grp":
-			i.grupo = (p.Valor)
+			i.grupo = QuitarComillas(p.Valor)
 		}
 	}
 }
@@ -73,6 +73,9 @@ func (i *mkusr) crearUsuario() {
 				// añadir el nuevo contenido
 				contenido += strconv.Itoa(nuevoId) + ",U," + i.grupo + "," + i.usr + "," + i.pwd + "\n"
 				escribirContenidoArchivo(contenido, 1, UsuarioActualLogueado.particion)
+
+				// guardar el journal y terminar
+				guardarJournal(2, 0, i.usr+","+i.pwd+","+i.grupo, "", [3]int8{}, UsuarioActualLogueado.particion)
 				fmt.Println("\tUsuario creado con èxito.")
 			} else {
 				fmt.Println("El grupo no existe, no se podrà crear el usuario")

@@ -52,8 +52,8 @@ func (y *yylexer) Lex(lval *yySymType) int {
 numero              [0-9]+
 letra               [a-zñA-ZÑ_]
 id                  ({letra}|{numero})+
-archivo             {id}(".arch"|".dsk"|".jpg"|".disk"|".png"|".pdf"|".txt")
-rutaSimple          "/"({id}"/")*({archivo}?)
+archivo             {id}(".arch"|".dsk"|".jpg"|".disk"|".png"|".pdf"|".txt"|".svg")
+rutaSimple          "/"({id}("/")?)*({archivo}?)
 rutaCompleja        \"[^\"\n\t\r]*\"
 
 %%
@@ -113,16 +113,17 @@ rutaCompleja        \"[^\"\n\t\r]*\"
 [Rr][Ff]                    lval.value = string(y.buf); return rf
 [Dd][Ee][Ss][Tt]            lval.value = string(y.buf); return dest
 
-[Kk]                        lval.value = string(y.buf); return k
-[Mm]                        lval.value = string(y.buf); return m
-[Ee]                        lval.value = string(y.buf); return e
-[Ll]                        lval.value = string(y.buf); return l
-[Bb][Ff]                    lval.value = string(y.buf); return bf
-[Ff][Ff]                    lval.value = string(y.buf); return ff
-[Ww][Ff]                    lval.value = string(y.buf); return wf
-[Ff][Aa][Ss][Tt]            lval.value = string(y.buf); return fast
-[Ff][Uu][Ll][Ll]            lval.value = string(y.buf); return full
-
+[Kk]                                lval.value = string(y.buf); return k
+[Mm]                                lval.value = string(y.buf); return m
+[Ee]                                lval.value = string(y.buf); return e
+[Ll]                                lval.value = string(y.buf); return l
+[Bb][Ff]                            lval.value = string(y.buf); return bf
+[Ff][Ff]                            lval.value = string(y.buf); return ff
+[Ww][Ff]                            lval.value = string(y.buf); return wf
+[Ff][Aa][Ss][Tt]                    lval.value = string(y.buf); return fast
+[Ff][Uu][Ll][Ll]                    lval.value = string(y.buf); return full
+[Ll][Oo][Ss][Ss]                    lval.value = string(y.buf); return loss
+[Rr][Ee][Cc][Oo][Vv][Ee][Rr][Yy]    lval.value = string(y.buf); return recovery
 
 {numero}                    lval.value = string(y.buf); return numero
 {rutaSimple}                lval.value = string(y.buf); return rutaSimple

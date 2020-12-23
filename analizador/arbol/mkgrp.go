@@ -61,15 +61,16 @@ func (i mkgrp) crearGrupo() {
 					nuevoId = maxId + 1
 				}
 			}
-
 			// añadir el nuevo contenido
 			contenido += strconv.Itoa(nuevoId) + ",G," + i.name + "\n"
 			escribirContenidoArchivo(contenido, 1, UsuarioActualLogueado.particion)
+
+			// guardar el journal y terminar
+			guardarJournal(1, 0, i.name, "", [3]int8{}, UsuarioActualLogueado.particion)
 			fmt.Println("\tGrupo creado con èxito.")
 		} else {
 			fmt.Println("\tEl grupo \"" + i.name + "\" ya existe.")
 		}
-
 	} else {
 		fmt.Println("\tÈsta acciòn requiere de permisos nivel administrador.")
 	}

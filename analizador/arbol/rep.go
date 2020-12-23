@@ -191,6 +191,20 @@ func (i *rep) crearReporte() {
 
 			file.WriteString(contenido)
 			file.Close()
+		} else if i.name == "journaling" {
+			//var superBloque = particionMontada.sp
+			// recuperar el bitmap inodo
+
+			var contenido = getReporteJournal(particionMontada)
+
+			// crear el archivo
+			file, err := os.Create(i.path + ".dot")
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			file.WriteString(contenido)
+			file.Close()
 		}
 
 		// compilar el archivo creado
@@ -206,6 +220,11 @@ func (i *rep) crearReporte() {
 			}
 		} else if strings.Contains(i.path, ".pdf") {
 			comando := exec.Command("dot", i.path+".dot", "-Tpdf", "-o", i.path)
+			if err := comando.Run(); err != nil {
+				fmt.Println(err)
+			}
+		} else if strings.Contains(i.path, ".svg") {
+			comando := exec.Command("dot", i.path+".dot", "-Tsvg", "-o", i.path)
 			if err := comando.Run(); err != nil {
 				fmt.Println(err)
 			}
@@ -437,6 +456,10 @@ func getReporteInodos(bitmap []byte, particion ParticionMontada) (retorno string
 			// inodo activo, recueprar el inodo
 			_, inodo := recuperarInodo(particion.path, int64(particion.sp.InodeStart)+int64(particion.sp.InodeSize)*int64(indice))
 
+			// validar que sea un inodo activo
+			if inodo.UID == 0 {
+				continue
+			}
 			// crear el reporte inodo
 			retorno += getLabelInodoData(int32(indice), inodo)
 			if arrows != "" {
@@ -459,7 +482,9 @@ func getRecursiveTree(indiceInodo int32, particionMontada ParticionMontada) (lab
 	// obtener el inodo
 	var sp = particionMontada.sp
 	_, inodo := recuperarInodo(particionMontada.path, sp.InodeStart+int64(int64(sp.InodeSize)*int64(indiceInodo)))
-
+	if inodo.UID == 0 { //  validar que sea un inodo habilitado
+		return "", "", ""
+	}
 	nombreLabel := "nd_i" + strconv.Itoa(int(indiceInodo))
 	labels = getLabelInodo(indiceInodo, inodo)
 
@@ -626,7 +651,9 @@ func getRecursiveTreeBlock(indiceInodo int32, particionMontada ParticionMontada)
 	// obtener el inodo
 	var sp = particionMontada.sp
 	_, inodo := recuperarInodo(particionMontada.path, sp.InodeStart+int64(int64(sp.InodeSize)*int64(indiceInodo)))
-
+	if inodo.UID == 0 { //  validar que sea un inodo habilitado
+		return ""
+	}
 	if inodo.Type == 0 {
 		// es inodo de carpetas
 		for indice, bloque := range inodo.Block {
@@ -710,5 +737,39 @@ func getReporteFile(ruta string, particion *ParticionMontada) (retorno string) {
 	// ya tenemos el contenido
 	retorno = pathSplit[len(pathSplit)-1]
 	retorno += "\n" + contenidoArchivo
+	return retorno
+}
+
+func getReporteJournal(particion *ParticionMontada) (retorno string) {
+
+	retorno += "digraph g{\n\trankdir = LR;\n\tnode[shape = record, width = .1, heigth = .1, width = 1.5];\n\t"
+
+	arrows := ""
+
+	// RECORRER TODOS LOS BLQOUES DE TIPO JOURNAL
+	for indice := int32(0); indice < particion.sp.JournalCount; indice++ {
+		// recuperar bloque journal
+		_, journal := recuperarJournal(particion.path, indice, *particion)
+
+		retorno += "nd_j" + strconv.Itoa(int(indice)) +
+			"[label=\"<t>Journal : " + strconv.Itoa(int(indice)) +
+			"|Acciòn : " + strconv.Itoa(int(journal.TipoOperacion)) +
+			"|Tipo: " + strconv.Itoa(int(journal.Tipo)) +
+			"|nombre: " + BytesToString(journal.Nombre[:]) +
+			"|contenido: " + BytesToString(journal.Content[:]) +
+			"|fecha: " + BytesToString(journal.Fecha[:]) +
+			"|propietario: " + strconv.Itoa(int(journal.Propietario[0])) + strconv.Itoa(int(journal.Propietario[0])) +
+			"|permisos: " + BytesToString([]byte{6, 6, 4})
+		retorno += "\"]\n"
+		arrows += "nd_j" + strconv.Itoa(int(indice)) + " -> "
+	}
+
+	if len(arrows) > 4 {
+		arrows = arrows[:len(arrows)-4]
+	}
+
+	retorno += "\n\n"
+	retorno += arrows
+	retorno += "\n\n}"
 	return retorno
 }

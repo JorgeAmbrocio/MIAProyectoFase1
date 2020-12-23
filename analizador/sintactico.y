@@ -29,9 +29,9 @@ var auxPath string
 %token  login, logout, mkgrp, rmgrp, mkusr, rmusr,chmod
 %token  mkfile, cat,rem, edit, ren, mkdir, cp, mv, find, chown
 %token  chgrp, rep, path, size, name, unit, rtype, fit, delete
-%token  add, idn, id, tipo, usr, pwd, grp, ugo, r, p, cont
+%token  add, idn, id, tipo, usr, pwd, grp, ugo, r, p, cont,loss
 %token  filen, rf, dest, k, m, e, l, bf,ff, wf, full, fast, rid
-%token  numero, rutaSimple, rutaCompleja, archivo,rruta
+%token  numero, rutaSimple, rutaCompleja, archivo,rruta,recovery
 
 %type <value> INICIO
 %type <value> asignacion, guion
@@ -39,9 +39,9 @@ var auxPath string
 %type <value> login, logout, mkgrp, rmgrp, mkusr, rmusr,chmod
 %type <value> mkfile, cat,rem, edit, ren, mkdir, cp, mv, find, chown
 %type <value> chgrp, rep, path, size, name, unit, rtype, fit, delete
-%type <value> add, idn, id, tipo, usr, pwd, grp, ugo, r, p, cont
+%type <value> add, idn, id, tipo, usr, pwd, grp, ugo, r, p, cont,loss
 %type <value> filen, rf, dest, k, m, e, l, bf,ff,wf, full, fast, rid
-%type <value>  numero, rutaSimple, rutaCompleja, archivo,rruta
+%type <value>  numero, rutaSimple, rutaCompleja, archivo,rruta, recovery
 %type <value> INSTRUCCION, LISTA_INSTRUCCION, PARAMETRO_PATH, VALOR_PATH
 %type <value> PARAMETRO_SIZE, PARAMETRO_NAME, VALOR_NAME, PARAMETRO_UNIT, VALOR_UNIT 
 %type <value> PARAMETRO_TYPE, VALOR_TYPE, PARAMETRO_FIT, VALOR_FIT
@@ -72,10 +72,12 @@ INSTRUCCION:
     |logout                 {AddInstruccion("logout");}
     |exec PARAMETRO_PATH    { EjecutarExec(); }
     |mkdisk LST_MKDIS       { AddInstruccion("mkdisk"); }
-    |rmdisk PARAMETRO_PATH  { AddParametro(); AddInstruccion("rmdisk"); }
     |fdisk LST_FDISK        { AddInstruccion("fdisk"); }
     |mount LST_MOUNT        { AddInstruccion("mount"); }
     |unmount PARAMETRO_ID   { AddParametro(); AddInstruccion("unmount"); }
+    |rmdisk PARAMETRO_PATH  { AddParametro(); AddInstruccion("rmdisk"); }
+    |loss  PARAMETRO_ID     { AddParametro(); AddInstruccion("loss"); }
+    |recovery  PARAMETRO_ID  { AddParametro(); AddInstruccion("recovery"); }
     |rep LST_REP            { AddInstruccion("rep"); }
     |mkfs LST_MKFS          { AddInstruccion("mkfs")}
     |login LST_LOGIN        { AddInstruccion("login")}
@@ -203,8 +205,8 @@ LST_MKDIS:
 ;
 
 PARAMETRO_GRP:
-    guion name asignacion rutaCompleja { $$=$1+$2+$3+$4; CrearParametro($2,$4);}
-    |guion grp asignacion id { $$=$1+$2+$3+$4; CrearParametro($2,$4);}
+    guion name asignacion VALOR_NAME { $$=$1+$2+$3+$4; CrearParametro($2,$4);}
+    |guion grp asignacion VALOR_NAME { $$=$1+$2+$3+$4; CrearParametro($2,$4);}
 ;
 
 PARAMETRO_FILEN:
@@ -248,7 +250,8 @@ PARAMETRO_PWD:
 ;
 
 PARAMETRO_USR:
-    guion usr asignacion id { $$=$1+$2+$3+$4; CrearParametro($2,$4);}
+    guion usr asignacion VALOR_NAME { $$=$1+$2+$3+$4; CrearParametro($2,$4);}
+    
 ;
 
 PARAMETRO_UNIT:

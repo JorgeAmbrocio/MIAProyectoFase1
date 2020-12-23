@@ -189,7 +189,8 @@ func escribirJournal(path string, jn Journaling, seek int64) {
 	WriteNextBytes(file, binario.Bytes())
 }
 
-func recuperarJournal(path string, seek int64) (bool, Journaling) {
+func recuperarJournal(path string, indice int32, particion ParticionMontada) (bool, Journaling) {
+	seek := particion.Start + int64(binary.Size(particion.sp)) + int64(binary.Size(Journaling{}))*int64(indice)
 	// recuperar mbr
 	// abrir archivo
 	file, err := os.OpenFile(path, os.O_RDWR, 0777)
@@ -972,7 +973,7 @@ func crearArchivoEnInodo(indiceInodo int, inodo Inodo, particion *ParticionMonta
 					}
 
 					escribirContenidoArchivo(contenido, int64(indiceInodoLibre), particion)
-					fmt.Println("Archivo creado con èxito :D, el programador està muy feliz")
+					//fmt.Println("Archivo creado con èxito :D, el programador està muy feliz")
 					return
 				}
 			}
@@ -1063,7 +1064,7 @@ func crearCarpetaEnInodo(indiceInodo int64, inodo Inodo, particion *ParticionMon
 					escribirInodo(particion.path, inodoNuevo, particion.sp.InodeStart+int64(particion.sp.InodeSize)*int64(indiceInodoLibre))
 
 					//escribirContenidoArchivo(contenido, int64(indiceInodoLibre), particion)
-					fmt.Println("Carpeta creada con èxito :D, el programador està muy feliz")
+					//fmt.Println("Carpeta creada con èxito :D, el programador està muy feliz")
 					return retorno
 				}
 			}
@@ -1113,7 +1114,7 @@ func crearCarpetaEnInodo(indiceInodo int64, inodo Inodo, particion *ParticionMon
 					escribirBloqueCarpeta(particion.path, bloqueCarpeta, particion.sp.BlockStart+int64(particion.sp.BlockSize)*int64(apuntadorCarpeta))
 					escribirInodo(particion.path, inodoNuevo, particion.sp.InodeStart+int64(particion.sp.InodeSize)*int64(indiceInodoLibre))
 
-					fmt.Println("Carpeta creada con èxito :D, el programador està muy feliz")
+					//fmt.Println("Carpeta creada con èxito :D, el programador està muy feliz")
 					return indiceInodoLibre
 				}
 			}

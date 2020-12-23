@@ -6,8 +6,9 @@ import (
 )
 
 type mkfs struct {
-	Id   string
-	Type string
+	Id         string
+	Type       string
+	EsRecovery bool
 }
 
 // MatchParametros adjudica los parámetros en lista
@@ -48,16 +49,19 @@ func (i *mkfs) CrearSistemaDeArchivos() {
 	if exito, particionMontada := RecuperarParticionMontada(i.Id); exito {
 		// sì se encontrò la particiòn
 		// ejecutar el formato
-		if i.Type == "full" {
-			WriteCeros(particionMontada.path, particionMontada.Start, particionMontada.Start+particionMontada.Size)
+		if !i.EsRecovery {
+			if i.Type == "full" {
+				WriteCeros(particionMontada.path, particionMontada.Start, particionMontada.Start+particionMontada.Size)
+			}
+			// escribir el super boque
+			particionMontada.sp = crearSuperBloque(*particionMontada)
+			particionMontada.sp.FirstBlock = 2
+			particionMontada.sp.FirstInode = 2
+			particionMontada.sp.FreeInodesCount -= 2
+			particionMontada.sp.FreeBlocksCount -= 2
+			escribirSuperBloque(particionMontada.path, particionMontada.sp, particionMontada.Start)
+
 		}
-		// escribir el super boque
-		particionMontada.sp = crearSuperBloque(*particionMontada)
-		particionMontada.sp.FirstBlock = 2
-		particionMontada.sp.FirstInode = 2
-		particionMontada.sp.FreeInodesCount -= 2
-		particionMontada.sp.FreeBlocksCount -= 2
-		escribirSuperBloque(particionMontada.path, particionMontada.sp, particionMontada.Start)
 
 		// crear primer inodo
 		inodo := Inodo{

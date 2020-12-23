@@ -70,6 +70,8 @@ func Eren(p []Parametro) {
 			bloqueCarpeta.Content[indiceCarpeta].Name = auxName
 			// escribir nuevamente los bloques
 			escribirBloqueCarpeta(UsuarioActualLogueado.particion.path, bloqueCarpeta, UsuarioActualLogueado.particion.sp.BlockStart+int64(UsuarioActualLogueado.particion.sp.BlockSize)*int64(pointerCarpeta))
+			// guardar el journal y terminar
+			guardarJournal(6, int32(0), i.path, i.name, [3]int8{}, UsuarioActualLogueado.particion)
 			fmt.Println("\tTermiando con èxito")
 		}
 	}

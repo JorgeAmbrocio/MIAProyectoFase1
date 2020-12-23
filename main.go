@@ -20,7 +20,7 @@ func main() {
 
 		//text := bufio.NewReader(os.Stdin)
 		//texto, _ := text.ReadString('\n')
-		texto := "exec -path->/home/fase2.arch \n"
+		texto := "exec -path->/home/test2.arch \n"
 		yyParse(newLexer(bufio.NewReader(strings.NewReader(texto))))
 
 		ast := lAST[len(lAST)-1]

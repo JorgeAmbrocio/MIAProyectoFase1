@@ -53,7 +53,7 @@ func (i *mkdir) crearCarpeta() {
 		return
 	}
 	_, inodo := recuperarInodo(u.particion.path, u.particion.sp.InodeStart)
-	var indiceInodo = 0
+	var indiceInodo = int64(0)
 	// recorrer todas las carpetas
 	pathSplit := strings.Split(i.path, "/")
 	for indice, carpeta := range pathSplit {
@@ -63,19 +63,23 @@ func (i *mkdir) crearCarpeta() {
 			if iInodoCarpetaSiguiente != -1 {
 				// la carpeta existe
 				_, inodo = recuperarInodo(UsuarioActualLogueado.particion.path, UsuarioActualLogueado.particion.sp.InodeStart+int64(UsuarioActualLogueado.particion.sp.InodeSize)*int64(iInodoCarpetaSiguiente))
+				indiceInodo = int64(iInodoCarpetaSiguiente)
+				if !tienePermiso(inodo, 'r') {
+					fmt.Println("\tNo tienes permisos de lectura en el directorio " + carpeta)
+					return
+				}
 			} else {
 				// la carpeta no existe
-				if i.p == "p" {
+				if i.p == "p" || indice == len(pathSplit)-1 {
 					// crear carpeta de manera forzada
 					if !tienePermiso(inodo, 'w') {
 						fmt.Println("\tNo tienes permisos de escritura en el directorio " + carpeta)
 						return
 					}
-
 					indiceCarpetaNueva := crearCarpetaEnInodo(int64(indiceInodo), inodo, UsuarioActualLogueado.particion, carpeta)
 					if indiceCarpetaNueva != -1 {
 						_, inodo = recuperarInodo(UsuarioActualLogueado.particion.path, UsuarioActualLogueado.particion.sp.InodeStart+int64(UsuarioActualLogueado.particion.sp.InodeSize)*int64(indiceCarpetaNueva))
-
+						fmt.Println("\tCarpeta creada con èxito " + carpeta)
 					}
 				} else {
 					// mostrar error porque la ruta no es vàlida
@@ -85,4 +89,8 @@ func (i *mkdir) crearCarpeta() {
 			}
 		}
 	}
+
+	// guardar el journal y terminar
+	guardarJournal(4, int32(byte(i.p[0])), i.path, "", [3]int8{}, UsuarioActualLogueado.particion)
+
 }

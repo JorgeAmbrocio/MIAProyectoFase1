@@ -75,6 +75,12 @@ func (i Instruccion) Ejecutar() {
 	case "ren":
 		Eren(i.Parametros)
 		break
+	case "loss":
+		Eloss(i.Parametros)
+		break
+	case "recovery":
+		Erecovery(i.Parametros)
+		break
 	default:
 		fmt.Println("No se reconoce la instrucción -> ", i.Tipo)
 	}
@@ -150,6 +156,7 @@ type SuperBlock struct {
 	BitMapBlockStart int64
 	InodeStart       int64
 	BlockStart       int64
+	JournalCount     int32
 }
 
 type Inodo struct {
@@ -182,14 +189,14 @@ type BloqueApuntadores struct {
 }
 
 type Journaling struct {
-	TipoOperacion byte
-	Tipo          byte
-	Nombre        [12]byte
-	Contenid      [64]byte
+	TipoOperacion int16 // 1-12
+	Tipo          int32
+	Nombre        [160]byte
+	Content       [160]byte
 	//Content     []byte
 	Fecha       [20]byte
-	Propietario [2]byte // uid, gid
-	Permisos    [3]int8 //
+	Propietario [2]int32 // uid, gid
+	Permisos    [3]int8  // propietario, grupos, otros
 }
 
 /*USUARIO*/
