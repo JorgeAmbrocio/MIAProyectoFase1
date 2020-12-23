@@ -125,7 +125,7 @@ func (i *recovery) recuperarSistema() {
 				accion := ren{}
 				accion.path = BytesToString(journal.Nombre[:])
 				accion.name = BytesToString(journal.Content[:])
-
+				accion.rename()
 				break
 			case 7:
 				break
@@ -144,6 +144,7 @@ func (i *recovery) recuperarSistema() {
 	}
 
 	UsuarioActualLogueado = auxUsuarioActivo
+	activoJournal = true
 }
 
 func guardarJournal(
