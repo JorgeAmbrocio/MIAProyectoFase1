@@ -532,6 +532,7 @@ func getRecursiveTree(indiceInodo int32, particionMontada ParticionMontada) (lab
 			} else if indice == 13 && bloque != -1 {
 				// llamar al bloque indirecto
 				// por cada indirecto llamar a cada carpeta
+
 			} else if indice == 14 && bloque != -1 {
 				// por cada apuntador del indirecto, llamar al segundo bloque indirecto
 				//por cada indirectsecundario llamar a carpetas llamar a recursivas
@@ -547,11 +548,45 @@ func getRecursiveTree(indiceInodo int32, particionMontada ParticionMontada) (lab
 
 				labels += labelT
 				arrows += nombreLabel + ":a" + strconv.Itoa(indice) + " -> " + nombre + ":p\n"
+			} else if indice == 13 && bloque != -1 {
+				// recueprar bloque indirecto
+				_, bloqueIndirecto := recuperarBloqueIndirecto(&particionMontada, int64(bloque))
+
+				nombreIndirecto, labelT := getLabelIndirecto(bloque, bloqueIndirecto)
+				labels += labelT
+				arrows += nombreLabel + ":a" + strconv.Itoa(indice) + " -> nd_bi" + strconv.Itoa(int(bloque)) + ":p\n"
+
+				// recorer apuntadores indirecto
+				for indice2, apuntador2 := range bloqueIndirecto.Apuntadores {
+					if apuntador2 != -1 {
+						// obtener el bloque archivo
+						_, bloqueArchivo := recuperarBloqueArchivo(particionMontada.path, sp.BlockStart+int64(sp.BlockSize)*int64(apuntador2))
+						nombre, labelT := getLabelArchivo(apuntador2, bloqueArchivo)
+
+						labels += labelT
+						arrows += nombreIndirecto + ":a" + strconv.Itoa(indice2) + " -> " + nombre + ":p\n"
+					}
+				}
+
 			}
 		}
 	}
 
 	return labels, arrows, nombreLabel
+}
+
+func getLabelIndirecto(indiceIndirecto int32, indirecto BloqueApuntadores) (string, string) {
+	strIndice := strconv.Itoa(int(indiceIndirecto))
+	retorno := "nd_bi" + strIndice +
+		"[label=\"<t>indirecto: " + strIndice
+
+	for indice, bloque := range indirecto.Apuntadores {
+		strI := strconv.Itoa(indice)
+		retorno += "|<a" + strI + ">a" + strI + ": " + strconv.Itoa(int(bloque))
+	}
+
+	retorno += "\"]\n"
+	return ("nd_bi" + strIndice), retorno
 }
 
 func getLabelInodo(indiceInodo int32, inodo Inodo) string {

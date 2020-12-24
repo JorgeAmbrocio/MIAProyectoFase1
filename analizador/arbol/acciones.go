@@ -445,6 +445,49 @@ func recuperarBloqueCarpeta(path string, seek int64) (bool, BloqueCarpeta) {
 	return true, sp
 }
 
+func escribirBloqueIndirecto(particion *ParticionMontada, bloqueIndirecto BloqueApuntadores, iBloqueIndirecto int32) {
+	// recuperar mbr
+	// abrir archivo
+	file, err := os.OpenFile(particion.path, os.O_RDWR, 0777)
+	defer file.Close()
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	// escribir la estructura
+	seek := particion.sp.BlockStart + int64(particion.sp.BlockSize)*int64(iBloqueIndirecto)
+	file.Seek(seek, 0)
+	var binario bytes.Buffer
+	binary.Write(&binario, binary.BigEndian, &bloqueIndirecto)
+	WriteNextBytes(file, binario.Bytes())
+}
+
+func recuperarBloqueIndirecto(particion *ParticionMontada, iBloqueIndirecto int64) (bool, BloqueApuntadores) {
+
+	// recuperar mbr
+	// abrir archivo
+	file, err := os.OpenFile(particion.path, os.O_RDWR, 0777)
+	defer file.Close()
+	if err != nil {
+		log.Fatal(err)
+	}
+	// preparar estructura mbr
+	sp := BloqueApuntadores{}
+	//ebr.Size = -1
+	seek := particion.sp.BlockStart + int64(particion.sp.BlockSize)*int64(iBloqueIndirecto)
+	file.Seek(seek, 0)
+	var tamano = binary.Size(sp)
+	datos := ReadNextBytes(file, tamano)
+	buffer := bytes.NewBuffer(datos)
+	err = binary.Read(buffer, binary.BigEndian, &sp)
+	if err != nil {
+		fmt.Println(err)
+		return false, sp
+	}
+
+	return true, sp
+}
+
 func (ii *BloqueCarpeta) iniciarPunteros() {
 	for i := 0; i < 4; i++ {
 		ii.Content[i].PointerInode = -1
@@ -555,6 +598,12 @@ func getFechaByte() [20]byte {
 
 	copy(fechab[:], fechastr)
 	return fechab
+}
+
+func (i *BloqueApuntadores) iniciarApuntadores() {
+	for indice, _ := range i.Apuntadores {
+		i.Apuntadores[indice] = -1
+	}
 }
 
 /*problemas con nulos en array de bytes*/
@@ -709,6 +758,18 @@ func getContenidoArchivo(inodo Inodo, particion ParticionMontada) (contenido str
 			break
 		case indice == 13 && apuntador != -1:
 			// apuntador indirecto
+			// recuperar el bloque indirecto
+			_, bloqueIndirecto := recuperarBloqueIndirecto(&particion, int64(apuntador))
+			// recorrer las posiciones del bloque indirecto
+			for _, apuntador2 := range bloqueIndirecto.Apuntadores {
+				// verificar que el aputnador tenga contenido
+				if apuntador2 != -1 {
+					// recueprar bloque archivo
+					_, bloqueArchivo := recuperarBloqueArchivo(particion.path, particion.sp.BlockStart+int64(particion.sp.BlockSize)*int64(apuntador2))
+					contenido2 := BytesToString(bloqueArchivo.Content[:])
+					contenido += contenido2
+				}
+			}
 			break
 		case indice == 14 && apuntador != -1:
 			// apuntador indirecto doble
@@ -735,7 +796,6 @@ func escribirContenidoArchivo(contenido string, indiceInodo int64, particion *Pa
 		if indiceCaracterEscribir < len(contenido)-1 {
 			switch {
 			case indice <= 12:
-
 				if apuntador != -1 {
 					// apuntadores directos con contenido
 					// reescribr el bloque
@@ -775,6 +835,57 @@ func escribirContenidoArchivo(contenido string, indiceInodo int64, particion *Pa
 				break
 			case indice == 13:
 				// apuntador indirecto
+				var iBloqueIndirecto = apuntador
+				if apuntador == -1 {
+					iBloqueIndirecto = crearBloqueIndirectoEnInodo(particion)
+					inodo.Block[13] = iBloqueIndirecto // apuntar el inodo al nuevo bloque
+				}
+				// ya deberìa estar creado el bloque de apuntadores indirectos
+
+				// recorrer el bloque indirecto para entontrar apuntador vacìo
+				_, bloqueIndirecto := recuperarBloqueIndirecto(particion, int64(iBloqueIndirecto))
+				for indice2, apuntador2 := range bloqueIndirecto.Apuntadores {
+					if indiceCaracterEscribir >= len(contenido)-1 {
+						break
+					}
+
+					if apuntador2 != -1 {
+						// apuntadores directos con contenido
+						// reescribr el bloque
+						// OBTENER EL BLOQUE ARCHIVO
+						_, bloqueArchivo := recuperarBloqueArchivo(particion.path, particion.sp.BlockStart+int64(particion.sp.BlockSize)*int64(apuntador2))
+						bloqueArchivo.Content = [64]byte{} // limpiar el contenido anterior
+
+						var cantidadCaracteres = len(contenido) //- indiceCaracterEscribir
+						if cantidadCaracteres > indiceCaracterEscribir+63 {
+							cantidadCaracteres = indiceCaracterEscribir + 63
+						}
+						copy(bloqueArchivo.Content[:], contenido[indiceCaracterEscribir:cantidadCaracteres])
+						indiceCaracterEscribir += 63
+						escribirBloqueArchivo(particion.path, bloqueArchivo, particion.sp.BlockStart+int64(particion.sp.BlockSize)*int64(apuntador2))
+
+					} else {
+						// apuntadores directos vacìos
+						// buscar un nuevo bloque en bitmap para añadir el contenido extra
+						apuntador3 := particion.sp.FirstBlock
+						bloqueIndirecto.Apuntadores[indice2] = apuntador3
+						// encontrar nuevo bloque vacìo
+						_, bitmap := recuperarBitMap(particion.path, particion.sp.BitMapBlockStart, int64(particion.sp.BlocksCount))
+						bitmap[apuntador3] = 1 // indicar que èste bit serà utilizado
+						particion.sp.encontrarSiguienteBloqueLibre(bitmap)
+						escribirBitMap(particion.path, bitmap, particion.sp.BitMapBlockStart)
+
+						bloqueArchivo := BloqueArchivo{}        // crear nuevo bloque
+						var cantidadCaracteres = len(contenido) //- indiceCaracterEscribir
+						if cantidadCaracteres > indiceCaracterEscribir+63 {
+							cantidadCaracteres = indiceCaracterEscribir + 63
+						}
+						copy(bloqueArchivo.Content[:], contenido[indiceCaracterEscribir:cantidadCaracteres])
+						indiceCaracterEscribir += 63
+						escribirBloqueArchivo(particion.path, bloqueArchivo, particion.sp.BlockStart+int64(particion.sp.BlockSize)*int64(apuntador3))
+					}
+				}
+				escribirBloqueIndirecto(particion, bloqueIndirecto, iBloqueIndirecto)
 				break
 			case indice == 14:
 				// apuntador indirecto doble
@@ -800,6 +911,17 @@ func escribirContenidoArchivo(contenido string, indiceInodo int64, particion *Pa
 
 	// escribir los nuevos datos
 	escribirInodo(particion.path, inodo, particion.sp.InodeStart+int64(particion.sp.InodeSize)*indiceInodo)
+}
+
+func crearBloqueIndirectoEnInodo(particion *ParticionMontada) (iBloqueIndirecto int32) {
+	iBloqueIndirecto = particion.sp.getNextIndiceBloque(*particion)
+	bloqueIndirecto := BloqueApuntadores{}
+	bloqueIndirecto.iniciarApuntadores()
+
+	// ESCRIBIR EN ARCHIVO EL BLOQUE
+	escribirBloqueIndirecto(particion, bloqueIndirecto, iBloqueIndirecto)
+
+	return iBloqueIndirecto
 }
 
 /*USUARIOS*/
@@ -1016,7 +1138,7 @@ func crearCarpetaEnInodo(indiceInodo int64, inodo Inodo, particion *ParticionMon
 	}
 
 	for indiceParaCarpeta, apuntador := range inodo.Block {
-		if apuntador != -1 {
+		if apuntador != -1 && indiceParaCarpeta < 13 {
 			// ya existe un bloque de carpeta
 			// recorrer todos los apuntadores de carpeta
 			_, bloqueCarpeta := recuperarBloqueCarpeta(particion.path, particion.sp.BlockStart+int64(particion.sp.BlockSize)*int64(apuntador))
@@ -1068,7 +1190,7 @@ func crearCarpetaEnInodo(indiceInodo int64, inodo Inodo, particion *ParticionMon
 					return retorno
 				}
 			}
-		} else {
+		} else if apuntador == -1 && indiceParaCarpeta < 13 {
 			// no existe un bloque carpeta
 			// crear un bloque nuevo de carpeta
 			apuntadorCarpeta, bloqueCarpeta := crearCarpetaEnIndiceInodo(int64(indiceInodo), inodo, int32(indiceParaCarpeta), particion)
@@ -1209,8 +1331,6 @@ func removeRecursivo(punteroInodoEliminar int32, particion *ParticionMontada) (r
 	}
 
 	// identificar tipo de inodo
-	//_, bitMapInodo := recuperarBitMap(particion.path, particion.sp.BitMapInodeStart, int64(particion.sp.InodesCount))
-	//_, bitMapBlock := recuperarBitMap(particion.path, particion.sp.BitMapBlockStart, int64(particion.sp.BlocksCount))
 	switch inodo.Type {
 	case 0:
 		// es un inodo de carpetas
@@ -1310,7 +1430,22 @@ func removeRecursivo(punteroInodoEliminar int32, particion *ParticionMontada) (r
 				particion.sp.FreeBlocksCount++
 				break
 			case indice == 13 && apuntador != -1:
+				// eliminar el apuntador indirecto simple
+				// recuperar el bloque indirecto
+				_, bloqueIndirecto := recuperarBloqueIndirecto(particion, int64(apuntador))
+				for _, apuntador2 := range bloqueIndirecto.Apuntadores {
+					// recorrer todos los apuntadores
+					if apuntador2 != -1 {
+						// verificar si el apuntador està activo
+						// limpiar en bitmap
+						bitMapBlock[apuntador2] = 0
+						particion.sp.FreeBlocksCount++
+						// colocar el apuntador en -1
+						//bloqueIndirecto.Apuntadores[indice2] = -1
+					}
+				}
 
+				//escribirBloqueIndirecto(particion, bloqueIndirecto, apuntador)
 				break
 			case indice == 14 && apuntador != -1:
 
