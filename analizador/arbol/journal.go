@@ -128,10 +128,17 @@ func (i *recovery) recuperarSistema() {
 				accion.rename()
 				break
 			case 7:
+				// chmod
 				break
 			case 8:
+				// mv
+				accion := mv{}
+				accion.path = BytesToString(journal.Nombre[:])
+				accion.dest = BytesToString(journal.Content[:])
+				accion.mover()
 				break
 			case 9:
+				// chown
 				break
 			case 10:
 				// chgrp
