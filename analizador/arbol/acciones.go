@@ -1358,3 +1358,33 @@ func encontrarArchivo(path string, particion ParticionMontada) (inodo Inodo, poi
 	}
 	return inodo, pointerInodo, pointerCarpeta, indiceCarpeta
 }
+
+func encontrarArchivoConPermiso(path string, particion ParticionMontada) (inodo Inodo, pointerInodo int32, pointerCarpeta int32, indiceCarpeta int32) {
+	// recuperar el primer inodo
+	_, inodo = recuperarInodo(UsuarioActualLogueado.particion.path, UsuarioActualLogueado.particion.sp.InodeStart)
+	// recorrer todas las carpetas
+	pathSplit := strings.Split(path, "/")
+	for indice, carpeta := range pathSplit {
+		if indice != 0 && indice != (len(pathSplit)) {
+			// recuperar carpeta del inodo
+			apuntadorCarpeta, indiceApuntadorCarpeta, iInodoCarpetaSiguiente := getCarpetaFromInodo(carpeta, inodo, *UsuarioActualLogueado.particion)
+			pointerCarpeta = apuntadorCarpeta
+			indiceCarpeta = int32(indiceApuntadorCarpeta)
+			pointerInodo = iInodoCarpetaSiguiente
+			if iInodoCarpetaSiguiente != -1 {
+				// la carpeta existe
+				_, inodo = recuperarInodo(UsuarioActualLogueado.particion.path, UsuarioActualLogueado.particion.sp.InodeStart+int64(UsuarioActualLogueado.particion.sp.InodeSize)*int64(iInodoCarpetaSiguiente))
+				if !tienePermiso(inodo, 'r') {
+					fmt.Println("No tienes permiso para leer èsta carpeta " + carpeta)
+					return Inodo{}, -1, -1, -1
+				}
+			} else {
+				// la carpeta no existe
+				// mostrar error porque la ruta no es vàlida
+				fmt.Println("\tNo se ha encontrado el directorio " + carpeta)
+				return Inodo{}, -1, -1, -1
+			}
+		}
+	}
+	return inodo, pointerInodo, pointerCarpeta, indiceCarpeta
+}

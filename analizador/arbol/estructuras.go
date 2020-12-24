@@ -8,12 +8,6 @@ import (
 
 // ESTRUCTURAS PARA EL FUNCIONAMIENTO DEL AST
 
-// Instruccion unidad contenedora de datos a ejecutar
-type Instruccion struct {
-	Tipo       string
-	Parametros []Parametro
-}
-
 // Ejecutar identifica el tipo de instrucción
 // luego la manda a ejecutar según sea el caso
 func (i Instruccion) Ejecutar() {
@@ -83,10 +77,20 @@ func (i Instruccion) Ejecutar() {
 		break
 	case "chgrp":
 		Echgrp(i.Parametros)
+	case "mv":
+		Emv(i.Parametros)
 		break
+	case " ":
+	case "":
 	default:
 		fmt.Println("No se reconoce la instrucción -> ", i.Tipo)
 	}
+}
+
+// Instruccion unidad contenedora de datos a ejecutar
+type Instruccion struct {
+	Tipo       string
+	Parametros []Parametro
 }
 
 // Parametro unidad que indica atributos de una intruccion

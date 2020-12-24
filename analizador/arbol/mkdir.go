@@ -26,6 +26,10 @@ func (i *mkdir) MatchParametros(lp []Parametro) {
 			break
 		}
 	}
+
+	if i.p == "" {
+		i.p = " "
+	}
 }
 
 // Validar : indica si el objeto cuenta con los parámetros suficientes para ejecutarse

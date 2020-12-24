@@ -469,7 +469,9 @@ func getReporteInodos(bitmap []byte, particion ParticionMontada) (retorno string
 		}
 	}
 
-	arrows = arrows[:len(arrows)-12]
+	if len(arrows) > 12 {
+		arrows = arrows[:len(arrows)-12]
+	}
 
 	retorno += "\n\n"
 	retorno += arrows
