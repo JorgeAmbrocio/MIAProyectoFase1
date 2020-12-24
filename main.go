@@ -15,15 +15,15 @@ func main() {
 		fmt.Println("Escribe un comando")
 		fmt.Print("-> ")
 
-		//text := bufio.NewReader(os.Stdin)
-		//texto, _ := text.ReadString('\n')
-		texto := "exec -path->/home/test3.arch \n"
+		text := bufio.NewReader(os.Stdin)
+		texto, _ := text.ReadString('\n')
+		//texto := "exec -path->/home/test3.arch \n"
 		//yyParse(newLexer(bufio.NewReader(strings.NewReader(texto))))
 		analizador(texto)
 
 		//ast := lAST[len(lAST)-1]
 		//ast.EjecutarAST()
-		break
+		//break
 	}
 }
 
